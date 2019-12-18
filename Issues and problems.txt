@@ -1,0 +1,4 @@
+- Device calibration?
+- Device class? Light, metter, water metter
+- Device Group
+
