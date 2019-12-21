@@ -32,10 +32,7 @@ include('create-plan-detail_css.php')
                                                   <div class="place-text">
                                                        <h3 class="text-16">Thác Bạc </h3>
                                                        <div class="d-flex align-items-center"><i class="fa fa-clock-o"></i><span class="text-12 px-2">45 phút</span></div>
-                                                       <div class="d-flex">
-                                                            <button class="edit-btn"><span>Sửa</span></button>
-                                                            <button class="delete-btn"><span>Xóa</span></button>
-                                                       </div>
+                                                       <button class="delete-btn"><span>Xóa</span></button>
                                                   </div>
                                              </div>
                                         </div>
@@ -60,7 +57,7 @@ include('create-plan-detail_css.php')
                </div>
           </div>
      </section>
-     <section class="add-place-modal dailylist-modal ">
+     <section class="add-place-modal dailylist-modal hide">
           <div class="container">
                <div class="trip-panel-editor modal-card">
                     <div class="modal-close-button"><i class="fa fa-times-circle"></i></div>
@@ -96,32 +93,6 @@ include('create-plan-detail_css.php')
                                              </div>
                                         </div>
                                    </div>
-                              </div>
-                         </form>
-                         <form class="step-editor-location-info">
-                              <div class="horizontal-field">
-                                   <div class="horizontal-field__label">Thời gian</div>
-                                   <div class="horizontal-field__content">
-                                        <div class="step-editor-date">
-                                             <div class="line-center">
-                                                  <div class="date-picker">
-                                                       <select name="day-picker">
-                                                            <option value="">Ngày 1</option>
-                                                            <option value="">Ngày 2</option>
-                                                            <option value="">Ngày 3</option>
-                                                       </select>
-                                                  </div>
-                                                  <div class="time-picker">
-                                                       <input class="form-control js-time-picker time-picker" type="text" value="00:00">
-                                                       <div class="time-picker-icon"><i class="fa fa-clock-o"></i></div>
-                                                  </div>
-                                             </div>
-                                        </div>
-                                   </div>
-                              </div>
-                              <div class="navigation-btn line-center">
-                                   <div class="button-header"><a href="javascript:void(0)">Thêm địa điểm</a></div>
-                                   <div class="button-header button-go-back"><a href="javascript:void(0)">Quay lại</a></div>
                               </div>
                          </form>
                     </div>

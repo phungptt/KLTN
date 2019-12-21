@@ -39,7 +39,7 @@ use app\modules\app\services\UserService;
                             </ul>
                         </nav>
                         <!-- /.mainnav-->
-                        <div class="button-header"><a href="#" title=""><i class="ti-plus"></i>Tạo lịch trình</a></div>
+                        <div class="button-header"><a href="#" title=""><i class="fa fa-plus"></i>Tạo lịch trình</a></div>
                         <div class="show-search">
                             <button><span class="ti-search"></span></button>
                             <div class="submenu top-search search-header">

@@ -95,4 +95,8 @@ class UserController extends \yii\web\Controller
 
         return 'success';
     }
+
+    // public function actionUserProfile() {
+    //     return $this->render('user-profile');
+    // }
 }

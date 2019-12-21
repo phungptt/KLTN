@@ -6,6 +6,10 @@ use yii\web\Controller;
 
 class PlaceController extends Controller
 {
+     public function actionDestinationDetail() {
+          return $this->render('destination-detail');
+     }
+
      public function actionHotelList() {
 
           return $this->render('hotel-list');

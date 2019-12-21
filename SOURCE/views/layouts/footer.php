@@ -13,7 +13,6 @@
             <div class="col-md-3">
                 <div class="widget widget-about">
                     <div class="logo-ft"><a href="#" title="">Dailylist</a></div>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
                 </div>
             </div>
             <div class="col-md-3">

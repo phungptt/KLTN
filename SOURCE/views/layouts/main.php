@@ -28,6 +28,7 @@ AppAsset::register($this);
         var APP = {};
         new WOW().init();
     </script>
+    <script src="https://kit.fontawesome.com/87dc155110.js" crossorigin="anonymous"></script>
 </head>
 
 <body cz-shortcut-listen="true">
