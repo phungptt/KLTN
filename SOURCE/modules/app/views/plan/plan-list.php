@@ -92,7 +92,7 @@ include('plan-list_css.php')
                                              </ul>
                                         </div><!-- /.box-content -->
                                         <ul class="location">
-                                             <li class="address"><span class="fa fa-user"></span>Seoul, Korea</li>
+                                             <li class="address"><span class="ti-location-pin"></span>Seoul, Korea</li>
                                         </ul><!-- /.location -->
                                    </div><!-- /.box-imagebox -->
                               </div><!-- /.imaegbox style1 -->
@@ -102,7 +102,7 @@ include('plan-list_css.php')
                     <div class="row">
                          <div class="col-md-12">
                               <div class="btn-more">
-                                   <a href="#" title="">Xem thêm</a>
+                                   <a href="#" title="">Show More</a>
                               </div>
                          </div>
                     </div><!-- /.row -->
