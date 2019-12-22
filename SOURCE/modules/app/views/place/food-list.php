@@ -1,4 +1,7 @@
 <?php
+use app\modules\contrib\gxassets\GxLeafletAsset;
+
+GxLeafletAsset::register($this);
 include('food-list_css.php')
 ?>
 
@@ -113,14 +116,24 @@ include('food-list_css.php')
                     </div><!-- /.flat-filter -->
                </div><!-- /.col-md-6 -->
                <div class="col-lg-6">
-                    <section class="pdmap" id="flat-map">
-                         <div class="flat-maps" data-address="Ngõ 178 Nguyễn Lương Bằng, Chợ Dừa, Đống Đa, Hà Nội, Việt Nam" data-image="images/icon/map.png" data-name="Themesflat Map"></div>
-                         <div class="gm-map">
-                              <div class="map s1"></div>
-                         </div>
+                    <section class="pdmap h-100" id="flat-map">
+                         
                     </section><!-- /#flat-map-2 -->
                </div><!-- /.col-md-6 -->
           </div><!-- /.row -->
      </div><!-- /.container-fluid -->
 </section><!-- /.flat-map-zoom-in -->
+
+<script>
+     (function($){
+          var map = L.map('flat-map').setView([16.0544,108.2022 ], 6);
+          L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          }).addTo(map);
+
+          L.marker([16.0544,108.2022]).addTo(map)
+          .bindPopup('A pretty CSS3 popup.<br> Easily customizable.')
+          .openPopup();
+     })(jQuery)
+</script>
 
