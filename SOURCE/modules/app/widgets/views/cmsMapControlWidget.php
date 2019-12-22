@@ -1,80 +1,45 @@
-<style>
-    .geocoder-control.leaflet-control,
-    .geocoder-control.geocoder-control-expanded,
-    .geocoder-control-suggestions.leaflet-bar,
-    .geocoder-control-input.leaflet-bar {
-        width: 400px !important;
-    }
-
-    .geocoder-control.leaflet-control {
-        position: absolute;
-        top: 0;
-        right: 0;
-        transform: translateX(105%);
-        height: 34px;
-        margin-left: 0px;
-    }
-
-    .geocoder-control-input.leaflet-bar {
-        height: 34px;
-    }
-</style>
-<div class='gxmap_create_map_container mb-3'>
-    <div class='row m-0'>
-        <div id='gxmap_create_map' class='col-12' style="height: 350px !important;z-index: 99;"></div>
+<div class='gxmap_create_map_container h-100'>
+    <div class='row m-0' style="height: calc(100% - 50px);">
+        <div id='gxmap_create_map' class='col-12 p-0 h-100' style="z-index: 99"></div>
     </div>
-    <?php if($useInputOfWidget): ?>
-    <div class="row form-group mt-3 mx-0">
-        <div class="col-3 col-md-1 col-form-label">
-            <span class="font-weight-semibold">Latitude</span>
+    <div class="row form-group m-0 d-flex align-items-center bg-white" style="height: 50px">
+        <div class="col-2 col-md-1 col-form-label">
+            <span class="font-weight-semibold">Lat</span>
         </div>
-        <div class="col-9 col-md-5">
-            <input class="form-control" id='geom_lat' name="geom_lat" type="text" />
+        <div class="col-4 col-md-5">
+            <input class="form-control" id='geom_lat' name="lat" type="text" />
         </div>
-        <div class="col-3 col-md-1 col-form-label">
-            <span class="font-weight-semibold">Longitude</span>
+        <div class="col-2 col-md-1 col-form-label">
+            <span class="font-weight-semibold">Lng</span>
         </div>
-        <div class="col-9 col-md-5">
-            <input class="form-control" id='geom_lng' name="geom_lng" type="text" />
+        <div class="col-4 col-md-5">
+            <input class="form-control" id='geom_lng' name="lng" type="text" />
         </div>
     </div>
-    <?php endif; ?>
 </div>
 
 <script type="application/javascript">
     var DATA = {
+        map: null,
         layers: {
             base: [],
             overlay: []
         },
         icons: {},
         controls: {},
-        currentLatlng: null,
     };
 
-    var lat = <?= $model->lat ? $model->lat : 'undefined' ?>,
-        lng = <?= $model->lng ? $model->lng : 'undefined' ?>,
-        initLocation = lat === undefined ? null : [lat, lng],
-        defaulLocation = [10.762622, 106.660172];
-
     $(function() {
-        $(window).on('load', function() {
+        if(!DATA.map) {
             initMap();
-        });
-
-        $('.geocoder-control').addClass('geocoder-control-expanded');
+            $('.geocoder-control').addClass('geocoder-control-expanded');
+        }
     });
 
     function initMap() {
-        DATA.map = L.map('gxmap_create_map').setView(defaulLocation, 17);
-        initLayer();
+        DATA.map = L.map('gxmap_create_map').setView([10.780196902937137, 106.6872198151157], 13);
         initControl();
         initExtends();
-    }
-
-    function initLayer() {
-        // initLocationGPS();
-        initVectorLayer();
     }
 
     function initControl() {
@@ -95,11 +60,6 @@
         });
     }
 
-    function initVectorLayer() {
-        DATA.layers.vectorlayers = L.layerGroup();
-        DATA.layers.vectorlayers.addTo(DATA.map);
-    }
-
     function initGoogleLayer() {
         DATA.layers.base['Google'] = L.tileLayer('https://{s}.google.com/vt/lyrs=' + 'r' + '&x={x}&y={y}&z={z}', {
             maxZoom: 26,
@@ -109,12 +69,12 @@
     }
 
     function initDragMarker(coords) {
-        coords = coords === null ? defaulLocation : coords;
+        coords = coords === null ? [10.780196902937137, 106.6872198151157] : coords;
+
         MARKER = L.marker(coords, {
             draggable: true
-        });
+        }).bindPopup('<p>Move the marker or manually enter in the <b>Lat</b> and <b>Lng</b> below to update your image coordinates</p>');
         MARKER.addTo(DATA.map);
-        DATA.map.setView(coords, 17);
         initBindingMarkerAndGeometryInput();
     }
 
@@ -152,7 +112,7 @@
 
 
     function initExtends() {
-        initDragMarker(initLocation);
+        initDragMarker(null);
         initClickToMapEvent();
     }
 </script>

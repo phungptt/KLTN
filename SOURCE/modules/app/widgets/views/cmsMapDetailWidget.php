@@ -1,6 +1,6 @@
-<div class='gxmap_detail_map_container h-100'>
+<div class='gxmap_create_map_container h-100'>
     <div class='row m-0 h-100'>
-        <div id='gxmap_create_map' class='col-12 p-0 h-100' style="height: 350px !important;z-index: 99"></div>
+        <div id='gxmap_create_map' class='col-12 p-0 h-100' style="z-index: 99"></div>
     </div>
 </div>
 
@@ -18,7 +18,9 @@
     var lat = '<?= $lat ? $lat : '' ?>';
     var lng = '<?= $lng ? $lng : '' ?>';
     $(function() {
-        initMap();
+        if(!DATA.map) {
+            initMap();
+        }
     });
 
     function initMap() {
@@ -51,7 +53,13 @@
 
     function initMarker() {
         if(lat !== '' && lng !== '') {
-            var marker = new L.marker([lat, lng]).addTo(DATA.map);
+            var iconOption = L.icon({
+                iconUrl: '<?= Yii::$app->homeUrl . "resources/images/marker_hcmgis.png" ?>',
+                iconSize:     [32, 32],
+                iconAnchor:   [16, 32],
+                popupAnchor:  [0, -20]
+            });
+            var marker = new L.marker([lat, lng], {icon: iconOption}).addTo(DATA.map);
             DATA.map.setView([lat, lng], 15);
         }
     }
