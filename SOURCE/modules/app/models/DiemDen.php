@@ -8,9 +8,9 @@ use Yii;
  * This is the model class for table "diem_den".
  *
  * @property int $id
- * @property string $ten
- * @property string $mota_ngan
- * @property string $mota
+ * @property string $name
+ * @property string $short_description
+ * @property string $description
  * @property string $slug
  * @property int $viewed
  * @property string $lat
@@ -37,11 +37,11 @@ class DiemDen extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['mota'], 'string'],
+            [['description'], 'string'],
             [['viewed', 'status', 'deleted', 'created_by'], 'default', 'value' => null],
             [['viewed', 'status', 'deleted', 'created_by'], 'integer'],
             [['created_at', 'updated_at'], 'safe'],
-            [['ten', 'mota_ngan', 'slug', 'lat', 'lng'], 'string', 'max' => 255],
+            [['name', 'short_description', 'slug', 'lat', 'lng'], 'string', 'max' => 255],
         ];
     }
 
@@ -52,9 +52,9 @@ class DiemDen extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'ten' => 'Ten',
-            'mota_ngan' => 'Mota Ngan',
-            'mota' => 'Mota',
+            'name' => 'Name',
+            'short_description' => 'Short Description',
+            'description' => 'Description',
             'slug' => 'Slug',
             'viewed' => 'Viewed',
             'lat' => 'Lat',
