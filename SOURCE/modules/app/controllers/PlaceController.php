@@ -19,7 +19,7 @@ class PlaceController extends Controller
           if($request->isPost) {
                $image = new UploadImage();
                $image->imageFile = UploadedFile::getInstance($image, 'imageFile');
-
+               
                $imageRelate = new UploadImages();
                $imageRelate->imageFiles = UploadedFile::getInstances($imageRelate, 'imageFiles');
 

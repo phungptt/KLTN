@@ -11,8 +11,9 @@ use Yii;
  * @property int $image_id
  * @property int $object_id
  * @property string $object_type
- * @property int $relate
+ * @property int $status
  * @property string $created_at
+ * @property string $relate
  */
 class ImageRef extends \yii\db\ActiveRecord
 {
@@ -30,10 +31,10 @@ class ImageRef extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['image_id', 'object_id', 'relate'], 'default', 'value' => null],
-            [['image_id', 'object_id', 'relate'], 'integer'],
+            [['image_id', 'object_id', 'status'], 'default', 'value' => null],
+            [['image_id', 'object_id', 'status'], 'integer'],
             [['created_at'], 'safe'],
-            [['object_type'], 'string', 'max' => 255],
+            [['object_type', 'relate'], 'string', 'max' => 255],
         ];
     }
 
@@ -47,8 +48,9 @@ class ImageRef extends \yii\db\ActiveRecord
             'image_id' => 'Image ID',
             'object_id' => 'Object ID',
             'object_type' => 'Object Type',
-            'relate' => 'Relate',
+            'status' => 'Status',
             'created_at' => 'Created At',
+            'relate' => 'Relate',
         ];
     }
 }

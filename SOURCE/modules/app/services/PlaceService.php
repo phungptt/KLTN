@@ -17,13 +17,13 @@ class PlaceService
 
 
     public static function CreateNewPlace($image, $imageRelate, $data) {
-
         if($image->imageFile) {
+            
             $imageFile = ImageService::SaveImage($image);
+            
             if($imageFile) {
                 //Save place images
                 $imageRelateFiles = ImageService::SaveImages($imageRelate);
-
                 //Create thumbnail
                 ImageService::CreateThumbnailForImage($imageFile->path);
 
@@ -54,10 +54,9 @@ class PlaceService
         $model->lat = $data['lat'];
         $model->lng = $data['lng'];
 
-        if($model->save()) {
+        if($model->save(false)) {
             ImageService::SaveImageRef($avatar->id, $model->className(), $model->id);
             ImageService::SaveImagesRef($imageRelateFiles, $model->className(), $model->id);
-
             return [
                 'status' => true,
                 'message' => 'Thêm tác phẩm thành công'

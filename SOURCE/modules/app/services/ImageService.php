@@ -39,7 +39,7 @@ class ImageService
                     'slug' => $imgInfo['slug'],
                     'path' => $imgInfo['path'],
                     'type' => $imgInfo['type'],
-                    'deleted' => self::$ALIVE,
+                    'delete' => self::$ALIVE,
                     'created_by' => Yii::$app->user->id,
                 ]);
 
@@ -64,7 +64,7 @@ class ImageService
                         'slug' => $imgInfo['slug'],
                         'path' => $imgInfo['path'],
                         'type' => $imgInfo['type'],
-                        'deleted' => self::$ALIVE,
+                        'delete' => self::$ALIVE,
                         'created_by' => Yii::$app->user->id,
                     ]);
     
@@ -105,6 +105,7 @@ class ImageService
         $newname = ConvertHelper::convertStringToSlug($newname);
         return [$newname, $ext];
     }
+
 
     public static function CreateThumbnailForImage($filename) {
         chdir('uploads');

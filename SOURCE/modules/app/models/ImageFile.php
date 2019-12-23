@@ -15,7 +15,8 @@ use Yii;
  * @property string $created_at
  * @property string $updated_at
  * @property string $type
- * @property int $deleted
+ * @property int $status
+ * @property int $delete
  */
 class ImageFile extends \yii\db\ActiveRecord
 {
@@ -33,8 +34,8 @@ class ImageFile extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['created_by', 'deleted'], 'default', 'value' => null],
-            [['created_by', 'deleted'], 'integer'],
+            [['created_by', 'status', 'delete'], 'default', 'value' => null],
+            [['created_by', 'status', 'delete'], 'integer'],
             [['created_at', 'updated_at'], 'safe'],
             [['name', 'slug', 'path', 'type'], 'string', 'max' => 255],
         ];
@@ -54,7 +55,8 @@ class ImageFile extends \yii\db\ActiveRecord
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
             'type' => 'Type',
-            'deleted' => 'Deleted',
+            'status' => 'Status',
+            'delete' => 'Delete',
         ];
     }
 }

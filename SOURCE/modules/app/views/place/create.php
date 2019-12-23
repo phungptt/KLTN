@@ -20,6 +20,7 @@ include('_create_css.php')
                     <?php $form = ActiveForm::begin([
                         'id' => 'create-place-form',
                         'options' => [
+                            'enctype' => 'multipart/form-data',
                             'class' => 'form-listing'
                         ]
                     ]) ?><!--Start form -->
@@ -53,7 +54,7 @@ include('_create_css.php')
                                 </div>
                                 <div class="one-half">
                                     <label for="">Thời gian đóng cửa</label>
-                                    <input type="time"  name="Place[time_close]">
+                                    <input type="time"  name="Place[time_closed]">
                                 </div>
                             </div>
                             <div class="wrap-listing">

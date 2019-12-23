@@ -11,20 +11,20 @@ use Yii;
  * @property string $name
  * @property string $short_description
  * @property string $description
- * @property int $viewed
+ * @property string $viewed
  * @property string $slug
  * @property string $phone_number
  * @property string $address
+ * @property string $time_open
+ * @property string $time_closed
  * @property string $lat
  * @property string $lng
  * @property string $create_at
  * @property int $create_by
  * @property string $update_at
- * @property int $status
- * @property int $deleted
+ * @property string $status
+ * @property string $deleted
  * @property int $id_destination
- * @property string $time_open
- * @property string $time_close
  */
 class Place extends \yii\db\ActiveRecord
 {
@@ -42,11 +42,11 @@ class Place extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['viewed', 'create_by', 'status', 'deleted', 'id_destination'], 'default', 'value' => null],
-            [['viewed', 'create_by', 'status', 'deleted', 'id_destination'], 'integer'],
             [['phone_number'], 'string'],
-            [['create_at', 'update_at', 'time_open', 'time_close'], 'safe'],
-            [['name', 'short_description', 'description', 'slug', 'address', 'lat', 'lng'], 'string', 'max' => 255],
+            [['time_open', 'time_closed', 'create_at', 'update_at'], 'safe'],
+            [['create_by', 'id_destination'], 'default', 'value' => null],
+            [['create_by', 'id_destination'], 'integer'],
+            [['name', 'short_description', 'description', 'viewed', 'slug', 'address', 'lat', 'lng', 'status', 'deleted'], 'string', 'max' => 255],
         ];
     }
 
@@ -64,6 +64,8 @@ class Place extends \yii\db\ActiveRecord
             'slug' => 'Slug',
             'phone_number' => 'Phone Number',
             'address' => 'Address',
+            'time_open' => 'Time Open',
+            'time_closed' => 'Time Closed',
             'lat' => 'Lat',
             'lng' => 'Lng',
             'create_at' => 'Create At',
@@ -72,8 +74,6 @@ class Place extends \yii\db\ActiveRecord
             'status' => 'Status',
             'deleted' => 'Deleted',
             'id_destination' => 'Id Destination',
-            'time_open' => 'Time Open',
-            'time_close' => 'Time Close',
         ];
     }
 }

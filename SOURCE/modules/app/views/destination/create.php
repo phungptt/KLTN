@@ -72,7 +72,7 @@ GxLaddaAsset::register($this);
                                 </div>
                             </div>
                         </div>
-                        <button type="submit" class="submit-form-listing w-100">Lưu địa điểm</button>
+                        <button type="submit" class="submit-form-listing w-100">Lưu điểm đến</button>
                     <?php $form->end() ?><!--End form-->
                 </div>
             </div>
