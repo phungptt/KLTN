@@ -35,7 +35,6 @@
 
     .list-images-relate-wrap {
         border-radius: .125rem;
-        background: #f9f9f9;
         border-radius: .125rem;
         padding: .625rem;
     }

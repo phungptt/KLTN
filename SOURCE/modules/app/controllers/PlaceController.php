@@ -35,7 +35,6 @@ class PlaceController extends Controller
                ];
                return $this->asJson($response);
           }
-
           return $this->render('create', compact('model'));
      }
 

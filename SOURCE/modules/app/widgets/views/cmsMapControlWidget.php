@@ -1,8 +1,16 @@
 <div class='gxmap_create_map_container h-100'>
-    <div class='row m-0' style="height: calc(100% - 50px);">
+    <div class="one-half">
+        <label for="">Lat</label>
+        <input class="form-control text-14" id='geom_lat' name="lat" type="text" />
+    </div>
+    <div class="one-half">
+        <label for="">Lng</label>
+        <input class="form-control text-14" id='geom_lng' name="lng" type="text" />
+    </div>
+    <div  style="height: calc(100% - 50px);">
         <div id='gxmap_create_map' class='col-12 p-0 h-100' style="z-index: 99"></div>
     </div>
-    <div class="row form-group m-0 d-flex align-items-center bg-white" style="height: 50px">
+    <!-- <div class="row form-group m-0 d-flex align-items-center bg-white" style="height: 50px">
         <div class="col-2 col-md-1 col-form-label">
             <span class="font-weight-semibold">Lat</span>
         </div>
@@ -15,7 +23,7 @@
         <div class="col-4 col-md-5">
             <input class="form-control" id='geom_lng' name="lng" type="text" />
         </div>
-    </div>
+    </div> -->
 </div>
 
 <script type="application/javascript">

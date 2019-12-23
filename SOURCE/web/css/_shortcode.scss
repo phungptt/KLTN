@@ -1707,7 +1707,7 @@ form.form-listing {
 			height: 50px;
 			padding-left: 30px;
 			border-radius: 4px;
-			border-color: #c2c2c2;
+			border-color: #c2c2c2 !important;
 			margin-bottom: 26px;
 			&::-webkit-input-placeholder {
 				color: #c2c2c2;
@@ -1723,15 +1723,19 @@ form.form-listing {
 			}
 		}
 		select {
-			height: 50px;
+			height: 50px !important;
 			padding-left: 30px;
 			border-radius: 4px;
-			border-color: #c2c2c2;
+			border-color: #c2c2c2 !important;
 			margin-bottom: 25px;
+			border-width: thin;
+			font-size: 14px;
 		}
 		textarea {
+			border-width: thin;
+			font-size: 14px;
 			border-radius: 4px;
-			border-color: #c2c2c2;
+			border-color: #c2c2c2 !important;
 			height: 200px;
 			margin-bottom: 10px;
 			padding: 13px 29px;
@@ -2415,7 +2419,7 @@ form.form-listing {
 }
 
 .line-center {
-	display: flex;
+	display: flex !important;
 	align-items: center;
 	justify-content: center;
 }
