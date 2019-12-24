@@ -20,6 +20,7 @@ GxLaddaAsset::register($this);
                     <?php $form = ActiveForm::begin([
                         'id' => 'create-destination-form',
                         'options' => [
+                            'enctype' => 'multipart/form-data',
                             'class' => 'form-listing'
                         ]
                     ]) ?><!--Start form -->

@@ -8,7 +8,10 @@ use yii\web\UploadedFile;
 use app\modules\app\models\UploadImage;
 use app\modules\app\models\UploadImages;
 use Yii;
+use yii\helpers\Html;
 use yii\web\Controller;
+use app\modules\app\AppConfig;
+use yii\helpers\ArrayHelper;
 
 class DestinationController extends Controller
 {
@@ -19,10 +22,8 @@ class DestinationController extends Controller
           if($request->isPost) {
                $image = new UploadImage();
                $image->imageFile = UploadedFile::getInstance($image, 'imageFile');
-
                $imageRelate = new UploadImages();
                $imageRelate->imageFiles = UploadedFile::getInstances($imageRelate, 'imageFiles');
-
                $saved = DiemDenService::CreateNewDestination($image, $imageRelate, $request->post());
                if($saved) {
                     Yii::$app->session->setFlash('success', 'Lưu thành công điểm đến mới');
@@ -48,6 +49,7 @@ class DestinationController extends Controller
      }
 
      public function actionDestinationList() {
+          
           return $this->render('destination-list');
      }
 

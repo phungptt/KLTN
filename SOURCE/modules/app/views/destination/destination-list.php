@@ -1,7 +1,11 @@
 <?php
+use app\modules\app\AppConfig;
+use app\modules\contrib\gxassets\GxVueAsset;
 use app\modules\contrib\gxassets\GxLeafletAsset;
+use app\modules\app\widgets\AppObjectMapWidget;
 
 GxLeafletAsset::register($this);
+GxVueAsset::register($this);
 include('destination-list_css.php');
 ?>
 

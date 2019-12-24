@@ -6,6 +6,7 @@ use app\modules\app\models\DiemDen;
 use app\modules\app\services\ImageService;
 use app\modules\contrib\helper\ConvertHelper;
 use Yii;
+use app\modules\app\APPConfig;
 
 class DiemDenService 
 {
@@ -15,11 +16,10 @@ class DiemDenService
     public static $DELETED = 0;
     public static $ALIVE = 1;
 
-
     public static function CreateNewDestination($image, $imageRelate, $data) {
-
         if($image->imageFile) {
             $imageFile = ImageService::SaveImage($image);
+
             if($imageFile) {
                 //Save place images
                 $imageRelateFiles = ImageService::SaveImages($imageRelate);
@@ -47,7 +47,7 @@ class DiemDenService
         $model = new DiemDen();
         
         $model->load($data);
-        $model->create_by = Yii::$app->user->id;
+        $model->created_by = Yii::$app->user->id;
         $model->viewed = 0;
         $model->slug = ConvertHelper::convertStringToSlug($model->name);
         $model->status = self::$AVALABLE;
@@ -68,5 +68,13 @@ class DiemDenService
             'status' => false,
             'message' => 'Vui lòng điền đầy đủ các trường thông tin có dấu (*)'
         ];
+    }
+
+    public static function GetDestinations($limit = null) {
+        $destinations = DiemDen::find();
+        if($limit) {
+            $destinations->limit($limit);
+        }
+        return $destinations->all();
     }
 }

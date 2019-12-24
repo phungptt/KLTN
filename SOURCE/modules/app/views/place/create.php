@@ -33,7 +33,6 @@ include('_create_css.php')
                                     <span>Tải ảnh</span>
                                     <input class="file-upload-input" type='file' @change="readFileInfo" name="UploadImage[imageFile]" accept=".png, .jpg, .jpeg" >
                                 </div>
-                               
                             </div>
                             <div class="file-upload-content h-100" style="display: none">
                                 <div class="d-flex flex-column align-items-center h-100">
@@ -89,7 +88,7 @@ include('_create_css.php')
                                 </div>
                             </div>
                         </div>
-                        <button class="submit-form-listing w-100">Lưu địa điểm</button>
+                        <button type="submit" class="submit-form-listing w-100">Lưu địa điểm</button>
                     <?php $form->end() ?><!--End form-->
                 </div>
             </div>
