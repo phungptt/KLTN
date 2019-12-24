@@ -53,4 +53,8 @@ class ImageRef extends \yii\db\ActiveRecord
             'relate' => 'Relate',
         ];
     }
+
+    public function getDestination() {
+        return $this->hasOne(DiemDen::className(), ['id', 'object_id']);
+    }
 }

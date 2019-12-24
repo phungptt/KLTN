@@ -16,6 +16,8 @@ class DiemDenService
     public static $DELETED = 0;
     public static $ALIVE = 1;
 
+    public static $DEFAUL_DESTINATION_AVATAR =  'resources/images/default-destination-avatar.jpg';
+
     public static function CreateNewDestination($image, $imageRelate, $data) {
         if($image->imageFile) {
             $imageFile = ImageService::SaveImage($image);

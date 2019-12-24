@@ -9,7 +9,7 @@ GxVueAsset::register($this);
 include('destination-list_css.php');
 ?>
 
-<div class="destination-list">     
+<div class="destination-list" id="destination-list">     
      <section class="flat-map-zoom-in">
           <div class="container-fluid">
                <div class="row">
@@ -40,71 +40,29 @@ include('destination-list_css.php');
                                         </li>
                                    </ul>
                               </div><!-- /.filter-result -->
-                              <div class="wrap-imagebox style1">
-                                   <div class="imagebox style3">
-                                        <div class="box-imagebox">
-                                             <div class="box-header">
-                                                  <div class="box-image">
-                                                       <img src="<?= Yii::$app->homeUrl ?>resources/images/visit-location.jpg" alt="">
-                                                       <a href="#" title="">Xem</a>
-                                                       <div class="overlay"></div>
-                                                       <div class="queue">
-                                                            <i class="fa fa-star" aria-hidden="true"></i>
-                                                            <i class="fa fa-star" aria-hidden="true"></i>
-                                                            <i class="fa fa-star" aria-hidden="true"></i>
-                                                            <i class="fa fa-star" aria-hidden="true"></i>
-                                                            <i class="fa fa-star-half-o" aria-hidden="true"></i>
-                                                       </div>
-                                                  </div>
-                                             </div><!-- /.box-header -->
-                                             <div class="box-content">
-                                                  <div class="box-title ad">
-                                                       <a href="#" title="">Đà Lạt</a>
-                                                  </div>
-                                                  <ul class="rating">
-                                                       <li>5 rating</li>
-                                                       <li>5 reviews</li>
-                                                  </ul>
-                                                  <div class="box-desc">
-                                                       Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                                                  </div>
-                                             </div><!-- /.box-content -->
-                                        </div><!-- /.box-imagebox -->
-                                   </div><!-- /.imagebox style3 -->
-                                   <div class="imagebox style3">
-                                        <div class="box-imagebox">
-                                             <div class="box-header">
-                                                  <div class="box-image">
-                                                       <img src="<?= Yii::$app->homeUrl ?>resources/images/sapa.jpg" alt="">
-                                                       <a href="#" title="">Xem</a>
-                                                       <div class="overlay"></div>
-                                                       <div class="queue">
-                                                            <i class="fa fa-star" aria-hidden="true"></i>
-                                                            <i class="fa fa-star" aria-hidden="true"></i>
-                                                            <i class="fa fa-star" aria-hidden="true"></i>
-                                                            <i class="fa fa-star" aria-hidden="true"></i>
-                                                            <i class="fa fa-star-half-o" aria-hidden="true"></i>
-                                                       </div>
-                                                  </div>
-                                             </div><!-- /.box-header -->
-                                             <div class="box-content">
-                                                  <div class="box-title ad">
-                                                       <a href="#" title="">Sapa</a>
-                                                  </div>
-                                                  <ul class="rating">
-                                                       <li>5 rating</li>
-                                                       <li>5 reviews</li>
-                                                  </ul>
-                                                  <div class="box-desc">
-                                                       Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                                                  </div>
-                                             </div><!-- /.box-content -->
-                                        </div><!-- /.box-imagebox -->
-                                   </div><!-- /.imagebox style3 -->
-                                   <div class="clearfix"></div>
-                                   <div class="btn-more">
-                                        <a href="#" title="">Tải thêm</a>
-                                   </div>
+                              <div class="wrap-imagebox style3" v-for="dest in destinations">
+                              <div class="imagebox style2" style="display: block;">
+                                   <div class="box-imagebox">
+                                        <div class="box-header">
+                                             <div class="box-image">
+                                                  <img :src="avatars[0]" alt="">
+                                                  <a href="#" title="">Xem</a>
+                                             </div>
+                                        </div><!-- /.box-header -->
+                                        <div class="box-content">
+                                             <div class="box-title ad">
+                                                  <a href="#" title="">{{dest.name}}</a>
+                                             </div>
+                                             <ul class="rating">
+                                                  <li>5 rating</li>
+                                                  <li>Moderate</li>
+                                             </ul>
+                                             <div class="box-desc">
+                                                  {{dest.short_description}}
+                                             </div>
+                                        </div><!-- /.box-content -->
+                                   </div><!-- /.box-imagebox -->
+                              </div>
                               </div><!-- /.wrap-imagebox -->
                          </div><!-- /.flat-filter -->
                     </div><!-- /.col-md-6 -->
@@ -124,6 +82,21 @@ include('destination-list_css.php');
 
 <script>
      (function($){
+          var destinationList = <?= json_encode($destinations) ?>;
+          var avatars = <?= json_encode($avatars) ?>;
+
+          APP.vueInstance = new Vue({
+               el: '#destination-list',
+               data: {
+                    destinations: destinationList,
+                    avatars: avatars,
+                    selectDestination: null
+               },
+               methods: {
+                    
+               },
+          })
+
           var map = L.map('flat-map').setView([16.0544,108.2022 ], 6);
           L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
           attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
