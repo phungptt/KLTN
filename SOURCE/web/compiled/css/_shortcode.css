@@ -200,6 +200,17 @@
         color: #2c3e50;
         opacity: 1; }
 
+.destination-list .wrap-box-search {
+  background: transparent; }
+  .destination-list .wrap-box-search form span {
+    border: none !important;
+    margin-bottom: 15px; }
+    .destination-list .wrap-box-search form span input {
+      border-color: #4ca1af;
+      height: 50px;
+      background: #fff;
+      border-radius: 30px; }
+
 .wrap-box-search.style1 {
   margin-top: 22px; }
 
@@ -293,11 +304,13 @@
   color: #f0b108;
   float: right; }
 
-.imagebox .box-imagebox {
-  border-radius: 8px;
-  overflow: hidden;
-  background-color: #fff;
-  box-shadow: 0px 7px 16px 0px rgba(0, 0, 0, 0.09); }
+.imagebox {
+  cursor: pointer; }
+  .imagebox .box-imagebox {
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: #fff;
+    box-shadow: 0px 7px 16px 0px rgba(0, 0, 0, 0.09); }
   .imagebox .box-header .box-image {
     position: relative; }
   .imagebox .box-header .box-image a {

@@ -13,6 +13,7 @@ use Yii;
  * @property string $lat
  * @property string $lng
  * @property string $path
+ * @property string $slug
  */
 class DestinationImage extends \yii\db\ActiveRecord
 {
@@ -32,7 +33,7 @@ class DestinationImage extends \yii\db\ActiveRecord
         return [
             [['id'], 'default', 'value' => null],
             [['id'], 'integer'],
-            [['name', 'short_description', 'lat', 'lng', 'path'], 'string', 'max' => 255],
+            [['name', 'short_description', 'lat', 'lng', 'path', 'slug'], 'string', 'max' => 255],
         ];
     }
 
@@ -48,6 +49,7 @@ class DestinationImage extends \yii\db\ActiveRecord
             'lat' => 'Lat',
             'lng' => 'Lng',
             'path' => 'Path',
+            'slug' => 'Slug',
         ];
     }
 }

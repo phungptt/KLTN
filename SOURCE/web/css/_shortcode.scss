@@ -226,6 +226,23 @@
 		}
 	}
 }
+.destination-list {
+	.wrap-box-search {
+		background: transparent;
+		form {
+			span {
+				border: none !important;
+				margin-bottom: 15px;
+				input {
+					border-color: #4ca1af;
+					height: 50px;
+					background: #fff;
+					border-radius: 30px;
+				}
+			}
+		}
+	}
+}
 .wrap-box-search.style1 {
 	margin-top: 22px;
 }
@@ -352,6 +369,7 @@
 	}
 }
 .imagebox {
+	cursor: pointer;
 	.box-imagebox {
 		border-radius: 8px;
 		overflow: hidden;

@@ -52,14 +52,14 @@ class DestinationController extends Controller
 
      public function actionDestinationList() {
           $destinations = DestinationImage::find()->all();
-          $avatars = [];
+          // $destinations = ArrayHelper::toArray($destinations);
 
           foreach($destinations as $dest) {
-               array_push($avatars, ImageService::GetOriginalPath($dest->path));
+               $dest['path'] =  ImageService::GetOriginalPath($dest->path);
           }
           $destinations = ArrayHelper::toArray($destinations);
-
-          return $this->render('destination-list', compact('destinations','avatars'));
+          // dd($destinations);
+          return $this->render('destination-list', compact('destinations'));
      }
 
      public function actionDestinationDetail() {
