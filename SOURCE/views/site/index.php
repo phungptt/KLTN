@@ -220,7 +220,7 @@ use app\modules\app\APPConfig;
                             </div>
                             <div class="box-content">
                                 <h4 class="box-title">Chọn Thứ Để Làm</h4>
-                                <div class="box-desc">Looking for a cozy hotel to stay, a restaurant to eat or a mall to do some shopping?</div>
+
                             </div>
                         </div>
                     </div>
@@ -231,7 +231,7 @@ use app\modules\app\APPConfig;
                             </div>
                             <div class="box-content">
                                 <h4 class="box-title">Tìm Thứ Bạn Muốn</h4>
-                                <div class="box-desc">Search and filter hundreds of listings, read reviews and find the perfect spot.</div>
+
                             </div>
                         </div>
                     </div>
@@ -242,7 +242,6 @@ use app\modules\app\APPConfig;
                             </div>
                             <div class="box-content">
                                 <h4 class="box-title">Khám Phá Các Địa Điểm Tuyệt Vời</h4>
-                                <div class="box-desc">Go and have a good time or even make a booking directly from the listing page.</div>
                             </div>
                         </div>
                     </div>
@@ -262,95 +261,44 @@ use app\modules\app\APPConfig;
         </div>
     </div>
 </section>
-<section class="flat-row flat-main-blog style2">
+<section class="flat-row flat-main-blog flat-imagebox style3">
     <div class="container">
         <div class="row">
             <div class="col-md-12">
                 <div class="flat-row-title center">
-                    <h2>Tips & Articles</h2>
-                    <p>Mách bạn một số tips khi đi du lịch</p>
+                    <h2>Lịch trình gợi ý</h2>
                 </div>
                 <div class="row">
-                    <div class="col-lg-3 col-sm-6">
-                        <article class="blog-post">
-                            <div class="featured-post"><a href="#" title=""><img src="<?= Yii::$app->homeUrl ?>resources/images/page/home-page/01.png" alt="">
-                                    <div class="overlay"></div>
-                                </a></div>
-                            <div class="content-post">
-                                <div class="entry-post">
-                                    <ul class="entry-meta">
-                                        <li class="topic"><a href="#" title="">Vocation</a></li>
-                                        <li class="date"><a href="#" title="">June 08, 2017</a></li>
+                    <div class="col-md-4">
+                        <div class="imagebox style1">
+                            <div class="box-imagebox">
+                                <div class="box-header">
+                                    <div class="box-image">
+                                        <img src="/resources/images/da-lat.jpg" alt="">
+                                        <a href="#" title="">Xem</a>
+                                        <div class="overlay"></div>
+                                    </div>
+                                </div><!-- /.box-header -->
+                                <div class="box-content">
+                                    <div class="box-title ad">
+                                        <a href="#" title="">Đà Lạt</a><i class="fa fa-check-circle" aria-hidden="true"></i>
+                                    </div>
+                                    <ul class="rating">
+                                        <li>5 ngày 4 đêm</li>
                                     </ul>
-                                    <h2 class="entry-title"><a href="#" title="">
-                                            Working While Traveling
-                                            Around the World</a></h2>
-                                </div>
-                                <p>Combining wanderlust and a steady job can be done for a year, with planning, permission and at a cost</p>
-                                <div class="author-post">By <a href="#" title="">Patricia R. Olsen</a></div>
-                            </div>
-                        </article>
-                    </div>
-                    <div class="col-lg-3 col-sm-6">
-                        <article class="blog-post">
-                            <div class="featured-post"><a href="#" title=""><img src="<?= Yii::$app->homeUrl ?>resources/images/page/home-page/02.png" alt="">
-                                    <div class="overlay"></div>
-                                </a></div>
-                            <div class="content-post">
-                                <div class="entry-post">
-                                    <ul class="entry-meta">
-                                        <li class="topic"><a href="#" title="">Trending</a></li>
-                                        <li class="date"><a href="#" title="">June 08, 2017</a></li>
-                                    </ul>
-                                    <h2 class="entry-title"><a href="#" title="">For Summer, <br> Five Hot Destinations</a></h2>
-                                </div>
-                                <p>Americans will likely travel more this summer than last, with Croatia, South Africa and Greece among the popular destinations.</p>
-                                <div class="author-post">By <a href="#" title="">Sivani Vora</a></div>
-                            </div>
-                        </article>
-                    </div>
-                    <div class="col-lg-3 col-sm-6">
-                        <article class="blog-post">
-                            <div class="featured-post"><a href="#" title=""><img src="<?= Yii::$app->homeUrl ?>resources/images/page/home-page/03.png" alt="">
-                                    <div class="overlay"></div>
-                                </a></div>
-                            <div class="content-post">
-                                <div class="entry-post">
-                                    <ul class="entry-meta">
-                                        <li class="topic"><a href="#" title="">Surfacing</a></li>
-                                        <li class="date"><a href="#" title="">May 25, 2017</a></li>
-                                    </ul>
-                                    <h2 class="entry-title"><a href="#" title="">
-                                            Five Places to Go in
-                                            Downtown Albuquerque</a></h2>
-                                </div>
-                                <p>Residents and in-the-know visitors to New Mexico’s largest city head to a once-derelict district that.</p>
-                                <div class="author-post">By <a href="#" title="">Nick Pachelli</a></div>
-                            </div>
-                        </article>
-                    </div>
-                    <div class="col-lg-3 col-sm-6">
-                        <article class="blog-post">
-                            <div class="featured-post"><a href="#" title=""><img src="<?= Yii::$app->homeUrl ?>resources/images/page/home-page/04.png" alt="">
-                                    <div class="overlay"></div>
-                                </a></div>
-                            <div class="content-post">
-                                <div class="entry-post">
-                                    <ul class="entry-meta">
-                                        <li class="topic"><a href="#" title="">24 Hour</a></li>
-                                        <li class="date"><a href="#" title="">May 25, 2017</a></li>
-                                    </ul>
-                                    <h2 class="entry-title"><a href="#" title="">24 Hours in Indianapolis</a></h2>
-                                </div>
-                                <p>There is more to Indiana’s capital city than the Memorial Day weekend whirlwind known as the Indy 500.</p>
-                                <div class="author-post">By <a href="#" title="">Elaine Glusac</a></div>
-                            </div>
-                        </article>
+                                </div><!-- /.box-content -->
+                                <ul class="location">
+                                    <li class="address">
+                                        <span class="fa fa-user" aria-hidden="true"></span>Tieu Phung
+                                    </li>
+                                </ul><!-- /.location -->
+                            </div><!-- /.box-imagebox -->
+                        </div><!-- /.imagebox style1 -->
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-12">
-                        <div class="btn-more"><a href="blog.html" title="">View Blog</a></div>
+                        <div class="btn-more"><a href="blog.html" title="">Xem thêm</a></div>
                     </div>
                 </div>
             </div>

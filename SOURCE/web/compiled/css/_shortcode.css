@@ -269,14 +269,14 @@
   .flat-imagebox .flat-row-title p {
     font-size: 16px; }
 
-.flat-main-blog.style2 {
-  background: url('../assets/images/page/home-page/bg-01.png') top center repeat-y;
+.flat-main-blog {
+  background: url('../../resources/images/page/home-page/bg-01.png') top center repeat-y;
   padding: 80px 0 92px; }
-  .flat-main-blog.style2 .flat-row-title {
+  .flat-main-blog .flat-row-title {
     margin-bottom: 56px; }
-  .flat-main-blog.style2 .btn-more {
+  .flat-main-blog .btn-more {
     margin-top: 74px; }
-  .flat-main-blog.style2 .btn-more a {
+  .flat-main-blog .btn-more a {
     padding: 15px 36px; }
 
 .flat-imagebox.background {
