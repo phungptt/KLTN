@@ -264,7 +264,7 @@ include('_create_css.php')
                                     </div>
                                 </div>
                             </div>
-                            <div class="d-inline-block"> <a class="room-list__add-item" href="#">
+                            <div class="d-inline-block"> <a class="room-list__add-item" href="#" v-on:click="addRoom">
                                     <div class="icon-plus"><i class="fa fa-plus"></i></div>Thêm loại phòng
                                 </a></div>
                         </div>
@@ -299,6 +299,9 @@ include('_create_css.php')
                 showC: false
             },
             methods: {
+                addRoom: function(event) {
+                    
+                },
                 showAFunc: function(event) {
                     this.showA = true;
                     this.showB = false;

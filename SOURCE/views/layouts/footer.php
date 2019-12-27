@@ -6,6 +6,7 @@
  * Date: 04-Mar-19
  * Time: 2:55 PM
  */
+use app\modules\app\APPConfig;
 ?>
 <footer>
     <div class="container">
@@ -19,9 +20,9 @@
                 <div class="widget widget-categories">
                     <h3 class="widget-title">Danh mục</h3>
                     <ul class="one-half">
-                        <li><a href="#" title="">Địa điểm</a></li>
-                        <li><a href="#" title="">Ăn uống</a></li>
-                        <li><a href="#" title="">Khách sạn</a></li>
+                        <li><a href="<?= AppConfig::getUrl('place/visit-location-list') ?>" title="">Địa điểm</a></li>
+                        <li><a href="<?= AppConfig::getUrl('place/food-list') ?>" title="">Ăn uống</a></li>
+                        <li><a href=""<?= AppConfig::getUrl('place/hotel-list') ?>" title="">Khách sạn</a></li>
                     </ul>
                     <div class="clearfix"></div>
                 </div>

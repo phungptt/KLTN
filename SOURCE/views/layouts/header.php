@@ -26,20 +26,20 @@ use app\modules\app\services\UserService;
                     <div class="nav-wrap">
                         <nav class="mainnav" id="mainnav">
                             <ul class="menu">
-                                <li><a href="#" title="">Điểm đến</a></li>
-                                <li><a href="#" title="">Lịch trình</a></li>
-                                <li><a href="blog.html" title="">Địa điểm</a>
+                                <li><a href="<?= AppConfig::getUrl('destination/destination-list') ?>" title="">Điểm đến</a></li>
+                                <li><a href="<?= AppConfig::getUrl('plan/create-plan') ?>" title="">Lịch trình</a></li>
+                                <li><a href="javascript:void(0)" title="">Địa điểm</a>
                                     <ul class="submenu">
-                                        <li><a href="" title="">Khách sạn</a></li>
-                                        <li><a href="" title="">Ăn uống</a></li>
-                                        <li><a href="#" title="">Tham quan</a></li>
+                                        <li><a href="<?= AppConfig::getUrl('place/hotel-list') ?>" title="">Khách sạn</a></li>
+                                        <li><a href="<?= AppConfig::getUrl('place/food-list') ?>" title="">Ăn uống</a></li>
+                                        <li><a href="<?= AppConfig::getUrl('place/visit-location-list') ?>" title="">Tham quan</a></li>
                                     </ul>
                                 </li>
                                 <li><a href="login.html" title="">Đăng nhập</a></li>
                             </ul>
                         </nav>
                         <!-- /.mainnav-->
-                        <div class="button-header"><a href="#" title=""><i class="fa fa-plus"></i>Tạo lịch trình</a></div>
+                        <div class="button-header"><a href="<?= AppConfig::getUrl('plan/create-plan') ?>" title=""><i class="fa fa-plus"></i>Tạo lịch trình</a></div>
                         <div class="show-search">
                             <button><span class="ti-search"></span></button>
                             <div class="submenu top-search search-header">
