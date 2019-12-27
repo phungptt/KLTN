@@ -1961,6 +1961,13 @@ input[type="email"] {
   -ms-transition: all 0.3s ease-in-out;
   -o-transition: all 0.3s ease-in-out;
   transition: all 0.3s ease-in-out; }
+  .header li.user-menu .avatar {
+    height: 36px;
+    padding-right: 15px; }
+  .header li.user-menu .avatar img {
+    width: 36px;
+    border-radius: 50%;
+    height: 36px; }
 
 .header.downscrolled {
   position: fixed;

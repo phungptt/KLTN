@@ -300,7 +300,40 @@ include('_create_css.php')
             },
             methods: {
                 addRoom: function(event) {
-                    
+                    var count;
+                    count = 1;
+                    var newRow = $('.room-list');
+                    var blockRoom = `<div class="room-list__item">
+                        <div class="d-flex align-items-center mb-3">
+                        <div class="icon-plus"><i class="fa fa-plus"></i></div>
+                        <div class="text-20 title">Loại phòng</div>
+                        </div>
+                        <div class="wrap-listing"> 
+                        <label>Tên loại phòng</label>
+                        <select name="type-of-room">
+                            <option value="">Phòng Standard</option>
+                            <option value="">Phòng Superior</option>
+                            <option value="">Phòng Deluxe</option>
+                            <option value="">Phòng Suite</option>
+                            <option value="">Phòng Executive Suite</option>
+                            <option value="">Phòng Dorm</option>
+                        </select>
+                        </div>
+                        <div class="wrap-listing">
+                        <label>Số lượng khách</label>
+                        <select name="people-contain">
+                            <option value="">1</option>
+                            <option value="">2</option>
+                            <option value="">3</option>
+                        </select>
+                        </div>
+                        <div class="wrap-listing"> 
+                        <label>Giá </label>
+                        <input type="number" name="price">
+                        </div>
+                    </div>`;
+
+                    newRow.append(blockRoom);
                 },
                 showAFunc: function(event) {
                     this.showA = true;

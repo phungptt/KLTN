@@ -2006,6 +2006,20 @@ input[type="email"] {
 	-ms-transition: all 0.3s ease-in-out;
 	-o-transition: all 0.3s ease-in-out;
 	transition: all 0.3s ease-in-out;
+	li {
+		&.user-menu{
+			.avatar {
+				height: 36px;
+				padding-right: 15px;
+				img {
+					width: 36px;
+					border-radius: 50%;
+					height: 36px;
+				}
+			}
+		}
+	}
+
 }
 .header.downscrolled {
 	position: fixed;
