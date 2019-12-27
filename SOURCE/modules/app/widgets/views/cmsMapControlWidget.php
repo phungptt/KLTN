@@ -10,20 +10,6 @@
     <div  style="height: calc(100% - 50px);">
         <div id='gxmap_create_map' class='col-12 p-0 h-100' style="z-index: 99"></div>
     </div>
-    <!-- <div class="row form-group m-0 d-flex align-items-center bg-white" style="height: 50px">
-        <div class="col-2 col-md-1 col-form-label">
-            <span class="font-weight-semibold">Lat</span>
-        </div>
-        <div class="col-4 col-md-5">
-            <input class="form-control" id='geom_lat' name="lat" type="text" />
-        </div>
-        <div class="col-2 col-md-1 col-form-label">
-            <span class="font-weight-semibold">Lng</span>
-        </div>
-        <div class="col-4 col-md-5">
-            <input class="form-control" id='geom_lng' name="lng" type="text" />
-        </div>
-    </div> -->
 </div>
 
 <script type="application/javascript">

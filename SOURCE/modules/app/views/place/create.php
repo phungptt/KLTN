@@ -2,6 +2,7 @@
 
 use kartik\form\ActiveForm;
 use app\modules\app\APPConfig;
+use app\modules\app\services\PlaceService;
 use app\modules\app\widgets\CMSMapControlWidget;
 use app\modules\contrib\gxassets\GxLaddaAsset;
 use app\modules\contrib\gxassets\GxLeafletAsset;
@@ -10,38 +11,24 @@ use app\modules\contrib\gxassets\GxErsiAutocompleteAsset;
 GxLeafletAsset::register($this);
 GxErsiAutocompleteAsset::register($this);
 GxLaddaAsset::register($this);
-include('_create_css.php')
+include('_create_css.php');
+
 ?>
 <section class="flat-listing">
     <div class="content" id="create-place-page">
         <div class="container">
-            <div class="choose-type-location text-center">
-                <div class="title text-16 text-bold">Chọn loại địa điểm</div>
-                <div class="d-flex justify-content-center my-3">
-                    <a href="javascript:void(0)" class="btn btn-choose line-center" @click="showAFunc()">
-                        <span>Tham quan</span>
-                    </a>
-                    <a href="javascript:void(0)" class="btn btn-choose line-center mx-5" @click="showBFunc()">
-                        <span>Ăn uống</span>
-                    </a>
-                    <a href="javascript:void(0)" class="btn btn-choose line-center" @click="showCFunc()">
-                        <span>Nghỉ ngơi</span>
-                    </a>
-                </div>
-
-            </div>
-            <div class="row">
-                <div class="col-md-12" v-bind:class="{showA: showA}" style="display:none">
+        <div class="row">
+                <div class="col-md-12">
                     <?php $form = ActiveForm::begin([
                         'id' => 'create-place-form',
                         'options' => [
                             'enctype' => 'multipart/form-data',
-                            'class' => 'form-listing'
+                            'class' => 'form-listing create-form'
                         ]
                     ]) ?>
                     <!--Start form -->
                     <div class="inner-box style3">
-                        <label for="">Ảnh bìa</label>
+                        <label for="">Ảnh đại diện</label>
                         <div class="browse image-upload-wrap h-100">
                             <p>Kéo hoặc thả file tại đây</p>
                             <span>hoặc</span>
@@ -60,34 +47,92 @@ include('_create_css.php')
                     </div>
                     <div class="inner-box form">
                         <div class="wrap-listing">
-                            <?= $form->field($model, 'name')->textInput()->label('Tên địa điểm tham quan') ?>
+                            <?= $form->field($model, 'name')->textInput()->label('Tên địa điểm') ?>
                         </div>
                         <div class="wrap-listing">
                             <div class="one-half">
-                                <label for="">Thời gian mở cửa</label>
-                                <input type="time" name="Place[time_open]">
+                                <?= $form->field($model, 'time_open')->textInput(['type' => 'time'])->label('Thời gian mở cửa') ?>
                             </div>
                             <div class="one-half">
-                                <label for="">Thời gian đóng cửa</label>
-                                <input type="time" name="Place[time_closed]">
+                                <?= $form->field($model, 'time_closed')->textInput(['type' => 'time'])->label('Thời gian đóng cửa') ?>
                             </div>
                         </div>
                         <div class="wrap-listing">
                             <?= $form->field($model, 'short_description')->textInput()->label('Mô tả ngắn') ?>
                         </div>
                         <div class="wrap-listing">
-                            <?= $form->field($model, 'description')->textarea(['rows' => 10])->label('Mô tả') ?>
+                            <?= $form->field($model, 'description')->textarea(['rows' => 5])->label('Mô tả') ?>
                         </div>
                         <div class="wrap-listing">
-                            <?= $form->field($model, 'id_destination')->dropDownList(['Đà Lạt', 'Hồ Chí Minh'], [])->label('Điểm đến') ?>
+                            <?= $form->field($model, 'id_destination')->dropDownList($destinations, [])->label('Điểm đến') ?>
                         </div>
                         <div class="wrap-listing">
                             <?= $form->field($model, 'address')->textInput()->label('Địa chỉ') ?>
                         </div>
+                        <div class="wrap-listing">
+                            <?= $form->field($model, 'id_type_of_place')->dropDownList(PlaceService::$placeTypes, ['v-model' => 'placetype'])->label('Loại địa điểm') ?>
+                        </div>
+                    </div>
+                    <div class="inner-box style3" v-if="placetype == 0">
+                        <div class="card-header p-0">
+                            <h4 class="card-title font-weight-bold">Thông tin khách sạn</h4>
+                        </div>
+                        <div class="list-room-type">
+                            <div class="room-type-detail" v-for="(room, index) in listroom">
+                                <div class="card-header px-0">
+                                    <h5 class="card-title font-weight-bold d-flex align-items-center">
+                                        <span class="icon-plus" @click="removeRoom(index)" v-if="index > 0"><i class="fa fa-times"></i></span>
+                                        <span>Loại phòng {{ index + 1 }}</span>
+                                    </h5>
+                                </div>
+                                <div class="wrap-listing">
+                                    <div class="form-group highlight-addon field-room-contain_number">
+                                        <label for="room-contain_number" class="control-label has-star">Loại phòng</label> 
+                                        <select :name="'Room[' + index + '][name]'" v-model="room.name" class="form-control" :key="index + room.name">
+                                            <option v-for="(type, key) in roomType" :value="key">{{ type }}</option>
+                                        </select>
+                                        <div class="help-block"></div>
+                                    </div>
+                                </div>
+                                <div class="wrap-listing">
+                                <div class="form-group highlight-addon field-room-contain_number">
+                                        <label for="room-contain_number" class="control-label has-star">Số lượng khách tối đa</label> 
+                                        <input type="number" :name="'Room[' + index + '][contain_number]'" v-model="room.contain_number" class="form-control"> 
+                                        <div class="help-block"></div>
+                                    </div>
+                                </div>
+                                <div class="wrap-listing">
+                                <div class="form-group highlight-addon field-room-contain_number">
+                                        <label for="room-contain_number" class="control-label has-star">Giá phòng trung bình</label> 
+                                        <input type="number" :name="'Room[' + index + '][price]'" v-model="room.price" class="form-control"> 
+                                        <div class="help-block"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-inline-block">
+                            <a class="room-list__add-item" href="#" @click="addRoom">
+                                <div class="icon-plus"><i class="fa fa-plus"></i></div>Thêm loại phòng
+                            </a>
+                        </div>
+                    </div>
+                    <div class="inner-box style3" v-if="placetype == 1">
+                        <div class="card-header px-0">
+                            <h4 class="card-title font-weight-bold">Thông tin địa điểm ăn uống</h4>
+                        </div>
+                        <div class="room-type-detail">
+                            <div class="wrap-listing">
+                                <?= $form->field($food, 'min_price')->textInput(['type' => 'number', 'v-model' => 'food.min_price'])->label('Giá thấp nhất') ?>
+                            </div>
+                            <div class="wrap-listing">
+                                <?= $form->field($food, 'max_price')->textInput(['type' => 'number', 'v-model' => 'food.max_price'])->label('Giá cao nhất') ?>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="inner-box style3">
                         <div class="pdmap style2" style="height: 400px;">
                             <?= CMSMapControlWidget::widget() ?>
                         </div>
-
                     </div>
                     <div class="inner-box style3">
                         <label for="">Hình ảnh mô tả địa điểm</label>
@@ -104,185 +149,14 @@ include('_create_css.php')
                             </div>
                         </div>
                     </div>
-                    <button type="submit" class="submit-form-listing w-100">Lưu địa điểm</button>
-                    <?php $form->end() ?>
-                    <!--End form-->
-                </div>
-                <div class="col-md-12" v-bind:class="{showB: showB}" style="display:none">
-                    <?php $form = ActiveForm::begin([
-                        'id' => 'create-place-form',
-                        'options' => [
-                            'enctype' => 'multipart/form-data',
-                            'class' => 'form-listing'
-                        ]
-                    ]) ?>
-                    <!--Start form -->
-                    <div class="inner-box style3">
-                        <label>Ảnh bìa</label>
-                        <div class="browse">
-                            <p>Kéo hoặc thả file tại đây</p><span>hoặc</span>
-                            <div class="upload"><span>Tải ảnh</span>
-                                <input type="file" name="upload-file">
-                            </div>
-                        </div>
-                        <div class="clearfix"></div>
-                    </div>
-                    <div class="inner-box form">
-                        <div class="wrap-listing your-email">
-                            <label>Tên địa điểm ăn uống</label>
-                            <input type="email" name="email" placeholder="">
-                        </div>
-                        <div class="wrap-listing">
-                            <label>Mô tả ngắn</label>
-                            <input type="email" name="yourname" placeholder="Mô tả ngắn">
-                        </div>
-                        <div class="clearfix"></div>
-                        <div class="wrap-listing">
-                            <label>Địa chỉ</label>
-                            <input type="email" name="yourname" placeholder="Địa chỉ">
-                        </div>
-                        <div class="wrap-listing">
-                            <div class="one-half">
-                                <label>Lat</label>
-                                <input type="text" name="lat">
-                            </div>
-                            <div class="one-half">
-                                <label>Lng</label>
-                                <input type="text" name="lng">
-                            </div>
-                        </div>
-                        <div class="pdmap style2" id="flat-map"></div>
-                        <div class="wrap-listing">
-                            <div class="one-half">
-                                <label>Giá thấp nhất</label>
-                                <input type="text" name="min-price">
-                            </div>
-                            <div class="one-half">
-                                <label>Giá cao nhất</label>
-                                <input type="text" name="max-price">
-                            </div>
-                        </div>
-                        <div class="wrap-listing">
-                            <label>Mô tả</label>
-                            <textarea placeholder="Nhập mô tả về điểm đến"></textarea>
-                        </div>
-                        <div class="clearfix"></div>
-                    </div>
-                    <div class="inner-box style3">
-                        <label>Hình ảnh mô tả địa điểm</label>
-                        <div class="browse">
-                            <p>Kéo hoặc thả file tại đây</p><span>hoặc</span>
-                            <div class="upload"><span>Tải ảnh</span>
-                                <input type="file" name="upload-file">
-                            </div>
-                        </div>
-                        <div class="clearfix"></div>
-                    </div>
-                    <button class="submit-form-listing w-100">Thêm địa điểm</button>
-                    <?php $form->end() ?>
-                    <!--End form-->
-                </div>
-                <div class="col-md-12 create-hotel-form" v-bind:class="{showC: showC}" style="display:none">
-                    <?php $form = ActiveForm::begin([
-                        'id' => 'create-place-form',
-                        'options' => [
-                            'enctype' => 'multipart/form-data',
-                            'class' => 'form-listing create-form'
-                        ]
-                    ]) ?>
-                    <!--Start form -->
-                        <div class="inner-box style3">
-                            <label>Ảnh bìa</label>
-                            <div class="browse">
-                                <p>Kéo hoặc thả file tại đây</p><span>hoặc</span>
-                                <div class="upload"><span>Tải ảnh</span>
-                                    <input type="file" name="upload-file">
-                                </div>
-                            </div>
-                            <div class="clearfix"></div>
-                        </div>
-                        <div class="inner-box form">
-                            <div class="wrap-listing your-email">
-                                <label>Tên địa điểm nghỉ ngơi</label>
-                                <input type="email" name="email" placeholder="">
-                            </div>
-                            <div class="wrap-listing">
-                                <label>Mô tả ngắn</label>
-                                <input type="email" name="yourname" placeholder="Mô tả ngắn">
-                            </div>
-                            <div class="clearfix"></div>
-                            <div class="wrap-listing">
-                                <label>Địa chỉ</label>
-                                <input type="email" name="yourname" placeholder="Địa chỉ">
-                            </div>
-                            <div class="wrap-listing">
-                                <div class="one-half">
-                                    <label>Lat</label>
-                                    <input type="text" name="lat">
-                                </div>
-                                <div class="one-half">
-                                    <label>Lng</label>
-                                    <input type="text" name="lng">
-                                </div>
-                            </div>
-                            <div class="pdmap style2" id="flat-map"></div>
-                            <div class="wrap-listing">
-                                <label>Mô tả</label>
-                                <textarea placeholder="Nhập mô tả về điểm đến"></textarea>
-                            </div>
-                            <div class="clearfix"></div>
-                        </div>
-                        <div class="inner-box">
-                            <div class="room-list">
-                                <div class="room-list__item">
-                                    <div class="d-flex align-items-center mb-3">
-                                        <div class="icon-plus"><i class="fa fa-plus"></i></div>
-                                        <div class="text-20 title">Loại phòng </div>
-                                    </div>
-                                    <div class="wrap-listing">
-                                        <label>Tên loại phòng</label>
-                                        <select name="type-of-room">
-                                            <option value="">Phòng Standard</option>
-                                            <option value="">Phòng Superior</option>
-                                            <option value="">Phòng Deluxe</option>
-                                            <option value="">Phòng Suite</option>
-                                            <option value="">Phòng Executive Suite</option>
-                                            <option value="">Phòng Dorm</option>
-                                        </select>
-                                    </div>
-                                    <div class="wrap-listing">
-                                        <label>Số lượng khách</label>
-                                        <select name="people-contain">
-                                            <option value="">1</option>
-                                            <option value="">2</option>
-                                            <option value="">3</option>
-                                        </select>
-                                    </div>
-                                    <div class="wrap-listing">
-                                        <label>Giá </label>
-                                        <input type="number" name="price">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="d-inline-block"> <a class="room-list__add-item" href="#" v-on:click="addRoom">
-                                    <div class="icon-plus"><i class="fa fa-plus"></i></div>Thêm loại phòng
-                                </a></div>
-                        </div>
-                        <div class="inner-box style3">
-                            <label>Hình ảnh mô tả địa điểm</label>
-                            <div class="browse">
-                                <p>Kéo hoặc thả file tại đây</p><span>hoặc</span>
-                                <div class="upload"><span>Tải ảnh</span>
-                                    <input type="file" name="upload-file">
-                                </div>
-                            </div>
-                            <div class="clearfix"></div>
-                        </div>
-                        <button class="submit-form-listing w-100">Thêm địa điểm</button>
+
+                    <button class="submit-form-listing w-100" id="btn-submit" @click="submitForm">Lưu địa điểm</button>
+
                     <?php $form->end() ?>
                     <!--End form-->
                 </div>
             </div>
+            
         </div>
     </div>
 </section>
@@ -290,66 +164,45 @@ include('_create_css.php')
 
 <script>
     $(function() {
-        var vueinstance = new Vue({
+        var roomType = JSON.parse('<?= json_encode(PlaceService::$roomType, true) ?>');
+        var vm = new Vue({
             el: '#create-place-page',
             data: {
                 imagesRelate: [],
-                showA: false,
-                showB: false,
-                showC: false
+                placetype: 0,
+                roomType: roomType,
+                listroom: [
+                    {
+                        name: 'Phòng Standard',
+                        contain_number: null,
+                        price: null
+                    }
+                ],
+                food: {
+                    min_price: null,
+                    max_price: null
+                }
+            },
+            watch: {
+                placetype: function(newVal, oldVal) {
+                    
+                }
             },
             methods: {
-                addRoom: function(event) {
-                    var count;
-                    count = 1;
-                    var newRow = $('.room-list');
-                    var blockRoom = `<div class="room-list__item">
-                        <div class="d-flex align-items-center mb-3">
-                        <div class="icon-plus"><i class="fa fa-plus"></i></div>
-                        <div class="text-20 title">Loại phòng</div>
-                        </div>
-                        <div class="wrap-listing"> 
-                        <label>Tên loại phòng</label>
-                        <select name="type-of-room">
-                            <option value="">Phòng Standard</option>
-                            <option value="">Phòng Superior</option>
-                            <option value="">Phòng Deluxe</option>
-                            <option value="">Phòng Suite</option>
-                            <option value="">Phòng Executive Suite</option>
-                            <option value="">Phòng Dorm</option>
-                        </select>
-                        </div>
-                        <div class="wrap-listing">
-                        <label>Số lượng khách</label>
-                        <select name="people-contain">
-                            <option value="">1</option>
-                            <option value="">2</option>
-                            <option value="">3</option>
-                        </select>
-                        </div>
-                        <div class="wrap-listing"> 
-                        <label>Giá </label>
-                        <input type="number" name="price">
-                        </div>
-                    </div>`;
+                addRoom: function() {
+                    // var newRoom = this.listroom.length + 1;
+                    this.listroom.push({
+                        name: 'Phòng Standard',
+                        contain_number: null,
+                        price: null
+                    });
+                },
 
-                    newRow.append(blockRoom);
+                removeRoom: function(index) {
+                    console.log(index);
+                    this.listroom.splice(index, 1);
                 },
-                showAFunc: function(event) {
-                    this.showA = true;
-                    this.showB = false;
-                    this.showC = false;
-                },
-                showBFunc: function(event) {
-                    this.showA = false;
-                    this.showB = true;
-                    this.showC = false;
-                },
-                showCFunc: function(event) {
-                    this.showA = false;
-                    this.showB = false;
-                    this.showC = true;
-                },
+
                 readFileInfo: function(event) {
                     var _this = this,
                         input = event.target;
@@ -398,13 +251,15 @@ include('_create_css.php')
                     $('.list-images-relate-wrap').empty();
                     $('#images-relate-upload-input').val('');
                 },
-                createPlace: function(event) {
+
+                submitForm: function(event) {
                     event.preventDefault();
                     var _this = this,
-                        ladda = Ladda.create($("#btn-submit")[0]),
+                        btnSubmit = $("#btn-submit"),
                         formData = new FormData($('#create-place-form')[0]);
 
-                    ladda.start();
+                    btnSubmit.empty().append('Đang lưu địa điểm mới...')
+
                     $.ajax({
                         contentType: false,
                         processData: false,
@@ -418,11 +273,11 @@ include('_create_css.php')
                                 toastMessage('success', response.message);
                                 window.location.reload();
                             }
-                            ladda.stop();
+                            btnSubmit.empty().append('Lưu địa điểm');
                         },
                         error: function() {
                             toastMessage('error', 'Upload failed');
-                            ladda.stop();
+                            btnSubmit.empty().append('Lưu địa điểm');
                         }
                     });
                 }

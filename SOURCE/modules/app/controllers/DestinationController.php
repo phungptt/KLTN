@@ -4,7 +4,7 @@ namespace app\modules\app\controllers;
 
 use app\modules\app\models\DiemDen;
 use app\modules\app\models\DestinationImage;
-use app\modules\app\services\DiemDenService;
+use app\modules\app\services\DestinationService;
 use yii\web\UploadedFile;
 use app\modules\app\models\UploadImage;
 use app\modules\app\models\UploadImages;
@@ -26,7 +26,7 @@ class DestinationController extends Controller
                $image->imageFile = UploadedFile::getInstance($image, 'imageFile');
                $imageRelate = new UploadImages();
                $imageRelate->imageFiles = UploadedFile::getInstances($imageRelate, 'imageFiles');
-               $saved = DiemDenService::CreateNewDestination($image, $imageRelate, $request->post());
+               $saved = DestinationService::CreateNewDestination($image, $imageRelate, $request->post());
                if($saved) {
                     Yii::$app->session->setFlash('success', 'Lưu thành công điểm đến mới');
                     return $this->refresh();

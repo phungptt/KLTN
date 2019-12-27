@@ -10,6 +10,7 @@
 <?php
 
 use app\modules\app\APPConfig;
+use app\modules\app\services\SiteService;
 use app\modules\app\services\UserService;
 
 ?>
@@ -35,18 +36,26 @@ use app\modules\app\services\UserService;
                                         <li><a href="<?= AppConfig::getUrl('place/visit-location-list') ?>" title="">Tham quan</a></li>
                                     </ul>
                                 </li>
+                                <?php if(UserService::IsAdministrator()) :?>
+                                <li><a href="javascript:void(0)" title="">Admin</a>
+                                    <ul class="submenu">
+                                        <li><a href="<?= AppConfig::getUrl('admin/destination') ?>" title="">QL Điểm đến</a></li>
+                                        <li><a href="<?= AppConfig::getUrl('admin/place') ?>" title="">QL Địa điểm</a></li>
+                                        <li><a href="<?= AppConfig::getUrl('admin/user') ?>" title="">QL Người dùng</a></li>
+                                    </ul>
+                                </li>
+                                <?php endif; ?>
                                 <?php if(Yii::$app->user->isGuest) :?>
                                     <li><a href="<?= Yii::$app->homeUrl ?>site/login" title="">Đăng nhập</a></li>
                                 <?php else : ?>
                                     <li class="user-menu line-center">
-                                        <div class="avatar"><img src="<?= Yii::$app->homeUrl ?>resources/images/page/user-profile.jpg"/></div><a href="javascript:void(0)" title="">Tiểu Phụng</a>
+                                        <div class="avatar"><img src="<?= Yii::$app->homeUrl ?>resources/images/page/user-profile.jpg"/></div><a href="javascript:void(0)" title=""><?= UserService::GetUserFullName() ?></a>
                                         <ul class="submenu">
                                             <li><a href="<?= AppConfig::getUrl('user/user-profile') ?>" title="">Trang cá nhân</a></li>
-                                            <li><a href="" title="">Đăng xuất</a></li>
+                                            <li><a href="<?= Yii::$app->homeUrl ?>site/logout" title="">Đăng xuất</a></li>
                                         </ul>
                                     </li>
                                 <?php endif; ?>
-                                <li><a href="<?= Yii::$app->homeUrl ?>site/logout" title="">Đăng nhập</a></li>
                             </ul>
                         </nav>
                         <!-- /.mainnav-->

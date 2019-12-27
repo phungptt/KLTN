@@ -2,11 +2,15 @@
 
 namespace app\modules\app\controllers;
 
+use app\modules\app\models\Food;
 use app\modules\app\models\Place;
+use app\modules\app\models\Room;
 use app\modules\app\services\PlaceService;
 use yii\web\UploadedFile;
 use app\modules\app\models\UploadImage;
 use app\modules\app\models\UploadImages;
+use app\modules\app\models\VisitLocation;
+use app\modules\app\services\DestinationService;
 use Yii;
 use yii\web\Controller;
 
@@ -14,6 +18,11 @@ class PlaceController extends Controller
 {
      public function actionCreate() {
           $model = new Place();
+          $food = new Food();
+          $room = new Room();
+          $visit = new VisitLocation();
+
+          $destinations = DestinationService::GetArrayDestination();
 
           $request = Yii::$app->request;
           if($request->isPost) {
@@ -24,18 +33,10 @@ class PlaceController extends Controller
                $imageRelate->imageFiles = UploadedFile::getInstances($imageRelate, 'imageFiles');
 
                $saved = PlaceService::CreateNewPlace($image, $imageRelate, $request->post());
-               if($saved) {
-                    Yii::$app->session->setFlash('success', 'Lưu thành công địa điểm mới');
-                    return $this->refresh();
-               } 
-
-               $response = [
-                    'status' => false,
-                    'message' => 'Không thể lưu'
-               ];
-               return $this->asJson($response);
+               
+               return $this->asJson($saved);
           }
-          return $this->render('create', compact('model'));
+          return $this->render('create', compact('model', 'room', 'food', 'visit', 'destinations'));
      }
 
      public function actionEdit() {

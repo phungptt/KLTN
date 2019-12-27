@@ -8,7 +8,7 @@ use app\modules\contrib\helper\ConvertHelper;
 use Yii;
 use app\modules\app\APPConfig;
 
-class DiemDenService 
+class DestinationService 
 {
     public static $AVALABLE = 1;
     public static $PENDING = 0;
@@ -78,5 +78,11 @@ class DiemDenService
             $destinations->limit($limit);
         }
         return $destinations->all();
+    }
+
+    public static function GetArrayDestination() {
+        $destinations = DiemDen::find()->select('name')->indexBy('id')->orderBy('created_at')->column();
+
+        return $destinations;
     }
 }
