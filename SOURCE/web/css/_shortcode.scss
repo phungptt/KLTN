@@ -109,28 +109,7 @@
 -------------------------------------------------------------- */
 /* Go Top
 ---------------------------------------------------------------*/
-.showA, 
-.showB, 
-.showC {
-	display: block !important;
-}
-.choose-type-location {
-	.btn-choose {
-		border: 1px dashed #4ca1af;
-		color: #4ca1af;
-		background: #fff;
-		white-space: nowrap;
-	 
-		&:hover {
-			border: 1px dashed #4ca1af;
-		}
 
-		&:focus {
-			background: #4ca1af;
-    			color: white;
-		}
-	}
-}
 
 .wrap-box-search {
 	background-color: #fff;

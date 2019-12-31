@@ -185,7 +185,6 @@ include('_create_css.php');
             },
             watch: {
                 placetype: function(newVal, oldVal) {
-                    
                 }
             },
             methods: {
@@ -199,7 +198,6 @@ include('_create_css.php');
                 },
 
                 removeRoom: function(index) {
-                    console.log(index);
                     this.listroom.splice(index, 1);
                 },
 

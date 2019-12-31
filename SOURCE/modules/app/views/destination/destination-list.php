@@ -39,7 +39,7 @@ include('destination-list_css.php');
 									<div class="box-header">
 										<div class="box-image">
 											<img :src="dest.path" alt="">
-											<a href="#" title="">Xem</a>
+											<a :href="'<?= AppConfig::getUrl('destination/destination-detail?slug=') ?>'  + dest.slug" title="">Xem</a>
 										</div>
 									</div><!-- /.box-header -->
 									<div class="box-content">
@@ -87,22 +87,8 @@ include('destination-list_css.php');
                     selectDestination: null
                },
                methods: {
-                    viewDestination: function(dest) {
-                         this.selectDestination = dest;
-                         this.zoomToMap(dest.lat, dest.lng);
-                         var iconMap = $('#image-object-on-map-' + dest.id).parent();
-                         iconMap.trigger('click');
-                    }
+                   
                },
           })
-
-          // var map = L.map('flat-map').setView([16.0544,108.2022 ], 6);
-          // L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-          // attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          // }).addTo(map);
-
-          // L.marker([16.0544,108.2022]).addTo(map)
-          // .bindPopup('A pretty CSS3 popup.<br> Easily customizable.')
-          // .openPopup();
      })(jQuery)
 </script>
