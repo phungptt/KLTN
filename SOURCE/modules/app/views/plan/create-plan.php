@@ -1,10 +1,9 @@
 <?php
 
-use app\modules\app\APPConfig;
 use kartik\form\ActiveForm;
 use kartik\date\DatePicker;
 
-include('create-plan_css.php')
+include('create-plan_css.php');
 ?>
 <div class="create-plan" id="create-plan-page">
      <section class="page-title parallax parallax1">
@@ -30,30 +29,37 @@ include('create-plan_css.php')
                     </div>
                     <div class="col-lg-6">
                          <?php $form = ActiveForm::begin([
-                              'id' => 'create-plan-form'
+                              'id' => 'create-plan-form',
+                              'tooltipStyleFeedback' => true,
+                              'options' => [
+                                   'class' => 'form-listing'
+                              ]
                          ]) ?>
-                         <div class="destination">
-                              <?= $form->field($model, 'id_place')->dropDownList($destinations, [
-                                   'promt' => '-- Chọn điểm đến --'
-                              ]) ?>
-                         </div>
-                         <div class="calendar-group">
-                              <?= DatePicker::widget([
-                                  'model' => $model,
-                                  'attribute' => 'date_start',
-                                  'attribute2' => 'date_end',
-                                  'options' => ['placeholder' => 'Ngày bắt đầu'],
-                                  'options2' => ['placeholder' => 'Ngày kết thúc'],
-                                  'type' => DatePicker::TYPE_RANGE,
-                                  'form' => $form,
-                                  'pluginOptions' => [
-                                      'format' => 'yyyy-mm-dd',
-                                      'autoclose' => true,
-                                  ] 
-                              ]) ?>
-                         </div>
-                         <div class="create-plan-btn">
-                              <div class="btn-more"><a href="<?= APPConfig::getUrl('plan/create-plan-detail?slug=') ?>" title="">Tạo lịch trình</a></div>
+                         <div class="inner-box">
+                              <div class="destination">
+                                   <?= $form->field($model, 'id_destination')->dropDownList($destinations, [
+                                        'promt' => '-- Chọn điểm đến --'
+                                   ])->label('Điểm đến') ?>
+                              </div>
+                              <div class="calendar-group">
+                                   <label for="" class="control-label">Thời gian</label>
+                                   <?= DatePicker::widget([
+                                   'name' => 'Plan[date_start]',
+                                   'value' => date('d-m-yy'),
+                                   'name2' => 'Plan[date_end]',
+                                   'value2' => date('d-m-yy'),
+                                   'type' => DatePicker::TYPE_RANGE,
+                                   'separator' => 'đến',
+                                   'pluginOptions' => [
+                                        'todayHighlight' => true,
+                                        'format' => 'dd-mm-yyyy',
+                                        'autoclose' => true
+                                   ],
+                                   ]) ?>
+                              </div>
+                              <div class="create-plan-btn mb-3">
+                                   <div class="btn-more"><a href="#" @click="createPlan">Tạo lịch trình</a></div>
+                              </div>
                          </div>
                          <?php ActiveForm::end() ?>
                     </div>
@@ -64,11 +70,29 @@ include('create-plan_css.php')
 
 <script>
      $(function() {
-          var destinations = <?= json_encode($destinations, true) ?>;
+          var destinations = JSON.parse('<?= json_encode($destinations, true) ?>');
           var vm = new Vue({
                el: '#create-plan-page',
                data: {
                     destinations: destinations
+               },
+               methods: {
+                    createPlan: function(e) {
+                         e.preventDefault();
+
+                         $.ajax({
+                              data: $('#create-plan-form').serialize(),
+                              type: 'POST',
+                              success: function(resp) {
+                                   if(!resp.status) {
+                                        toastMessage('error', resp.message)
+                                   }
+                              },
+                              error: function(msg) {
+                                   toastMessage('error', msg)
+                              }
+                         })
+                    }
                }
           })
      })

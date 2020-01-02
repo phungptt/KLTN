@@ -1,7 +1,7 @@
 <?php
 include('create-plan-detail_css.php')
 ?>
-<div class="create-plan-detail">
+<div class="create-plan-detail" id="create-plan-detail-page">
      <section class="banner-section">
           <div class="banner-img"></div>
           <div class="text-box">
@@ -100,3 +100,15 @@ include('create-plan-detail_css.php')
           </div>
      </section>
 </div>
+
+<script>
+     $(function() {
+          var plan = JSON.parse('<?= json_encode($plan, true) ?>');
+          var vm = new Vue({
+               el: '#create-plan-detail-page',
+               data: {
+                    plan: plan
+               }
+          })
+     })
+</script>

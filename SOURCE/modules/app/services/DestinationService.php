@@ -118,4 +118,9 @@ class DestinationService
         }                               
         return $images;
     }
+
+    public static function GetDestinationNameById($id) {
+        $destination = DiemDen::findOne($id);
+        return $destination ? $destination->name : null;
+    }
 }
