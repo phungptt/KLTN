@@ -10,6 +10,8 @@ use app\modules\app\models\VisitLocation;
 use app\modules\app\services\ImageService;
 use app\modules\contrib\helper\ConvertHelper;
 use Yii;
+use app\modules\app\models\PlaceImage;
+use yii\db\Query;
 
 class PlaceService 
 {
@@ -18,6 +20,11 @@ class PlaceService
 
     public static $DELETED = 1;
     public static $ALIVE = 0;
+
+    public static $VISIT_TYPE = 2;
+    public static $FOOD_TYPE = 1;
+    public static $HOTEL_TYPE = 3;
+
 
     public static $placeTypes = ['Khách sạn', 'Ăn uống', 'Tham quan'];
     public static $roomType = [
@@ -62,7 +69,7 @@ class PlaceService
         $model->load($data);
         $model->create_by = Yii::$app->user->id;
         $model->viewed = 0;
-        $model->slug = ConvertHelper::convertStringToSlug($model->name);
+        $model->slug = SiteService::uniqid() . SiteService::convertStringToSlug($model->name);
         $model->status = self::$AVALABLE;
         $model->deleted = self::$ALIVE;
         $model->id_type_of_place = intval($data['Place']['id_type_of_place']);
@@ -112,5 +119,14 @@ class PlaceService
     public static function GetListPlaceType() {
         $amenities = Amenities::find()->select('name')->indexBy('id')->column();
         return $amenities;
+    }
+
+    public static function GetVisitLocationAvailable() {
+        $visits = PlaceImage::find()->where(['and', ['status' => self::$AVALABLE], ['deleted' => self::$ALIVE], ['id_type_of_place' => self::$VISIT_TYPE]])->asArray()->all();
+
+        foreach($visits as &$visit) {
+            $visit['path'] = ImageService::GetOriginalPath($visit['path']);
+        }
+        return $visits;
     }
 }

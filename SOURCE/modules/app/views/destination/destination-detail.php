@@ -11,7 +11,7 @@
 
 <div class="destination-detail" id='destination-detail'>
      <section class="destination-banner-section banner-section">
-          <div class="banner-img" :style="{ backgroundImage: 'url(' +  image.path + ')' }"></div>
+          <div class="banner-img" :style="{ backgroundImage: 'url(' +  selectDestination.path + ')' }"></div>
           <div class="text-box">
                <div class="title"> <span class="destination">{{selectDestination.name}}</span></div>
           </div>
@@ -28,10 +28,8 @@
                     </div>
                     <div class="slider-box">
                          <div class="swiper-container">
-                              <div class="swiper-wrapper">
-                                   <div class="swiper-slide"> <img src="<?= Yii::$app->homeUrl ?>resources/images/page/destination-detail/slider-1.jpg"></div>
-                                   <div class="swiper-slide"> <img src="<?= Yii::$app->homeUrl ?>resources/images/page/destination-detail/slider-2.jpg"></div>
-                                   <div class="swiper-slide"> <img src="<?= Yii::$app->homeUrl ?>resources/images/page/destination-detail/slider-3.jpg"></div>
+                              <div class="swiper-wrapper" v-for="image in imagesRelate">
+                                   <div class="swiper-slide"> <img :src="image.path"></div>
                               </div>
                               <div class="swiper-button-next"></div>
                               <div class="swiper-button-prev"></div>
@@ -88,28 +86,32 @@
 
 <script>
      (function ($) {
-          // var swiper = new Swiper('.swiper-container', {
-          //      centeredSlides: true,
-          //      loop: true,
-          //      pagination: {
-          //           el: '.swiper-pagination',
-          //           clickable: true,
-          //      },
-          //      navigation: {
-          //           nextEl: '.swiper-button-next',
-          //           prevEl: '.swiper-button-prev',
-          //      },
-          // });
           var selectDestination = <?= json_encode($destination) ?>;
-          var image = <?= json_encode($image) ?>;
+          var imagesRelate = <?= json_encode($imagesRelate) ?>;
 
           APP.vueInstance = new Vue({
                el: '#destination-detail',
                data: {
                     selectDestination: selectDestination,
-                    image: image,
+                    imagesRelate: imagesRelate,
+                    swiper: null,
                },
                methods: {
+               },
+               mounted() {
+                    this.swiper = new window.Swiper('.swiper-container', {
+                         cssMode: true,
+                         navigation: {
+                              nextEl: '.swiper-button-next',
+                              prevEl: '.swiper-button-prev',
+                         },
+                         pagination: {
+                              el: '.swiper-pagination',
+                              clickable: true,
+                         },
+                         mousewheel: true,
+                         keyboard: true,
+                    })
                },
           });
 

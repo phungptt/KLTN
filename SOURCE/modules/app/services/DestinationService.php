@@ -7,14 +7,16 @@ use app\modules\app\services\ImageService;
 use app\modules\contrib\helper\ConvertHelper;
 use Yii;
 use app\modules\app\APPConfig;
+use app\modules\app\models\DestinationImage;
+use yii\db\Query;
 
 class DestinationService 
 {
     public static $AVALABLE = 1;
     public static $PENDING = 0;
 
-    public static $DELETED = 0;
-    public static $ALIVE = 1;
+    public static $DELETED = 1;
+    public static $ALIVE = 0;
 
     public static $DEFAUL_DESTINATION_AVATAR =  'resources/images/default-destination-avatar.jpg';
 
@@ -51,8 +53,9 @@ class DestinationService
         $model->load($data);
         $model->created_by = Yii::$app->user->id;
         $model->viewed = 0;
-        $model->slug = ConvertHelper::convertStringToSlug($model->name);
+        $model->slug = SiteService::uniqid() . SiteService::convertStringToSlug($model->name);
         $model->status = self::$AVALABLE;
+        $model->deleted = self::$ALIVE;
         $model->lat = $data['lat'];
         $model->lng = $data['lng'];
 
@@ -72,6 +75,15 @@ class DestinationService
         ];
     }
 
+    public static function GetDestinationsAvailable() {
+        $destinations = DestinationImage::find()->where(['and', ['status' => self::$AVALABLE], ['deleted' => self::$ALIVE]])->asArray()->all();
+
+        foreach($destinations as &$dest) {
+            $dest['path'] = ImageService::GetThumbnailPath($dest['path']);
+        }
+        return $destinations;
+    }
+
     public static function GetDestinations($limit = null) {
         $destinations = DiemDen::find();
         if($limit) {
@@ -84,5 +96,26 @@ class DestinationService
         $destinations = DiemDen::find()->select('name')->indexBy('id')->orderBy('created_at')->column();
 
         return $destinations;
+    }
+
+    public static function GetDestinationBySlug($slug) {
+        $destination = DestinationImage::find()->where(['slug' => $slug])->andWhere(['and', ['status' => self::$AVALABLE], ['deleted' => self::$ALIVE]])->asArray()->one();
+        $destination['path'] = ImageService::GetOriginalPath($destination['path']);
+        return $destination;
+    }
+
+    public static function GetImagesRelateByDestinationId($id) {
+        $images = (new Query())
+                                        ->select('path')
+                                        ->from('image_file as f')
+                                        ->leftJoin('image_ref as r', 'f.id = r.image_id')
+                                        ->where(['and', ['r.object_type' => 'app\modules\app\models\DiemDen'], ['r.object_id' => $id]])
+                                        ->andWhere(['relate' => 1])
+                                        ->all();
+
+        foreach($images as &$img) {
+            $img['path'] = ImageService::GetOriginalPath($img['path']);
+        }                               
+        return $images;
     }
 }

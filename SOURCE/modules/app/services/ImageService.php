@@ -109,7 +109,7 @@ class ImageService
 
     public static function CreateThumbnailForImage($filename) {
         chdir('uploads');
-        $command = 'mogrify -auto-orient -resize 400 -path thumbnails/ ' . $filename;
+        $command = 'mogrify -auto-orient -resize 400 -quality 100 -path thumbnails/ ' . $filename;
         $output = shell_exec($command);
     }
 

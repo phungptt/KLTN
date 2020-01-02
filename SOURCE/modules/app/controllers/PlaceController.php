@@ -4,8 +4,10 @@ namespace app\modules\app\controllers;
 
 use app\modules\app\models\Food;
 use app\modules\app\models\Place;
+use app\modules\app\models\PlaceImage;
 use app\modules\app\models\Room;
 use app\modules\app\services\PlaceService;
+use app\modules\app\services\ImageService;
 use yii\web\UploadedFile;
 use app\modules\app\models\UploadImage;
 use app\modules\app\models\UploadImages;
@@ -72,7 +74,8 @@ class PlaceController extends Controller
      }
 
      public function actionVisitLocationList() {
-          return $this->render('visit-location-list');
+          $visit = PlaceService::GetVisitLocationAvailable();
+          return $this->render('visit-location-list', compact('visit'));
      }
 
      public function actionVisitLocationDetail() {
