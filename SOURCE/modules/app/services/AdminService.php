@@ -17,7 +17,7 @@ class AdminService
     public static $ALIVE = 0;
 
     public static function GetPlaceList() {
-        $places = Place::find()->where(['deleted' => self::$ALIVE])->all();
+        $places = Place::find()->where(['deleted' => self::$ALIVE])->asArray()->all();
         return $places;
     }
 }

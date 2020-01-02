@@ -2,12 +2,16 @@
 
 namespace app\modules\app\controllers;
 
+use app\modules\app\models\Plan;
+use app\modules\app\services\DestinationService;
 use yii\web\Controller;
 
 class PlanController extends Controller
 {
      public function actionCreatePlan() {
-          return $this->render('create-plan');
+          $model = new Plan();
+          $destinations = DestinationService::GetArrayDestination();
+          return $this->render('create-plan', compact('destinations', 'model'));
      }
 
      public function actionCreatePlanDetail() {

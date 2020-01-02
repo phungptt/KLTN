@@ -22,7 +22,8 @@
         "tinymce/tinymce": ">= 4",
         "lsolesen/pel": "^0.9.6",
         "yiisoft/yii2-authclient": "^2.2",
-        "nizsheanez/yii2-asset-converter": "^1.5"
+        "nizsheanez/yii2-asset-converter": "^1.5",
+        "kartik-v/yii2-widget-datepicker": "dev-master"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",
