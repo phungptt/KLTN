@@ -357,8 +357,8 @@
     .imagebox:hover .box-header .box-image:after {
       opacity: 1; }
   .imagebox .box-content {
-    padding: 30px 25px;
-    padding: 30px 25px 43px; }
+    padding: 30px 25px 43px;
+    min-height: 150px; }
   .imagebox .box-content .box-desc {
     margin-top: 18px;
     margin: 18px 0 13px; }
@@ -375,7 +375,7 @@
     height: 20px;
     position: absolute; }
   .imagebox .box-content .box-title a {
-    font-size: 24px;
+    font-size: 18px;
     font-weight: 500; }
   .imagebox .box-content .box-title i {
     position: relative;

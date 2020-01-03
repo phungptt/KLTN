@@ -1,10 +1,16 @@
 <?php
 use app\modules\contrib\gxassets\GxBootstrapSliderAsset;
+use app\modules\contrib\gxassets\GxVueAsset;
+use app\modules\contrib\gxassets\GxLeafletAsset;
+use app\modules\app\widgets\AppObjectMapWidget;
+use app\modules\app\widgets\CMSMapDetailWidget;
 
-GxBootstrapSliderAsset::register($this);
+GxLeafletAsset::register($this);
+GxVueAsset::register($this);
 include('hotel-list_css.php')
 ?>
-<section class="flat-map-zoom-in">
+
+<section class="flat-map-zoom-in" id="hotel-list">
      <div class="container-fluid">
           <div class="row">
                <div class="col-lg-6">
@@ -23,7 +29,7 @@ include('hotel-list_css.php')
                                    </span>
                                    <div class="clearfix"></div>
                                    <div class="box-slider">
-                                        <input id="price-slider-range" type="text" class="span2" value="" />
+                                        <!-- <input id="price-slider-range" type="text" class="span2" value="" v-model="sliderValue" /> -->
                                         <div class="slider-limit">
                                              <span class="price-min text-12">0 VNĐ</span>
                                              <span class="price-max text-12">24000000 VNĐ</span>
@@ -97,12 +103,12 @@ include('hotel-list_css.php')
                               </ul>
                          </div><!-- /.filter-result -->
                          <div class="wrap-imagebox style1">
-                              <div class="imagebox style3">
+                              <div class="imagebox style3" v-for="hotel in hotelList">
                                    <div class="box-imagebox">
                                         <div class="box-header">
                                              <div class="box-image">
-                                                  <img src="<?= Yii::$app->homeUrl ?>resources/images/page/home-page/img-02.png" alt="">
-                                                  <a href="#" title="">Preview</a>
+                                                  <img :src="hotel.path" alt="">
+                                                  <a href="#" title="">Xem</a>
                                                   <div class="overlay"></div>
                                                   <div class="queue">
                                                        <i class="fa fa-star" aria-hidden="true"></i>
@@ -115,46 +121,13 @@ include('hotel-list_css.php')
                                         </div><!-- /.box-header -->
                                         <div class="box-content">
                                              <div class="box-title">
-                                                  <a href="#" title="">Acantara</a><i class="fa fa-check-circle" aria-hidden="true"></i>
+                                                  <a href="#" title="">{{hotel.name}}</a><i class="fa fa-check-circle" aria-hidden="true"></i>
                                              </div>
                                              <ul class="rating">
                                                   <li>540 000 VNĐ / đêm</li>
                                              </ul>
                                              <div class="box-desc">
                                                   Lorem ipsum dolor sit amet, consectetur<br /> adipisicing elit, sed do eiusmod tempor
-                                             </div>
-                                        </div><!-- /.box-content -->
-                                        <ul class="location">
-                                             <li class="address"><span class="ti-location-pin"></span>Seoul, Korea</li>
-                                             <li class="open">Open Now !</li>
-                                        </ul><!-- /.location -->
-                                   </div><!-- /.box-imagebox -->
-                              </div><!-- /.imagebox style3 -->
-                              <div class="imagebox style3">
-                                   <div class="box-imagebox">
-                                        <div class="box-header">
-                                             <div class="box-image">
-                                                  <img src="<?= Yii::$app->homeUrl ?>resources/images/page/home-page/img-03.png" alt="">
-                                                  <a href="#" title="">Preview</a>
-                                                  <div class="overlay"></div>
-                                                  <div class="queue">
-                                                       <i class="fa fa-star" aria-hidden="true"></i>
-                                                       <i class="fa fa-star" aria-hidden="true"></i>
-                                                       <i class="fa fa-star" aria-hidden="true"></i>
-                                                       <i class="fa fa-star" aria-hidden="true"></i>
-                                                       <i class="fa fa-star" aria-hidden="true"></i>
-                                                  </div>
-                                             </div>
-                                        </div><!-- /.box-header -->
-                                        <div class="box-content">
-                                             <div class="box-title">
-                                                  <a href="#" title="">Intercontinental</a><i class="fa fa-check-circle" aria-hidden="true"></i>
-                                             </div>
-                                             <ul class="rating">
-                                                  <li>200 000 VNĐ / đêm</li>
-                                             </ul>
-                                             <div class="box-desc">
-                                                  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
                                              </div>
                                         </div><!-- /.box-content -->
                                         <ul class="location">
@@ -183,39 +156,31 @@ include('hotel-list_css.php')
      </div><!-- /.container-fluid -->
 </section><!-- /.flat-map-zoom-in -->
 
-<section class="flat-row flat-subscribe">
-     <div class="container">
-          <div class="row">
-               <div class="col-sm-7">
-                    <div class="subscribe-text">
-                         Subscribe and be notified about new locations
-                    </div>
-               </div><!-- /.col-sm-7 -->
-               <div class="col-sm-5">
-                    <div class="subscribe-form">
-                         <form action="#" method="get" accept-charset="utf-8">
-                              <div class="subscribe-content">
-                                   <div class="input-field">
-                                        <input type="email" name="yourEmail" placeholder="Your Email" />
-                                   </div>
-                                   <button><span class="arrow_right"></span></button>
-                              </div>
-                         </form>
-                    </div><!-- /.subscribe-form -->
-               </div><!-- /.col-sm-5 -->
-          </div><!-- /.row -->
-     </div><!-- /.container -->
-</section><!-- /.flat-subscibe -->
 
 <script>
-   $("#price-slider-range").slider({
-        min: 0,
-        max: 24000000,
-        step: 150000,
-        value: [0,24000000]
-   });
-   $("#price-slider-range").on('slide', function(slideEvt){
-     $('.price-min').text(slideEvt.value[0] + ' VNĐ');
-     $('.price-max').text(slideEvt.value[1] + ' VNĐ');
-   });
+//    $("#price-slider-range").slider({
+//         min: 0,
+//         max: 24000000,
+//         step: 150000,
+//         value: [0,24000000]
+//    });
+//    $("#price-slider-range").on('slide', function(slideEvt){
+//      $('.price-min').text(slideEvt.value[0] + ' VNĐ');
+//      $('.price-max').text(slideEvt.value[1] + ' VNĐ');
+//    });
+   (function($){
+          var hotelList = <?= json_encode($hotelList) ?>
+
+          APP.vueInstance = new Vue({
+               el: '#hotel-list',
+               data: {
+                    hotelList: hotelList,
+                    sliderValue: [0,24000000],
+
+               },
+               methods: {
+                    
+               },
+          })
+     })(jQuery)
 </script>

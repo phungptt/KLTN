@@ -9,9 +9,9 @@ class GxBootstrapSliderAsset extends \yii\web\AssetBundle {
     ];
 
     public $js = [
-        'bootstrap-slider.js'
+        'bootstrap-slider.min.js'
     ];
-
+    
     public $depends = [
         'app\modules\contrib\gxassets\GxJqueryAsset'
     ];

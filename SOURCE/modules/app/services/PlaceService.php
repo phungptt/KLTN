@@ -121,12 +121,23 @@ class PlaceService
         return $amenities;
     }
 
-    public static function GetVisitLocationAvailable() {
-        $visits = PlaceImage::find()->where(['and', ['status' => self::$AVALABLE], ['deleted' => self::$ALIVE], ['id_type_of_place' => self::$VISIT_TYPE]])->asArray()->all();
+    public static function GetLocationAvailable($type_of_place = null) {
+        $visits = PlaceImage::find()->where(['and', ['status' => self::$AVALABLE], ['deleted' => self::$ALIVE], ['id_type_of_place' => $type_of_place]])->asArray()->all();
 
         foreach($visits as &$visit) {
             $visit['path'] = ImageService::GetOriginalPath($visit['path']);
         }
         return $visits;
+    }
+
+    public static function GetRoom() {
+        $room = (new Query())
+                                ->select(['room.name as name', 
+                                                    'room.price as price',
+                                                    'room.contain_number as contain_number'])
+                                ->from('room')
+                                ->join('LEFT OUTER JOIN', 'place', 'place.id = room.id')
+                                ->all();
+        return $room;
     }
 }

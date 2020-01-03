@@ -57,8 +57,10 @@ class PlaceController extends Controller
      }
 
      public function actionHotelList() {
-
-          return $this->render('hotel-list');
+          $hotelList = PlaceService::GetLocationAvailable(0);
+          $hotelRoom = PlaceService::GetRoom();
+          dd($hotelRoom);
+          return $this->render('hotel-list', compact('hotelList'));
      }
 
      public function actionHotelDetail() {
@@ -66,7 +68,8 @@ class PlaceController extends Controller
      }
 
      public function actionFoodList() {
-          return $this->render('food-list');
+          $foodList = PlaceService::GetLocationAvailable(1);
+          return $this->render('food-list', compact('foodList'));
      }
 
      public function actionFoodDetail() {
@@ -74,7 +77,7 @@ class PlaceController extends Controller
      }
 
      public function actionVisitLocationList() {
-          $visit = PlaceService::GetVisitLocationAvailable();
+          $visit = PlaceService::GetLocationAvailable(2);
           return $this->render('visit-location-list', compact('visit'));
      }
 

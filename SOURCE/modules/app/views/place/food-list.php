@@ -1,11 +1,15 @@
 <?php
+use app\modules\contrib\gxassets\GxVueAsset;
 use app\modules\contrib\gxassets\GxLeafletAsset;
+use app\modules\app\widgets\AppObjectMapWidget;
+use app\modules\app\widgets\CMSMapDetailWidget;
 
 GxLeafletAsset::register($this);
+GxVueAsset::register($this);
 include('food-list_css.php')
 ?>
 
-<section class="flat-map-zoom-in">
+<section class="flat-map-zoom-in" id="food-list">
      <div class="container-fluid">
           <div class="row">
                <div class="col-lg-6">
@@ -40,11 +44,11 @@ include('food-list_css.php')
                               </ul>
                          </div><!-- /.filter-result -->
                          <div class="wrap-imagebox style1">
-                              <div class="imagebox style3">
+                              <div class="imagebox style3" v-for="food in foodList">
                                    <div class="box-imagebox">
                                         <div class="box-header">
                                              <div class="box-image">
-                                                  <img src="<?= Yii::$app->homeUrl ?>resources/images/page/home-page/img-01.png" alt="">
+                                                  <img :src="food.path" alt="">
                                                   <a href="#" title="">Xem</a>
                                                   <div class="overlay"></div>
                                                   <div class="queue">
@@ -58,49 +62,12 @@ include('food-list_css.php')
                                         </div><!-- /.box-header -->
                                         <div class="box-content">
                                              <div class="box-title ad">
-                                                  <a href="#" title="">AN Restaurant</a><i class="fa fa-check-circle" aria-hidden="true"></i>
+                                                  <a href="#" title="">{{food.name}}</a>
                                              </div>
                                              <ul class="rating">
                                                   <li>5 rating</li>
                                                   <li>5 reviews</li>
                                              </ul>
-                                             <div class="box-desc">
-                                                  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                                             </div>
-                                        </div><!-- /.box-content -->
-                                        <ul class="location">
-                                             <li class="address"><span class="ti-location-pin"></span>Hà Nội</li>
-                                             <li class="closed">Closed Now !</li>
-                                        </ul><!-- /.location -->
-                                   </div><!-- /.box-imagebox -->
-                              </div><!-- /.imagebox style3 -->
-                              <div class="imagebox style3">
-                                   <div class="box-imagebox">
-                                        <div class="box-header">
-                                             <div class="box-image">
-                                                  <img src="<?= Yii::$app->homeUrl ?>resources/images/page/home-page/img-01.png" alt="">
-                                                  <a href="#" title="">Preview</a>
-                                                  <div class="overlay"></div>
-                                                  <div class="queue">
-                                                       <i class="fa fa-star" aria-hidden="true"></i>
-                                                       <i class="fa fa-star" aria-hidden="true"></i>
-                                                       <i class="fa fa-star" aria-hidden="true"></i>
-                                                       <i class="fa fa-star" aria-hidden="true"></i>
-                                                       <i class="fa fa-star-half-o" aria-hidden="true"></i>
-                                                  </div>
-                                             </div>
-                                        </div><!-- /.box-header -->
-                                        <div class="box-content">
-                                             <div class="box-title ad">
-                                                  <a href="#" title="">AN Restaurant</a><i class="fa fa-check-circle" aria-hidden="true"></i>
-                                             </div>
-                                             <ul class="rating">
-                                                  <li>5 rating</li>
-                                                  <li>5 reviews</li>
-                                             </ul>
-                                             <div class="box-desc">
-                                                  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                                             </div>
                                         </div><!-- /.box-content -->
                                         <ul class="location">
                                              <li class="address"><span class="ti-location-pin"></span>Hà Nội</li>
@@ -126,14 +93,20 @@ include('food-list_css.php')
 
 <script>
      (function($){
-          var map = L.map('flat-map').setView([16.0544,108.2022 ], 6);
-          L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          }).addTo(map);
+          var foodList = <?= json_encode($foodList) ?>
 
-          L.marker([16.0544,108.2022]).addTo(map)
-          .bindPopup('A pretty CSS3 popup.<br> Easily customizable.')
-          .openPopup();
+          APP.vueInstance = new Vue({
+               el: '#food-list',
+               data: {
+                    foodList: foodList,
+                    selectDestination: null
+               },
+               methods: {
+
+               },
+          })
+
+
      })(jQuery)
 </script>
 

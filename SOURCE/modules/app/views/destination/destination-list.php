@@ -78,7 +78,7 @@ include('destination-list_css.php');
 
 <script>
      (function($){
-          var destinationList = <?= json_encode($destinations) ?>;
+          var destinationList = <?= json_encode($destinations) ?>
 
           APP.vueInstance = new Vue({
                el: '#destination-list',

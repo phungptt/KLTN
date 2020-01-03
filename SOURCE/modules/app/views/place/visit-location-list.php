@@ -77,7 +77,7 @@ include('visit-location-list_css.php')
 
 <script>
      (function($) {
-          var visitLocationList = <?= json_encode($visit) ?>;
+          var visitLocationList = <?= json_encode($visit) ?>
 
           APP.vueInstance = new Vue({
                el: '#visit-location-list',
