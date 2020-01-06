@@ -92,7 +92,7 @@ include('create-plan-detail_css.php')
                                                   <div class="address">
                                                        <p>{{ place.address }}</p>
                                                   </div>
-                                                  <div class="button-header button-pick-location" @click="addPlaceToTrip(place)"><a href="javascript:void(0)">Thêm vào lịch trình</a></div>
+                                                  <div class="btn-more button-pick-location" @click="addPlaceToTrip(place)"><a href="javascript:void(0)">Thêm vào lịch trình</a></div>
                                              </div>
                                         </div>
                                         <nav aria-label="Page navigation example">

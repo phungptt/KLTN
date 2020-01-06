@@ -3,6 +3,15 @@
           background-image: url('<?= \Yii::$app->homeUrl ?>resources/images/plan-detail-banner.jpg');
      }
 
+     .imagebox:hover .box-header .box-image:after {
+          opacity: 0;
+     }
+     .btn-more {
+          text-align: left;
+     }
+     .imagebox .box-imagebox {
+    margin: 20px 0;
+     }
      .create-plan-detail .trip-panel-detail {
           width: 100%;
      }
