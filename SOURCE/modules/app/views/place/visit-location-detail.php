@@ -1,31 +1,19 @@
 <?php
+
 use app\modules\contrib\gxassets\GxSwiperAsset;
+use app\modules\contrib\gxassets\GxVueAsset;
 
 GxSwiperAsset::register($this);
+GxVueAsset::register($this);
 include('hotel-detail_css.php')
 ?>
 
-<div class="visit-location-detail">
-     <section class="page-title parallax parallax1">
-          <div class="container">
-               <div class="row">
-                    <div class="col-md-12">
-                         <div class="page-title-heading">
-                              Địa Điểm Tham Quan
-                         </div>
-                         <ul class="breadcrumbs">
-                              <li>
-                                   <a href="#" title="">Trang chủ</a>
-                                        <span class="arrow_right"></span>
-                              </li>
-                              <li>
-                                   Tham quan
-                              </li>
-                         </ul>
-                    </div><!-- /.col-md-12 -->
-               </div><!-- /.row -->
-          </div><!-- /.container -->
-          <div class="overlay"></div>
+<div class="visit-location-detail" id="visit-location-detail">
+     <section class="banner-section">
+          <div class="banner-img" :style="{ backgroundImage: 'url(' +  selectVisit.path + ')' }"></div>
+          <div class="text-box">
+               <h2 class="title">{{selectVisit.name}}</h2>
+          </div>
      </section>
      <section class="flat-title">
           <div class="container">
@@ -33,11 +21,12 @@ include('hotel-detail_css.php')
                     <div class="col-md-8">
                          <div class="title-left">
                               <div class="queue"><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star-half-o" aria-hidden="true"></i></div>
-                              <div class="box-title"><a href="#" title="">Nhà thờ Domaine de Marie</a><i class="fa fa-check-circle" aria-hidden="true"></i></div>
+                              <div class="box-title"><a href="#" title="">{{selectVisit.name}}</a></i></div>
                               <ul class="box-address">
-                                   <li class="address"><i class="fa fa-map-marker" aria-hidden="true"></i>1 Ngô Quyền, P. 6, TP Đà Lạt, Lâm Đồng</li>
-                                   <li class="phone"><i class="fa fa-phone" aria-hidden="true"></i>Không có</li>
-                                   <li class="open-hour"><i class="fa fa-clock-o" aria-hidden="true"></i>09:00 AM - 05:00 PM</li>
+                                   <li class="address"><i class="fa fa-map-marker" aria-hidden="true"></i>{{selectVisit.address}}</li>
+                                   <li class="phone" v-if="selectVisit.phone_number"><i class="fa fa-phone" aria-hidden="true"></i>{{selectVisit.phone_number}}</li>
+                                   <li class="phone" v-else><i class="fa fa-phone" aria-hidden="true"></i>Không có</li>
+                                   <li class="open-hour"><i class="fa fa-clock-o" aria-hidden="true"></i>{{selectVisit.time_open}} - {{selectVisit.time_closed}}</li>
                               </ul>
                          </div>
                     </div>
@@ -55,8 +44,7 @@ include('hotel-detail_css.php')
                <div class="text-box">
                     <h3>Thông tin</h3>
                     <div class="text-desc">
-                         <p>Nhà thờ Domaine de Marie (còn gọi là Lãnh địa Đức Bà hay nhà thờ Mai Anh) được xây dựng từ năm 1940 - 1944 do phu nhân toàn quyền Đông Dương Jean Decoux đứng ra quyên góp từ nhiều giáo dân. Nhà thờ cách trung tâm thành phố Đà Lạt 1 km về phía tây nam, được xây dựng theo phong cách châu Âu thế kỷ XVII, có sự kết hợp hài hòa giữa kiến trúc phương Tây với kiến trúc của dân tộc thiểu số vùng Tây Nguyên. Nét riêng của nhà thờ Domain de Marie là không có tháp chuông, hệ thống chiếu sáng của nhà thờ được làm bằng những khung kính màu. Bạn có thể nhìn thấy một pho tượng Đức Mẹ ban ơn cao 3 m, nặng 1 tấn đứng trên quả địa cầu, được khắc hoạ theo hình người phụ nữ Việt Nam, do kiến trúc sư người Pháp Jonchere thiết kế.</p>
-                         <p>Nhà thờ Domain de Marie không mất vé tham quan, ở đây chỉ có tu nữ, họ sống và làm việc ở đây như đan áo lạnh và bán cho du khách vào tham quan.</p>
+                         <p>{{selectVisit.description}}</p>
                     </div>
                </div>
                <div class="image-slider-block">
@@ -93,24 +81,40 @@ include('hotel-detail_css.php')
                </li>
                </ol>
           </div>
-          </div>
-     </section>
+</div>
+</section>
 </div>
 
 <script>
-     (function ($) {
-          var swiper = new Swiper('.swiper-container', {
-               // slidesPerView: 3,
-               centeredSlides: true,
-               loop: true,
-               pagination: {
-                    el: '.swiper-pagination',
-                    clickable: true,
+     (function($) {
+          var selectVisit = <?= json_encode($visit) ?>;
+          var imagesRelate = <?= json_encode($imagesRelate) ?>
+
+          APP.vueInstance = new Vue({
+               el: '#visit-location-detail',
+               data: {
+                    selectVisit: selectVisit,
+                    imagesRelate: imagesRelate,
                },
-               navigation: {
-                    nextEl: '.swiper-button-next',
-                    prevEl: '.swiper-button-prev',
+
+               methods: {
+
                },
+               // mounted() {
+               //      this.swiper = new window.Swiper('.swiper-container', {
+               //           cssMode: true,
+               //           navigation: {
+               //                nextEl: '.swiper-button-next',
+               //                prevEl: '.swiper-button-prev',
+               //           },
+               //           pagination: {
+               //                el: '.swiper-pagination',
+               //                clickable: true,
+               //           },
+               //           mousewheel: true,
+               //           keyboard: true,
+               //      })
+               // },
           });
      })(jQuery);
 </script>

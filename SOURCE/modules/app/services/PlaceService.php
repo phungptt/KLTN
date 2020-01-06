@@ -130,14 +130,52 @@ class PlaceService
         return $visits;
     }
 
-    public static function GetRoom() {
-        $room = (new Query())
-                                ->select(['room.name as name', 
-                                                    'room.price as price',
-                                                    'room.contain_number as contain_number'])
-                                ->from('room')
-                                ->join('LEFT OUTER JOIN', 'place', 'place.id = room.id')
-                                ->all();
-        return $room;
+    public static function GetHotelLocationAvailable($type_of_place = null) {
+        $hotels = (new Query())
+                            -> select([
+                                '*',
+                                'place_image.name as name',
+                                'r.name as room_name',
+                            ])
+                            ->from('place_image')
+                            ->leftJoin('room as r','place_image.id = r.id_place')
+                            ->where(['and', ['place_image.id_type_of_place' => $type_of_place]])
+                            ->all();
+        $hotelsResult = array();
+        for($i = 0; $i < count($hotels); $i++) {
+            $hotels[$i]['path'] = ImageService::GetOriginalPath($hotels[$i]['path']);
+            for($j = 1; $j < count($hotels); $j++) {
+                if($hotels[$i]['id_place'] == $hotels[$j]['id_place']) {
+                    if($hotels[$i]['price'] >= $hotels[$j]['price']) {
+                        array_push($hotelsResult,$hotels[$j]);
+                    }
+                }
+            }
+        }
+        dd($hotelsResult);
+        // return $hotelsResult;
+    }
+
+    public static function GetLocationBySlug($slug) {
+        $location = PlaceImage::find()->where(['slug' => $slug])->andWhere(['and', ['status' => self::$AVALABLE], ['deleted' => self::$ALIVE]])->asArray()->one();
+
+        $location['path'] = ImageService::GetOriginalPath($location['path']);
+
+        return $location;
+    }
+
+    public static function GetImagesRelateByPlaceId($id) {
+        $images = (new Query())
+                                        ->select('path')
+                                        ->from('image_file as f')
+                                        ->leftJoin('image_ref as r', 'f.id = r.image_id')
+                                        ->where(['and', ['r.object_type' => 'app\modules\app\models\Place'], ['r.object_id' => $id]])
+                                        ->andWhere(['relate' => 1])
+                                        ->all();
+
+        foreach($images as &$img) {
+            $img['path'] = ImageService::GetOriginalPath($img['path']);
+        }                               
+        return $images;
     }
 }

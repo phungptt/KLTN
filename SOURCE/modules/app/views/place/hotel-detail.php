@@ -47,19 +47,19 @@ include('hotel-detail_css.php')
                <div class="amenities">
                     <h3>Tiện nghi</h3>
                     <ul class="quater">
-                         <li><span class="ti-check-box"></span>Wireless Internet</li>
-                         <li><span class="ti-check-box"></span>Street Parking</li>
-                         <li><span class="ti-check-box"></span>Kitchen</li>
-                         <li><span class="ti-check-box"></span>Bike Parking</li>
+                         <li><span class="far fa-check-square"></span>Wireless Internet</li>
+                         <li><span class="far fa-check-square"></span>Street Parking</li>
+                         <li><span class="far fa-check-square"></span>Kitchen</li>
+                         <li><span class="far fa-check-square"></span>Bike Parking</li>
                     </ul>
                     <ul class="quater">
-                         <li><span class="ti-check-box"></span>Pets Friendly</li>
-                         <li><span class="ti-check-box"></span>Moderate</li>
-                         <li><span class="ti-check-box"></span>Smoking Allowed</li>
-                         <li><span class="ti-check-box"></span>Good for Kids</li>
+                         <li><span class="far fa-check-square"></span>Pets Friendly</li>
+                         <li><span class="far fa-check-square"></span>Moderate</li>
+                         <li><span class="far fa-check-square"></span>Smoking Allowed</li>
+                         <li><span class="far fa-check-square"></span>Good for Kids</li>
                     </ul>
                     <ul class="quater">
-                         <li><span class="ti-check-box"></span>Most Reviewed</li>
+                         <li><span class="far fa-check-square"></span>Most Reviewed</li>
                     </ul>
                     <div class="clearfix"></div>
                </div>

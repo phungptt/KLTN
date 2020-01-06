@@ -1,6 +1,5 @@
  <style>
      .food-detail .banner-section {
-          background-image: url('../../resouces/images/page/food-detail/banner-1.jpg');
           background-position: 50% 50%;
      }
      .food-detail .food-detail-content .title {

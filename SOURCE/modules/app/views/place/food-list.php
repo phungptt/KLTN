@@ -1,4 +1,5 @@
 <?php
+use app\modules\app\AppConfig;
 use app\modules\contrib\gxassets\GxVueAsset;
 use app\modules\contrib\gxassets\GxLeafletAsset;
 use app\modules\app\widgets\AppObjectMapWidget;
@@ -48,8 +49,8 @@ include('food-list_css.php')
                                    <div class="box-imagebox">
                                         <div class="box-header">
                                              <div class="box-image">
-                                                  <img :src="food.path" alt="">
-                                                  <a href="#" title="">Xem</a>
+                                                  <img :src="food.path" alt="" class="w-100">
+                                                  <a :href="'<?= AppConfig::getUrl('place/food-detail?slug=') ?>'  + food.slug" title="">Xem</a>
                                                   <div class="overlay"></div>
                                                   <div class="queue">
                                                        <i class="fa fa-star" aria-hidden="true"></i>
