@@ -1,4 +1,5 @@
 <?php
+
 use app\modules\contrib\gxassets\GxBootstrapSliderAsset;
 use app\modules\contrib\gxassets\GxVueAsset;
 use app\modules\contrib\gxassets\GxLeafletAsset;
@@ -21,7 +22,7 @@ include('hotel-list_css.php')
                                         <input type="text" placeholder="Tìm kiếm ?" name="search">
                                    </span>
                                    <span class="location">
-                                        <span class="ti-location-pin"></span>
+                                        <span class="fas fa-map-marker-alt"></span>
                                         <input type="text" placeholder="Địa điểm" name="location">
                                    </span>
                                    <span class="categories">
@@ -44,55 +45,34 @@ include('hotel-list_css.php')
                               </div>
                               <div class="clearfix"></div>
                               <div class="select-filter">
-                                   <ul class="list-filter third">
-                                        <li class="active">
-                                             <span class="ti-check-box"></span>Wireless Internet
-                                        </li>
-                                        <li>
-                                             <span class="ti-layout-width-full"></span>Street Parking
-                                        </li>
-                                        <li>
-                                             <span class="ti-layout-width-full"></span>Kitchen
-                                        </li>
-                                        <li class="active">
-                                             <span class="ti-check-box"></span>Bike Parking
-                                        </li>
+                                   <ul class="list-filter one-half" >
+                                        <div class="select-filter__item" v-for="(amenity,index) in amenities">
+                                             <div v-if="index < 4">
+                                                  <input class="inp-cbx" :id="amenity.id" type="checkbox" style="display: none" />
+                                                  <label class="check-box" :for="amenity.id"><span>
+                                                       <svg width="12px" height="10px" viewbox="0 0 12 10">
+                                                            <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+                                                       </svg></span><span>{{amenity.name}}</span>
+                                                  </label>
+                                             </div>
+                                        </div>
                                    </ul>
-                                   <ul class="list-filter third">
-                                        <li>
-                                             <span class="ti-layout-width-full"></span>Pets Friendly
-                                        </li>
-                                        <li>
-                                             <span class="ti-layout-width-full"></span>Cable TV
-                                        </li>
-                                        <li class="active">
-                                             <span class="ti-check-box"></span>Smoking Allowed
-                                        </li>
-                                        <li>
-                                             <span class="ti-layout-width-full"></span>Good for Kids
-                                        </li>
-                                   </ul>
-                                   <ul class="list-filter third">
-                                        <li>
-                                             <span class="ti-layout-width-full"></span>Pool
-                                        </li>
-                                        <li>
-                                             <span class="ti-layout-width-full"></span>Washer
-                                        </li>
-                                        <li>
-                                             <span class="ti-layout-width-full"></span>Hair Dryer
-                                        </li>
-                                        <li>
-                                             <span class="ti-layout-width-full"></span>Wheelchair Accessible
-                                        </li>
+                                   <ul class="list-filter one-half" >
+                                        <div class="select-filter__item" v-for="(amenity,index) in amenities">
+                                             <div v-if="index > 3">
+                                                  <input class="inp-cbx" :id="amenity.id" type="checkbox" style="display: none" />
+                                                  <label class="check-box" :for="amenity.id"><span>
+                                                       <svg width="12px" height="10px" viewbox="0 0 12 10">
+                                                            <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+                                                       </svg></span><span>{{amenity.name}}</span>
+                                                  </label>
+                                             </div>
+                                        </div>
                                    </ul>
                                    <div class="clearfix"></div>
                               </div><!-- /.select-filter -->
                          </div>
                          <div class="filter-result">
-                              <div class="result">
-                                   5 Results Found
-                              </div>
                               <ul class="arrange">
                                    <li class="active">
                                         <span class="ti-view-grid"></span>
@@ -107,7 +87,7 @@ include('hotel-list_css.php')
                                    <div class="box-imagebox">
                                         <div class="box-header">
                                              <div class="box-image">
-                                                  <img :src="hotel.path" alt="">
+                                                  <img :src="hotel.path" alt="" class="w-100">
                                                   <a href="#" title="">Xem</a>
                                                   <div class="overlay"></div>
                                                   <div class="queue">
@@ -121,27 +101,28 @@ include('hotel-list_css.php')
                                         </div><!-- /.box-header -->
                                         <div class="box-content">
                                              <div class="box-title">
-                                                  <a href="#" title="">{{hotel.name}}</a><i class="fa fa-check-circle" aria-hidden="true"></i>
+                                                  <a href="#" title="">{{hotel.name}}</a>
                                              </div>
                                              <ul class="rating">
-                                                  <li>540 000 VNĐ / đêm</li>
+                                                  <li>Từ 540 000 VNĐ / đêm</li>
                                              </ul>
                                              <div class="box-desc">
-                                                  Lorem ipsum dolor sit amet, consectetur<br /> adipisicing elit, sed do eiusmod tempor
+                                                 {{hotel.short_description}}
                                              </div>
                                         </div><!-- /.box-content -->
-                                        <ul class="location">
-                                             <li class="address"><span class="ti-location-pin"></span>Seoul, Korea</li>
-                                             <li class="open">Open Now !</li>
+                                        <div class="location">
+                                             <span class="fas fa-map-marker-alt"></span>
+                                             <span>{{hotel.name_destination}}</span> 
                                         </ul><!-- /.location -->
                                    </div><!-- /.box-imagebox -->
                               </div><!-- /.imagebox style3 -->
                               <div class="height33 clearfix"></div>
                               <div class="clearfix"></div>
-                              <div class="btn-more">
-                                   <a href="#" title="">Load More</a>
-                              </div>
+                           
                          </div><!-- /.wrap-imagebox -->
+                         <div class="btn-more">
+                              <a href="#" title="">Tải thêm</a>
+                         </div>
                     </div><!-- /.flat-filter -->
                </div><!-- /.col-md-6 -->
                <div class="col-lg-6">
@@ -158,28 +139,29 @@ include('hotel-list_css.php')
 
 
 <script>
-//    $("#price-slider-range").slider({
-//         min: 0,
-//         max: 24000000,
-//         step: 150000,
-//         value: [0,24000000]
-//    });
-//    $("#price-slider-range").on('slide', function(slideEvt){
-//      $('.price-min').text(slideEvt.value[0] + ' VNĐ');
-//      $('.price-max').text(slideEvt.value[1] + ' VNĐ');
-//    });
-   (function($){
-          var hotelList = <?= json_encode($hotelList) ?>
+     //    $("#price-slider-range").slider({
+     //         min: 0,
+     //         max: 24000000,
+     //         step: 150000,
+     //         value: [0,24000000]
+     //    });
+     //    $("#price-slider-range").on('slide', function(slideEvt){
+     //      $('.price-min').text(slideEvt.value[0] + ' VNĐ');
+     //      $('.price-max').text(slideEvt.value[1] + ' VNĐ');
+     //    });
+     (function($) {
+          var hotelList = <?= json_encode($hotelList) ?>;
+          var amenities = <?= json_encode($amenities) ?>
 
           APP.vueInstance = new Vue({
                el: '#hotel-list',
                data: {
                     hotelList: hotelList,
-                    sliderValue: [0,24000000],
-
+                    amenities: amenities,
+                    sliderValue: [0, 24000000],
                },
                methods: {
-                    
+
                },
           })
      })(jQuery)

@@ -1,15 +1,17 @@
 <?php
-use app\modules\contrib\gxassets\GxSwiperAsset;
+     use app\modules\contrib\gxassets\GxSwiperAsset;
+     use app\modules\contrib\gxassets\GxVueAsset;
 
-GxSwiperAsset::register($this);
-include('food-detail_css.php')
+     GxSwiperAsset::register($this);
+     GxVueAsset::register($this);
+     include('food-detail_css.php');
 ?>
 
-<div class="food-detail">
+<div class="food-detail" id="food-detail">
      <section class="banner-section">
-          <div class="banner-img"></div>
+          <div class="banner-img"  :style="{ backgroundImage: 'url(' +  selectFood.path + ')' }"></div>
           <div class="text-box">
-               <h2 class="title">Food detail</h2>
+               <h2 class="title">{{selectFood.name}}</h2>
           </div>
      </section>
      <section class="flat-title">
@@ -18,17 +20,18 @@ include('food-detail_css.php')
                     <div class="col-md-8">
                          <div class="title-left">
                               <div class="queue"><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star-half-o" aria-hidden="true"></i></div>
-                              <div class="box-title"><a href="#" title="">AN Restaurant</a><i class="fa fa-check-circle" aria-hidden="true"></i></div>
+                              <div class="box-title"><a href="#" title="">{{selectFood.name}}</a></div>
                               <ul class="box-address">
-                                   <li class="address"><i class="fa fa-map-marker" aria-hidden="true"></i>2 / 51 Hoang Cau Street, Hanoi, Vietnam</li>
-                                   <li class="phone"><i class="fa fa-phone" aria-hidden="true"></i>(+84) 936 736 288</li>
-                                   <li class="open-hour"><i class="fa fa-clock-o" aria-hidden="true"></i>09:00 AM - 05:00 PM</li>
+                                   <li class="address"><i class="fa fa-map-marker" aria-hidden="true"></i>{{selectFood.address}}</li>
+                                   <li class="phone" v-if="selectFood.phone_number"><i class="fa fa-phone" aria-hidden="true"></i>{{selectFood.phone_number}}</li>
+                                   <li class="phone" v-else><i class="fa fa-phone" aria-hidden="true"></i>Không có</li>
+                                   <li class="open-hour"><i class="fa fa-clock-o" aria-hidden="true"></i>{{selectFood.time_open}} - {{selectFood.time_closed}}</li>
                               </ul>
                          </div>
                     </div>
                     <div class="col-md-4 text-right">
                          <div class="title-right">
-                              <div class="btn-more review"><a href="#" title="">Write A Review</a></div>
+                              <div class="btn-more review"><a href="#" title="">Đánh giá</a></div>
                               <div class="clearfix"></div>
                          </div>
                     </div>
@@ -40,8 +43,7 @@ include('food-detail_css.php')
                <div class="text-box">
                     <h3>Thông tin</h3>
                     <div class="text-desc">
-                         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p><i>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla qui officia deserunt mollit anim id est laborum.</i>
-                         <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.</p>
+                         <p>{{selectFood.description}}</p>
                     </div>
                </div>
                <div class="image-slider-block">
@@ -50,12 +52,9 @@ include('food-detail_css.php')
                     </div>
                     <div class="slider-box">
                          <div class="swiper-container">
-                              <div class="swiper-wrapper">
-                                   <div class="swiper-slide"> <img src="<?= Yii::$app->homeUrl ?>resources/images/page/food-detail/slider-1.png"></div>
-                                   <div class="swiper-slide"> <img src="<?= Yii::$app->homeUrl ?>resources/images/page/food-detail/slider-2.png"></div>
-                                   <div class="swiper-slide"> <img src="<?= Yii::$app->homeUrl ?>resources/images/page/food-detail/slider-3.png"></div>
+                              <div class="swiper-wrapper" v-for="image in imagesRelate">
+                                   <div class="swiper-slide"> <img :src="image.path"></div>
                               </div>
-                              <!-- Add Arrows-->
                               <div class="swiper-button-next"></div>
                               <div class="swiper-button-prev"></div>
                          </div>
@@ -84,18 +83,36 @@ include('food-detail_css.php')
 
 <script>
      (function ($) {
-          var swiper = new Swiper('.swiper-container', {
-               // slidesPerView: 3,
-               centeredSlides: true,
-               loop: true,
-               pagination: {
-                    el: '.swiper-pagination',
-                    clickable: true,
+          var selectFood = <?= json_encode($food) ?>;
+          var imagesRelate = <?= json_encode($imagesRelate) ?>
+
+          APP.vueInstance = new Vue({
+               el: '#food-detail',
+               data: {
+                    selectFood: selectFood,
+                    imagesRelate: imagesRelate,
                },
-               navigation: {
-                    nextEl: '.swiper-button-next',
-                    prevEl: '.swiper-button-prev',
+              
+               methods: {
+                    
                },
+               // mounted() {
+               //      this.swiper = new window.Swiper('.swiper-container', {
+               //           cssMode: true,
+               //           navigation: {
+               //                nextEl: '.swiper-button-next',
+               //                prevEl: '.swiper-button-prev',
+               //           },
+               //           pagination: {
+               //                el: '.swiper-pagination',
+               //                clickable: true,
+               //           },
+               //           mousewheel: true,
+               //           keyboard: true,
+               //      })
+               // },
           });
+
+          
      })(jQuery);
 </script>

@@ -347,6 +347,14 @@
 	width: 50%;
 	float: left;
 	padding: 15px;
+	.box-image {
+		img {
+			@media (min-width: 1280px) {
+				height: 220px !important;
+			}
+			height: 170px !important;
+		}
+	}
 }
 .imagebox.style4 {
 	display: none;
@@ -709,10 +717,81 @@
 		}
 	}
 	.select-filter {
-		margin-right: -15px;
-		margin-left: -15px;
 		margin-top: 29px;
 		margin-bottom: 20px;
+		display: flex;
+		&__item {
+			padding-right: 15px;
+			// - Checkbox
+			.check-box {
+				margin: auto;
+				user-select: none;
+				cursor: pointer;
+				span {
+					display: inline-block;
+					vertical-align: middle;
+					transform: translate3d(0,0,0);
+					&:first-child {
+						position: relative;
+						width: 18px;
+						height: 18px;
+						border-radius: 3px;
+						transform: scale(1);
+						vertical-align: middle;
+						border: 1px solid #4ca1af;
+						transition: all .2s ease;
+						&::before {
+							content: "";
+							width: 100%;
+							height: 100%;
+							background: #4ca1af;
+							display: block;
+							transform: scale(0);
+							opacity: 1;
+							border-radius: 50%;
+						}
+						svg {
+							position: absolute;
+							top: 3px;
+							left: 2px;
+							fill: none;
+							stroke: #FFFFFF;
+							stroke-width: 2;
+							stroke-linecap: round;
+							stroke-linejoin: round;
+							stroke-dasharray: 16px;
+							stroke-dashoffset: 16px;
+							transition: all .3s ease;
+							transition-delay: .1s;
+							transform: translate3d(0,0,0);
+							
+						}
+					}
+					&:last-child {
+						padding-left: 8px !important;
+						padding-right: 0 !important;
+					}
+				}
+			}
+
+			.inp-cbx:checked + .check-box {
+				span {
+					&:first-child {
+						background: #4ca1af;
+						border-color: #4ca1af;
+						animation: wave .4s ease;
+						svg {
+							stroke-dashoffset: 0;
+						}
+						&::before {
+							transform: scale(3.5);
+							opacity: 0;
+							transition: all .6s ease;
+						}
+					}
+				}
+			}
+		}
 		ul.list-filter.quarter {
 			width: 25%;
 			float: left;
@@ -2089,6 +2168,7 @@ form.form-listing {
 	ul.box-address {
 		li {
 			font-weight: 400;
+			margin-bottom: 5px;
 			i {
 				margin-right: 15px;
 			}
@@ -2501,3 +2581,11 @@ form.form-listing {
 	}
 }
 
+
+
+@keyframes wave {
+	50% {
+		transform: scale(.9)
+	}
+}
+  

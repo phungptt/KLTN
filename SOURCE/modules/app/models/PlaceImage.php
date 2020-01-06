@@ -27,6 +27,7 @@ use Yii;
  * @property string $time_closed
  * @property int $id_type_of_place
  * @property string $path
+ * @property string $name_destination
  */
 class PlaceImage extends \yii\db\ActiveRecord
 {
@@ -48,7 +49,7 @@ class PlaceImage extends \yii\db\ActiveRecord
             [['id', 'create_by', 'id_destination', 'id_type_of_place'], 'integer'],
             [['description', 'phone_number'], 'string'],
             [['create_at', 'update_at', 'time_open', 'time_closed'], 'safe'],
-            [['name', 'short_description', 'viewed', 'slug', 'address', 'lat', 'lng', 'status', 'deleted', 'path'], 'string', 'max' => 255],
+            [['name', 'short_description', 'viewed', 'slug', 'address', 'lat', 'lng', 'status', 'deleted', 'path', 'name_destination'], 'string', 'max' => 255],
         ];
     }
 
@@ -78,6 +79,7 @@ class PlaceImage extends \yii\db\ActiveRecord
             'time_closed' => 'Time Closed',
             'id_type_of_place' => 'Id Type Of Place',
             'path' => 'Path',
+            'name_destination' => 'Name Destination',
         ];
     }
 }

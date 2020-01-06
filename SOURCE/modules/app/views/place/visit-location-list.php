@@ -1,4 +1,5 @@
 <?php
+use app\modules\app\AppConfig;
 include('visit-location-list_css.php')
 ?>
 
@@ -30,7 +31,7 @@ include('visit-location-list_css.php')
                                         <div class="box-header">
                                              <div class="box-image">
                                                   <img :src="visit.path" alt="">
-                                                  <a href="#" title="">Preview</a>
+                                                  <a :href="'<?= AppConfig::getUrl('place/visit-location-detail?slug=') ?>'  + visit.slug" title="">Xem</a>
                                                   <div class="overlay"></div>
                                                   <div class="queue">
                                                        <i class="fa fa-star" aria-hidden="true"></i>
@@ -43,7 +44,7 @@ include('visit-location-list_css.php')
                                         </div><!-- /.box-header -->
                                         <div class="box-content">
                                              <div class="box-title ad">
-                                                  <a href="#" title="">{{visit.name}}
+                                                  <a href="javascript:void(0)" title="">{{visit.name}}
                                              </div>
                                              <div class="address">
                                                   <p>{{visit.address}}</p>

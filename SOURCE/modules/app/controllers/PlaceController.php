@@ -12,6 +12,7 @@ use yii\web\UploadedFile;
 use app\modules\app\models\UploadImage;
 use app\modules\app\models\UploadImages;
 use app\modules\app\models\VisitLocation;
+use app\modules\app\models\Amenities;
 use app\modules\app\services\DestinationService;
 use Yii;
 use yii\web\Controller;
@@ -57,10 +58,10 @@ class PlaceController extends Controller
      }
 
      public function actionHotelList() {
-          $hotelList = PlaceService::GetLocationAvailable(0);
-          $hotelRoom = PlaceService::GetRoom();
-          dd($hotelRoom);
-          return $this->render('hotel-list', compact('hotelList'));
+          $hotelList = PlaceService::GetHotelLocationAvailable(0);
+          $amenities = Amenities::find()->asArray()->all();
+          dd($hotelList);
+          return $this->render('hotel-list', compact('hotelList', 'amenities'));
      }
 
      public function actionHotelDetail() {
@@ -72,8 +73,13 @@ class PlaceController extends Controller
           return $this->render('food-list', compact('foodList'));
      }
 
-     public function actionFoodDetail() {
-          return $this->render('food-detail');
+     public function actionFoodDetail($slug=null) {
+          // - Select food location with slug
+          $food = PlaceService::GetLocationBySlug($slug);
+
+          // - Select image relate of place
+          $imagesRelate = PlaceService::GetImagesRelateByPlaceId($food['id']);
+          return $this->render('food-detail', compact('food', 'imagesRelate'));
      }
 
      public function actionVisitLocationList() {
@@ -81,7 +87,12 @@ class PlaceController extends Controller
           return $this->render('visit-location-list', compact('visit'));
      }
 
-     public function actionVisitLocationDetail() {
-          return $this->render('visit-location-detail');
+     public function actionVisitLocationDetail($slug) {
+          // - Select food location with slug
+          $visit = PlaceService::GetLocationBySlug($slug);
+
+          // - Select image relate of place
+          $imagesRelate = PlaceService::GetImagesRelateByPlaceId($visit['id']);
+          return $this->render('visit-location-detail', compact('visit', 'imagesRelate'));
      }
 }
