@@ -25,6 +25,7 @@ class PlaceService
     public static $FOOD_TYPE = 1;
     public static $HOTEL_TYPE = 3;
 
+    public static $PLACE_PERPAGE_PLAN = 10;
 
     public static $placeTypes = ['Khách sạn', 'Ăn uống', 'Tham quan'];
     public static $roomType = [
@@ -177,5 +178,55 @@ class PlaceService
             $img['path'] = ImageService::GetOriginalPath($img['path']);
         }                               
         return $images;
+    }
+
+    public static function GetPlaceListWithPaginations($destination, $type, $page, $keyword, $lat, $lng) {
+        $perpage = self::$PLACE_PERPAGE_PLAN;
+        $places = self::GetPlaceList($destination, $type, $page, $perpage, $keyword, $lat, $lng);
+        $total = self::CountTotalPlaceOfList($destination, $type, $keyword, $lat, $lng);
+        $paginations = SiteService::CreatePaginationMetadata($total, $page, $perpage, count($places));
+
+        return [$places, $paginations];
+    }
+
+    public static function GetPlaceList($destination, $type, $page, $perpage, $keyword, $lat, $lng) {
+        list($limit, $offset) = SiteService::GetLimitAndOffset($page, $perpage);
+
+        if($lat === '' || $lng === '') {
+            $query = "SELECT *
+                        FROM place_image 
+                        WHERE id_destination = " . $destination . " AND id_type_of_place = " . $type . " AND name LIKE '%" . $keyword . "%' AND status = 1 AND deleted = 0
+                        LIMIT " . $limit . " OFFSET " . $offset;
+        } else {
+            $query = "SELECT *, ST_Distance(t.x, ST_SetSRID(ST_MakePoint(place_image.lng::double precision, place_image.lat::double precision),4326)::geography) AS dist
+                        FROM place_image, (SELECT ST_GeographyFromText('SRID=4326;POINT(" . $lng . " " . $lat . ")')) AS t(x)
+                        WHERE id_destination = " . $destination . " AND id_type_of_place = " . $type . " AND name LIKE '%" . $keyword . "%' AND status = 1 AND deleted = 0
+                        AND ST_DWithin(t.x, ST_SetSRID(ST_MakePoint(place_image.lng::double precision, place_image.lat::double precision),4326)::geography, 200000)
+                        ORDER BY dist LIMIT " . $limit . " OFFSET " . $offset;
+        }
+        
+        $places = SiteService::CommandQueryAll($query);
+
+        foreach($places as &$place) {
+            $place['path'] = ImageService::GetThumbnailPath($place['path']);
+        }
+
+        return $places;
+    }
+
+    public static function CountTotalPlaceOfList($destination, $type, $keyword, $lat, $lng) {
+        if($lat === '' || $lng === '') {
+            $query = "SELECT COUNT(*)
+                        FROM place_image 
+                        WHERE id_destination = " . $destination . " AND id_type_of_place = " . $type . " AND name LIKE '%" . $keyword . "%' AND status = 1 AND deleted = 0";
+        } else {
+            $query = "SELECT COUNT(*)
+                        FROM place_image, (SELECT ST_GeographyFromText('SRID=4326;POINT(" . $lng . " " . $lat . ")')) AS t(x)
+                        WHERE id_destination = " . $destination . " AND id_type_of_place = " . $type . " AND name LIKE '%" . $keyword . "%' AND status = 1 AND deleted = 0
+                        AND ST_DWithin(t.x, ST_SetSRID(ST_MakePoint(place_image.lng::double precision, place_image.lat::double precision),4326)::geography, 200000)";
+        }
+
+        $total = SiteService::CommandQueryOne($query);
+        return $total['count'];
     }
 }
