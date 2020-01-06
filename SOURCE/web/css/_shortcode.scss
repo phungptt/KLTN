@@ -2332,13 +2332,13 @@ form.form-listing {
 						transition: all 0.3s ease-in-out;
 					}
 				}
-				&:hover {
-					.img-box {
-						&:after {
-							opacity: 1;
-						}
-					}
-				}
+				// &:hover {
+				// 	.img-box {
+				// 		&:after {
+				// 			opacity: 1;
+				// 		}
+				// 	}
+				// }
 				.involve-desc {
 					line-height: 20px;
 					padding: 6px 0 4px;

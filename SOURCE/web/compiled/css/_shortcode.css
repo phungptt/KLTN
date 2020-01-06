@@ -1794,8 +1794,6 @@ form.form-listing .inner-box {
       -ms-transition: all 0.3s ease-in-out;
       -o-transition: all 0.3s ease-in-out;
       transition: all 0.3s ease-in-out; }
-    .sidebar .involve ul li:hover .img-box:after {
-      opacity: 1; }
     .sidebar .involve ul li .involve-desc {
       line-height: 20px;
       padding: 6px 0 4px; }
