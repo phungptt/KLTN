@@ -11,7 +11,7 @@ use Yii;
  * @property string $name
  * @property string $short_description
  * @property string $description
- * @property string $viewed
+ * @property int $viewed
  * @property string $slug
  * @property string $phone_number
  * @property string $address
@@ -20,8 +20,8 @@ use Yii;
  * @property string $create_at
  * @property int $create_by
  * @property string $update_at
- * @property string $status
- * @property string $deleted
+ * @property int $status
+ * @property int $deleted
  * @property int $id_destination
  * @property string $time_open
  * @property string $time_closed
@@ -45,11 +45,11 @@ class PlaceImage extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id', 'create_by', 'id_destination', 'id_type_of_place'], 'default', 'value' => null],
-            [['id', 'create_by', 'id_destination', 'id_type_of_place'], 'integer'],
+            [['id', 'viewed', 'create_by', 'status', 'deleted', 'id_destination', 'id_type_of_place'], 'default', 'value' => null],
+            [['id', 'viewed', 'create_by', 'status', 'deleted', 'id_destination', 'id_type_of_place'], 'integer'],
             [['description', 'phone_number'], 'string'],
             [['create_at', 'update_at', 'time_open', 'time_closed'], 'safe'],
-            [['name', 'short_description', 'viewed', 'slug', 'address', 'lat', 'lng', 'status', 'deleted', 'path', 'name_destination'], 'string', 'max' => 255],
+            [['name', 'short_description', 'slug', 'address', 'lat', 'lng', 'path', 'name_destination'], 'string', 'max' => 255],
         ];
     }
 
