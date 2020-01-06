@@ -42,7 +42,7 @@ use app\modules\app\APPConfig;
                         <div class="box-image"><img src="<?= Yii::$app->homeUrl ?>resources/images/page/home-page/halong.png" alt="">
                             <div class="overlay"></div>
                         </div>
-                        <div class="box-content"><a href="#" title="">Hạ Long</a></div>
+                        <div class="box-content line-center"><a href="#" title="">Hạ Long</a></div>
                     </div>
                 </div>
                 <div class="col-md-3 col-sm-6">
@@ -50,14 +50,14 @@ use app\modules\app\APPConfig;
                         <div class="box-image"><img src="<?= Yii::$app->homeUrl ?>resources/images/page/home-page/da-nang.jpg" alt="">
                             <div class="overlay"></div>
                         </div>
-                        <div class="box-content"><a href="#" title="">Đà Nẵng</a></div>
+                        <div class="box-content line-center"><a href="#" title="">Đà Nẵng</a></div>
                     </div>
                     <div class="height20"></div>
                     <div class="imagebox style5">
                         <div class="box-image"><img src="<?= Yii::$app->homeUrl ?>resources/images/page/home-page/hanoi.png" alt="">
                             <div class="overlay"></div>
                         </div>
-                        <div class="box-content"><a href="#" title="">Hà Nội</a></div>
+                        <div class="box-content line-center"><a href="#" title="">Hà Nội</a></div>
                     </div>
                 </div>
                 <div class="col-md-3 col-sm-6">
@@ -65,14 +65,14 @@ use app\modules\app\APPConfig;
                         <div class="box-image"><img src="<?= Yii::$app->homeUrl ?>resources/images/page/home-page/ninh-binh.jpg" alt="">
                             <div class="overlay"></div>
                         </div>
-                        <div class="box-content"><a href="#" title="">Ninh Bình</a></div>
+                        <div class="box-content line-center"><a href="#" title="">Ninh Bình</a></div>
                     </div>
                     <div class="height20"></div>
                     <div class="imagebox style5">
                         <div class="box-image"><img src="<?= Yii::$app->homeUrl ?>resources/images/page/home-page/da-lat.jpg" alt="">
                             <div class="overlay"></div>
                         </div>
-                        <div class="box-content"><a href="#" title="">Đà Lạt</a></div>
+                        <div class="box-content line-center"><a href="#" title="">Đà Lạt</a></div>
                     </div>
                 </div>
             </div>
@@ -279,7 +279,7 @@ use app\modules\app\APPConfig;
                                         <div class="overlay"></div>
                                     </div>
                                 </div><!-- /.box-header -->
-                                <div class="box-content">
+                                <div class="box-content line-center">
                                     <div class="box-title ad">
                                         <a href="#" title="">Đà Lạt</a><i class="fa fa-check-circle" aria-hidden="true"></i>
                                     </div>
