@@ -61,180 +61,109 @@
                     </div>
                </div>
                <div class="comment-area">
-							<h3 class="comment-title">3 Reviews</h3>
-							<ol class="comment-list">
-								<li class="comment" style="display: list-item;">
-									<article class="comment-body">
-										<div class="comment-image">
-											<img src="images/blog/comment_01.png" alt="">
-										</div><!-- /.comment-image -->
-										<div class="comment-content">
-											<div class="comment-metadata">
-												April 8, 2017 9:48 pm
-											</div>
-											<h5>
-												The food was amazing
-												<span>
-													<i class="fa fa-star" aria-hidden="true"></i>
-													<i class="fa fa-star" aria-hidden="true"></i>
-													<i class="fa fa-star" aria-hidden="true"></i>
-													<i class="fa fa-star" aria-hidden="true"></i>
-													<i class="fa fa-star-half-o" aria-hidden="true"></i>
-												</span>
-											</h5>
-											<div class="comment-author">
-												by <a href="#" title="">Alex luthor</a>
-											</div>
-											<p>
-												Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-											</p>
-											<div class="comment-like">
-												<ul>
-													<li>
-														<a href="#" title=""><i class="fa fa-thumbs-o-up" aria-hidden="true"></i> 2</a>
-													</li>
-													<li>
-														<a href="#" title=""><i class="fa fa-thumbs-o-down" aria-hidden="true"></i> 0</a>
-													</li>
-												</ul>
-												<div class="comment-reply">
-													<a href="#" title="">Reply</a>
-												</div>
-											</div><!-- /.comment-like -->
-										</div><!-- /.comment-content -->
-									</article><!-- /.comment-body -->
-								</li><!-- /.comment -->
-								<li class="comment" style="display: list-item;">
-									<article class="comment-body">
-										<div class="comment-image">
-											<img src="images/blog/comment_02.png" alt="">
-										</div><!-- /.comment-image -->
-										<div class="comment-content">
-											<div class="comment-metadata">
-												April 2, 2017 5:48 pm
-											</div>
-											<h5>
-												We had a great time !!!!
-												<span>
-													<i class="fa fa-star" aria-hidden="true"></i>
-													<i class="fa fa-star" aria-hidden="true"></i>
-													<i class="fa fa-star" aria-hidden="true"></i>
-													<i class="fa fa-star" aria-hidden="true"></i>
-													<i class="fa fa-star" aria-hidden="true"></i>
-												</span>
-											</h5>
-											<div class="comment-author">
-												by <a href="#" title="">Patricia Alice</a>
-											</div>
-											<p>
-												Such a lovely place. The host met us at agreed time, showed us everything. The apartment is conveniently located, a short walk to subway, shops, and restaurants. Wi fi worked well. We had a great time.
-											</p>
-											<div class="comment-like">
-												<ul>
-													<li>
-														<a href="#" title=""><i class="fa fa-thumbs-o-up" aria-hidden="true"></i> 5</a>
-													</li>
-													<li>
-														<a href="#" title=""><i class="fa fa-thumbs-o-down" aria-hidden="true"></i> 0</a>
-													</li>
-												</ul>
-												<div class="comment-reply">
-													<a href="#" title="">Reply</a>
-												</div>
-											</div><!-- /.comment-like -->
-										</div><!-- /.comment-content -->
-									</article><!-- /.comment-body -->
-								</li><!-- /.comment -->
-								<li class="comment">
-									<article class="comment-body">
-										<div class="comment-image">
-											<img src="images/blog/comment_01.png" alt="">
-										</div><!-- /.comment-image -->
-										<div class="comment-content">
-											<div class="comment-metadata">
-												April 8, 2017 9:48 pm
-											</div>
-											<h5>
-												The food was amazing
-												<span>
-													<i class="fa fa-star" aria-hidden="true"></i>
-													<i class="fa fa-star" aria-hidden="true"></i>
-													<i class="fa fa-star" aria-hidden="true"></i>
-													<i class="fa fa-star" aria-hidden="true"></i>
-													<i class="fa fa-star-half-o" aria-hidden="true"></i>
-												</span>
-											</h5>
-											<div class="comment-author">
-												by <a href="#" title="">Alex luthor</a>
-											</div>
-											<p>
-												Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-											</p>
-											<div class="comment-like">
-												<ul>
-													<li>
-														<a href="#" title=""><i class="fa fa-thumbs-o-up" aria-hidden="true"></i> 2</a>
-													</li>
-													<li>
-														<a href="#" title=""><i class="fa fa-thumbs-o-down" aria-hidden="true"></i> 0</a>
-													</li>
-												</ul>
-												<div class="comment-reply">
-													<a href="#" title="">Reply</a>
-												</div>
-											</div><!-- /.comment-like -->
-										</div><!-- /.comment-content -->
-									</article><!-- /.comment-body -->
-								</li><!-- /.comment -->
-							</ol><!-- /.comment-list -->
-							<div class="load-more">
-								<a href="" title="">Load More</a>
-							</div>
-							<div class="comment-respond">
-								<h2 class="comment-reply-title">Leave a Review</h2>
-								<div class="comment-vote">
-									<p>Your Rating for this listing</p>
-									<star-rating></star-rating>
-									<span>Good!!!</span>
-								</div>
-								<form action="#" class="comment-form" method="get" accept-charset="utf-8">
-									<div class="clearfix"></div>
-									<div class="comment-form-comment">
-										<label for="comment-comment">Review</label>
-										<textarea id="comment-comment" name="comment"></textarea>
-										<p>
-											Your review recommended to be at least 140 characters long
-										</p>
-									</div>
-									<div class="submit-form">
-										<button type="submit">Submit Your Review</button>
-									</div>
-								</form><!-- /.comment-form -->
-							</div><!-- /.comment-respond -->
-						</div>
-               </article>
-               </li>
-               </ol>
-          </div>
+                    <h3 class="comment-title">Đánh giá</h3>
+                    <ol class="comment-list">
+                         <li class="comment" style="display: list-item;">
+                              <article class="comment-body">
+                                   <div class="comment-image">
+                                        <img src="<?= Yii::$app->homeUrl ?>resources/images/page/comment/comment_01.png" alt="">
+                                   </div><!-- /.comment-image -->
+                                   <div class="comment-content">
+                                        <div class="comment-metadata">
+                                             April 8, 2017 9:48 pm
+                                        </div>
+                                        <h5>
+                                             The food was amazing
+                                             <span>
+                                                  <i class="fa fa-star" aria-hidden="true"></i>
+                                                  <i class="fa fa-star" aria-hidden="true"></i>
+                                                  <i class="fa fa-star" aria-hidden="true"></i>
+                                                  <i class="fa fa-star" aria-hidden="true"></i>
+                                                  <i class="fa fa-star-half-o" aria-hidden="true"></i>
+                                             </span>
+                                        </h5>
+                                        <div class="comment-author">
+                                             by <a href="#" title="">Alex luthor</a>
+                                        </div>
+                                        <p>
+                                             Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                                        </p>
+                                   </div><!-- /.comment-content -->
+                              </article><!-- /.comment-body -->
+                         </li><!-- /.comment -->
+                    </ol><!-- /.comment-list -->
+                    <div class="load-more">
+                         <a href="" title="">Tải thêm</a>
+                    </div>
+                    <div class="comment-respond">
+                         <h2 class="comment-reply-title">Đánh giá của bạn</h2>
+                         <div class="comment-vote">
+                              <p>Rating</p>
+                              <star-rating v-model="rating" :max-stars="5"></star-rating>
+                         </div>
+                         <form action="#" class="comment-form" method="get" accept-charset="utf-8">
+                              <div class="comment-form-title pl-0 w-100">
+                                   <label for="comment-title">Tiêu đề nhận xét</label>
+                                   <input type="text" id="comment-title" name="comment-title">
+                              </div>
+                              <div class="clearfix"></div>
+                              <div class="comment-form-comment">
+                                   <label for="comment-comment">Nhận xét của bạn</label>
+                                   <textarea id="comment-comment" name="comment"></textarea>
+                              </div>
+                              <div class="submit-form">
+                                   <button type="submit">Gửi đánh giá</button>
+                              </div>
+                         </form><!-- /.comment-form -->
+                    </div><!-- /.comment-respond -->
+               </div>
           </div>
      </section>
 </div>
-
+<template id="star-rating-template">
+  <span>
+    <i v-for="n in maxStars" 
+       :class="getClass(n)" 
+       :style="getStyle(n)"
+       @click="$emit('input', n)"></i>
+  </span>
+</template>
 <script>
      (function ($) {
           var selectFood = <?= json_encode($food) ?>;
           var imagesRelate = <?= json_encode($imagesRelate) ?>
-          Vue.component('star-rating', {
-
-          })
+          
+          Vue.component("star-rating", {
+               props:{
+                    value:{type: Number, default: 0},
+                    maxStars: {type: Number, default: 5},
+                    starredColor: {type: String, default: "orange"},
+                    blankColor: {type: String, default: "darkgray"}
+               },
+               template:"#star-rating-template",
+               methods:{
+                    getClass(n){
+                         return {
+                              "fa": true,
+                              "fa-star": n <= this.value,
+                              "fa-star-o": n > this.value,
+                              // "fa-star-half-o": (n / 2) == 0.5
+                         }
+                    },
+                    getStyle(n){
+                         return {
+                              color: n <= this.value ? this.starredColor : this.blankColor
+                         }
+                    }
+               }
+          });
 
           APP.vueInstance = new Vue({
                el: '#food-detail',
                data: {
                     selectFood: selectFood,
                     imagesRelate: imagesRelate,
-                    rating: "No Rating Selected",
-                    boundRating: 3
+                    rating: 0
                },
               
                methods: {

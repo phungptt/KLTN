@@ -2332,13 +2332,13 @@ form.form-listing {
 						transition: all 0.3s ease-in-out;
 					}
 				}
-				// &:hover {
-				// 	.img-box {
-				// 		&:after {
-				// 			opacity: 1;
-				// 		}
-				// 	}
-				// }
+				&:hover {
+					.img-box {
+						&:after {
+							opacity: 1;
+						}
+					}
+				}
 				.involve-desc {
 					line-height: 20px;
 					padding: 6px 0 4px;
@@ -2359,14 +2359,14 @@ form.form-listing {
 }
 .comment-respond {
 	.comment-vote {
-		margin-bottom: 50px;
+		margin-bottom: 20px;
 		p {
 			font-weight: 400;
 			margin-bottom: 16px;
 			font-size: 16px;
 		}
-		span {
-			font-size: 16px;
+		i {
+			font-size: 20px;
 		}
 		.queue {
 			color: #f0b108;
