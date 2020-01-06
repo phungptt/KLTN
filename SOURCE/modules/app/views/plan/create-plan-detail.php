@@ -3,6 +3,7 @@
 use app\modules\api\APIConfig;
 use app\modules\app\APPConfig;
 use app\modules\app\services\PlaceService;
+use app\modules\app\services\PlanService;
 
 include('create-plan-detail_css.php')
 ?>
@@ -215,8 +216,8 @@ include('create-plan-detail_css.php')
 
                     addPlaceToTrip: function(place) {
                          var _this = this;
-                         
-                         _this.trip[_this.currentDay].details.push(place)
+                         _this.calDistanceBetweenLastPlaceInTripWithNewPlace(place);
+                         // _this.trip[_this.currentDay].details.push(place)
                          _this.toggleListPlace = false;
                     },
 
@@ -227,16 +228,14 @@ include('create-plan-detail_css.php')
                          var newPlace = _this.normalizePlaceData(place);
                          if(listPlaceOfDay.length >= 1) {
                               var lastPlace = _this.trip[_this.currentDay].details[listPlaceOfDay.length - 1];
-                              coordsStr += lastPlace.lng + ',' + lastPlace.lat + ';' + newPlace.lng + ',' + newPlace.lat;
-                              _this.getRoutesAndDistancesBetweenLocations(coordsStr, 'false', function(routes) {
-                                   if(routes === false) {
-                                        alert('Có lỗi sảy ra, vui lòng thử lại');
+                              _this.getRoutesAndDistancesBetweenLocations(lastPlace, newPlace, 'car', function(summary) {
+                                   if(summary == false) {
+                                        toastMessage('error', 'Có lỗi sảy ra, vui lòng thử lại');
                                    } else {
-                                        lastPlace.distance = routes[0].distance;
-                                        lastPlace.transfer_time = Math.round(routes[0].distance / _this.transferType[lastPlace.transfer_type_id].velocity);
-                                        newPlace.start_time = _this.getTotalTimeFormFristPlace(_this.currentDay, listPlaceOfDay.length - 1);
-                                        listPlaceOfDay.push(newPlace);
-                                        _this.newPlace = null;
+                                        lastPlace.distance = summary.distance;
+                                        lastPlace.time_move = summary.travelTime;
+                                        newPlace.time_start = _this.getTotalTimeFormFristPlace(_this.currentDay, listPlaceOfDay.length - 1);
+                                        _this.trip[_this.currentDay].details.push(newPlace);
                                    }
                               })
                          } else {
@@ -246,20 +245,22 @@ include('create-plan-detail_css.php')
                          }
                     },
 
-                    getRoutesAndDistancesBetweenLocations: function(coords, overview = 'false', callback) {
-                         var urlApiGetDistances = 'http://router.project-osrm.org/route/v1/driving/' + coords + '?overview=' + overview;
+
+                    //transporttype: car | pedestrian
+                    getRoutesAndDistancesBetweenLocations: function(waypoint0, waypoint1, transporttype, callback) {
+                         var urlApiGetDistances = 'https://route.ls.hereapi.com/routing/7.2/calculateroute.json?apiKey=<?= PlanService::$HERE_KEY ?>' + '&waypoint0=geo!' + waypoint0.lat + ',' + waypoint0.lng + '&waypoint1=geo!' + waypoint1.lat + ',' + waypoint1.lng + '&routeattributes=sm&mode=fastest;' + transporttype;
                          $.ajax({
-                         url: urlApiGetDistances,
-                         success: function(resp) {
-                              if (resp.code === 'Ok') {
-                                   callback(resp.routes[0].legs);
-                              } else {
+                              url: urlApiGetDistances,
+                              success: function(data) {
+                                   if(data.response.route) {
+                                        callback(data.response.route[0].summary);
+                                   } else {
+                                        callback(false);
+                                   }
+                              },
+                              error: function(msg) {
                                    callback(false);
                               }
-                         },
-                         error: function(msg) {
-                              callback(false);
-                         }
                          });
                          return false;
                     },
@@ -268,7 +269,7 @@ include('create-plan-detail_css.php')
                          var _this = this;
                          var totalTime = 0;
                          var place = _this.trip[didx].details[pidx];
-                         totalTime += parseInt(place.time_start) + parseInt(place.time_stay) + parseInt(place.time_move);
+                         totalTime += parseInt(place.time_start) + parseInt(place.time_stay) + parseInt(place.time_move) + parseInt(place.time_free);
                          return totalTime;
                     },
 
@@ -277,14 +278,16 @@ include('create-plan-detail_css.php')
                               place_name: place.name,
                               time_start: 480,
                               time_stay: 60,
-                              time_move: null,
+                              time_move: 0,
+                              time_free: 0,
                               id_place: place.id,
                               lat: place.lat,
                               lng: place.lng,
                               path: place.path,
-                              date_index: _this.currentDay,
+                              date_index: this.currentDay,
                               note: '',
-                              id_type_of_transport: 0
+                              id_type_of_transport: 0,
+                              distance: 0
                          }
 
                          return placeData;

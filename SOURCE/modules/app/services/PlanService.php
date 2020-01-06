@@ -16,6 +16,9 @@ class PlanService
     public static $DELETED = 1;
     public static $ALIVE = 0;
 
+    public static $HERE_ID = 'gRqLa6YYLXTqvoTTUhiT';
+    public static $HERE_KEY = 'hPtC4kp3SDaqlFsNbcT_zPpyknvCfWEdcxejzcUk8zI';
+
     public static function CreatePlan($data)
     {
         $model = new Plan();
