@@ -72,10 +72,10 @@ include('create-plan-detail_css.php')
                          <form class="step-pick-location">
                               <div class="search-box d-flex">
                                    <div class="search-box__item">
-                                        <input type="text" placeholder="Tìm kiếm" name="search">
+                                        <input type="text" placeholder="Tìm kiếm" v-model="places.query.keyword">
                                    </div>
                                    <div class="search-box__item"><span class="ti-angle-down"></span>
-                                        <select name="categories" v-model="type">
+                                        <select name="categories" v-model="places.query.type">
                                              <option v-for="(label, value) in placeTypes" :value="value">{{ label }}</option>
                                         </select>
                                    </div>
@@ -128,14 +128,13 @@ include('create-plan-detail_css.php')
                          paginations: {},
                          query: {
                               type: '<?= PlaceService::$VISIT_TYPE ?>',
-                              keyword: '',
+                              keyword: null,
                               page: 1,
                               pointcenter: {
                                    lat: null,
                                    lng: null
                               }
                          }
-                         
                     },
                     currentDay: null,
                     placeTypes: placeTypes
@@ -188,7 +187,8 @@ include('create-plan-detail_css.php')
                               },
                               success: function(resp) {
                                    if(resp.status) {
-                                        _this.places = resp.places
+                                        _this.places.data = resp.places.data
+                                        _this.places.paginations = resp.places.paginations
                                    } else {
                                         toastMessage('error', resp.message)
                                    }
@@ -203,22 +203,91 @@ include('create-plan-detail_css.php')
                          console.log(1);
                     },
 
-                    addPlaceToTrip: function(place) {
-                         console.log(place)
-                         this.toggleListPlace = false;
-                    },
-
                     initTripData: function() {
                          for(var i = 0; i < this.plan.total_day; i++) {
                               this.trip.push({
                                    date: this.plusDays(this.plan.date_start, i),
+                                   time_start: 480,
                                    details: []
                               });
                          }
                     },
 
                     addPlaceToTrip: function(place) {
+                         var _this = this;
+                         
+                         _this.trip[_this.currentDay].details.push(place)
+                         _this.toggleListPlace = false;
+                    },
 
+                    calDistanceBetweenLastPlaceInTripWithNewPlace: function(place) {
+                         var _this = this;
+                         var coordsStr = '';
+                         var listPlaceOfDay = _this.trip[_this.currentDay].details;
+                         var newPlace = _this.normalizePlaceData(place);
+                         if(listPlaceOfDay.length >= 1) {
+                              var lastPlace = _this.trip[_this.currentDay].details[listPlaceOfDay.length - 1];
+                              coordsStr += lastPlace.lng + ',' + lastPlace.lat + ';' + newPlace.lng + ',' + newPlace.lat;
+                              _this.getRoutesAndDistancesBetweenLocations(coordsStr, 'false', function(routes) {
+                                   if(routes === false) {
+                                        alert('Có lỗi sảy ra, vui lòng thử lại');
+                                   } else {
+                                        lastPlace.distance = routes[0].distance;
+                                        lastPlace.transfer_time = Math.round(routes[0].distance / _this.transferType[lastPlace.transfer_type_id].velocity);
+                                        newPlace.start_time = _this.getTotalTimeFormFristPlace(_this.currentDay, listPlaceOfDay.length - 1);
+                                        listPlaceOfDay.push(newPlace);
+                                        _this.newPlace = null;
+                                   }
+                              })
+                         } else {
+                              _this.trip[_this.currentDay].time_start = 480; //480' = 08:am
+                              newPlace.start_time = 480; //480' = 08:am
+                              _this.trip[_this.currentDay].details.push(newPlace);
+                         }
+                    },
+
+                    getRoutesAndDistancesBetweenLocations: function(coords, overview = 'false', callback) {
+                         var urlApiGetDistances = 'http://router.project-osrm.org/route/v1/driving/' + coords + '?overview=' + overview;
+                         $.ajax({
+                         url: urlApiGetDistances,
+                         success: function(resp) {
+                              if (resp.code === 'Ok') {
+                                   callback(resp.routes[0].legs);
+                              } else {
+                                   callback(false);
+                              }
+                         },
+                         error: function(msg) {
+                              callback(false);
+                         }
+                         });
+                         return false;
+                    },
+
+                    getTotalTimeFormFristPlace(didx, pidx) {
+                         var _this = this;
+                         var totalTime = 0;
+                         var place = _this.trip[didx].details[pidx];
+                         totalTime += parseInt(place.time_start) + parseInt(place.time_stay) + parseInt(place.time_move);
+                         return totalTime;
+                    },
+
+                    normalizePlaceData: function(place) {
+                         var placeData = {
+                              place_name: place.name,
+                              time_start: 480,
+                              time_stay: 60,
+                              time_move: null,
+                              id_place: place.id,
+                              lat: place.lat,
+                              lng: place.lng,
+                              path: place.path,
+                              date_index: _this.currentDay,
+                              note: '',
+                              id_type_of_transport: 0
+                         }
+
+                         return placeData;
                     },
 
                     formatDate: function(date) {
