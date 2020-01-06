@@ -1,6 +1,6 @@
 <style>
      .create-plan-detail .banner-section .banner-img {
-          background-image: url('../../resources/images/plan-detail-banner.jpg');
+          background-image: url('<?= \Yii::$app->homeUrl ?>resources/images/plan-detail-banner.jpg');
      }
 
      .create-plan-detail .trip-panel-detail {

@@ -138,4 +138,8 @@ $config['modules']['app'] = [
     'class' => 'app\modules\app\Module'
 ];
 
+$config['modules']['api'] = [
+    'class' => 'app\modules\api\Module'
+];
+
 return $config;

@@ -9,8 +9,6 @@ use Yii;
  *
  * @property int $id
  * @property int $id_destination
- * @property string $date_start
- * @property string $date_end
  * @property int $status
  * @property int $deleted
  * @property string $created_at
@@ -19,8 +17,10 @@ use Yii;
  * @property string $name
  * @property string $slug
  * @property int $total_day
- * @property int $public
  * @property string $note
+ * @property int $public
+ * @property string $date_start
+ * @property string $date_end
  */
 class Plan extends \yii\db\ActiveRecord
 {
@@ -40,8 +40,9 @@ class Plan extends \yii\db\ActiveRecord
         return [
             [['id_destination', 'status', 'deleted', 'created_by', 'total_day', 'public'], 'default', 'value' => null],
             [['id_destination', 'status', 'deleted', 'created_by', 'total_day', 'public'], 'integer'],
-            [['date_start', 'date_end', 'created_at', 'updated_at'], 'safe'],
-            [['name', 'slug', 'note'], 'string', 'max' => 255],
+            [['created_at', 'updated_at', 'date_start', 'date_end'], 'safe'],
+            [['note'], 'string'],
+            [['name', 'slug'], 'string', 'max' => 255],
         ];
     }
 
@@ -53,8 +54,6 @@ class Plan extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'id_destination' => 'Id Destination',
-            'date_start' => 'Date Start',
-            'date_end' => 'Date End',
             'status' => 'Status',
             'deleted' => 'Deleted',
             'created_at' => 'Created At',
@@ -63,8 +62,10 @@ class Plan extends \yii\db\ActiveRecord
             'name' => 'Name',
             'slug' => 'Slug',
             'total_day' => 'Total Day',
-            'public' => 'Public',
             'note' => 'Note',
+            'public' => 'Public',
+            'date_start' => 'Date Start',
+            'date_end' => 'Date End',
         ];
     }
 }

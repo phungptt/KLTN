@@ -10,7 +10,6 @@ use Yii;
  * @property int $id
  * @property int $id_plan
  * @property int $id_place
- * @property string $date_index
  * @property int $id_type_of_transport
  * @property string $place_name
  * @property string $lat
@@ -19,6 +18,8 @@ use Yii;
  * @property int $time_stay
  * @property int $time_move
  * @property string $note
+ * @property string $path
+ * @property int $date_index
  */
 class PlanDetail extends \yii\db\ActiveRecord
 {
@@ -36,10 +37,10 @@ class PlanDetail extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id_plan', 'id_place', 'id_type_of_transport', 'time_start', 'time_stay', 'time_move'], 'default', 'value' => null],
-            [['id_plan', 'id_place', 'id_type_of_transport', 'time_start', 'time_stay', 'time_move'], 'integer'],
-            [['date_index'], 'safe'],
-            [['place_name', 'lat', 'lng', 'note'], 'string', 'max' => 255],
+            [['id_plan', 'id_place', 'id_type_of_transport', 'time_start', 'time_stay', 'time_move', 'date_index'], 'default', 'value' => null],
+            [['id_plan', 'id_place', 'id_type_of_transport', 'time_start', 'time_stay', 'time_move', 'date_index'], 'integer'],
+            [['note'], 'string'],
+            [['place_name', 'lat', 'lng', 'path'], 'string', 'max' => 255],
         ];
     }
 
@@ -52,7 +53,6 @@ class PlanDetail extends \yii\db\ActiveRecord
             'id' => 'ID',
             'id_plan' => 'Id Plan',
             'id_place' => 'Id Place',
-            'date_index' => 'Date Index',
             'id_type_of_transport' => 'Id Type Of Transport',
             'place_name' => 'Place Name',
             'lat' => 'Lat',
@@ -61,6 +61,8 @@ class PlanDetail extends \yii\db\ActiveRecord
             'time_stay' => 'Time Stay',
             'time_move' => 'Time Move',
             'note' => 'Note',
+            'path' => 'Path',
+            'date_index' => 'Date Index',
         ];
     }
 }
