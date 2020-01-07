@@ -3,7 +3,7 @@ use app\modules\app\AppConfig;
 use app\modules\contrib\gxassets\GxVueAsset;
 use app\modules\contrib\gxassets\GxLeafletAsset;
 use app\modules\app\widgets\AppObjectMapWidget;
-use app\modules\app\widgets\CMSMapDetailWidget;
+use app\modules\app\widgets\CMSMapListWidget;
 
 GxLeafletAsset::register($this);
 GxVueAsset::register($this);
@@ -63,7 +63,7 @@ include('food-list_css.php')
                                         </div><!-- /.box-header -->
                                         <div class="box-content">
                                              <div class="box-title ad">
-                                                  <a href="#" title="">{{food.name}}</a>
+                                                  <a href="#" title="" @click="viewLocation(food)" @mouseover="showMarkerPopup(food.id)">{{food.name}}</a>
                                              </div>
                                              <ul class="rating">
                                                   <li>5 rating</li>
@@ -85,7 +85,9 @@ include('food-list_css.php')
                </div><!-- /.col-md-6 -->
                <div class="col-lg-6">
                     <section class="pdmap h-100" id="flat-map">
-                         
+                         <div class="pdmap style2" style="height: 1500px;">
+                              <?= CMSMapListWidget::widget() ?>
+                         </div>
                     </section><!-- /#flat-map-2 -->
                </div><!-- /.col-md-6 -->
           </div><!-- /.row -->
@@ -103,7 +105,20 @@ include('food-list_css.php')
                     selectDestination: null
                },
                methods: {
-
+                    viewLocation: function(location){
+                         this.selectedLocation = location;
+                         this.zoomToMap(location.lat, location.lng);
+                         var iconMap = $('#image-object-on-map-' + location.id).parent();
+                         iconMap.trigger('click');
+                    },
+                    zoomToMap: function(lat, lng) {
+                         DATA.map.setView([lat, lng], 15);
+                         MARKER.setLatLng([lat, lng]);
+                    },
+                    showMarkerPopup: function(id) {
+                         var iconMap = $('#image-object-on-map-' + id).parent();
+                         iconMap.trigger('mouseout');
+                    }
                },
           })
 

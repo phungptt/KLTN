@@ -1,10 +1,9 @@
 <?php
 
 use app\modules\contrib\gxassets\GxBootstrapSliderAsset;
+use app\modules\app\widgets\CMSMapListWidget;
 use app\modules\contrib\gxassets\GxVueAsset;
 use app\modules\contrib\gxassets\GxLeafletAsset;
-use app\modules\app\widgets\AppObjectMapWidget;
-use app\modules\app\widgets\CMSMapDetailWidget;
 
 GxLeafletAsset::register($this);
 GxVueAsset::register($this);
@@ -35,6 +34,7 @@ include('hotel-list_css.php')
                                              <span class="price-min text-12">0 VNĐ</span>
                                              <span class="price-max text-12">24000000 VNĐ</span>
                                         </div>
+                                   </div>
                               </form><!-- /form -->
                          </div><!-- /.wrap-box-search -->
                          <div class="clearfix"></div>
@@ -101,7 +101,7 @@ include('hotel-list_css.php')
                                         </div><!-- /.box-header -->
                                         <div class="box-content">
                                              <div class="box-title">
-                                                  <a href="#" title="">{{hotel.name}}</a>
+                                                  <a href="#" title="" @click="viewLocation(hotel)" @mouseover="showMarkerPopup(hotel.id)">{{hotel.name}}</a>
                                              </div>
                                              <ul class="rating">
                                                   <li>Từ 540 000 VNĐ / đêm</li>
@@ -113,12 +113,11 @@ include('hotel-list_css.php')
                                         <div class="location">
                                              <span class="fas fa-map-marker-alt"></span>
                                              <span>{{hotel.name_destination}}</span> 
-                                        </ul><!-- /.location -->
+                                        </div><!-- /.location -->
                                    </div><!-- /.box-imagebox -->
                               </div><!-- /.imagebox style3 -->
                               <div class="height33 clearfix"></div>
                               <div class="clearfix"></div>
-                           
                          </div><!-- /.wrap-imagebox -->
                          <div class="btn-more">
                               <a href="#" title="">Tải thêm</a>
@@ -127,9 +126,8 @@ include('hotel-list_css.php')
                </div><!-- /.col-md-6 -->
                <div class="col-lg-6">
                     <section class="pdmap" id="flat-map">
-                         <div class="flat-maps" data-address="Ngõ 178 Nguyễn Lương Bằng, Chợ Dừa, Đống Đa, Hà Nội, Việt Nam" data-image="images/icon/map.png" data-name="Themesflat Map"></div>
-                         <div class="gm-map">
-                              <div class="map s1"></div>
+                         <div class="pdmap style2" style="height: 1500px;">
+                            <?= CMSMapListWidget::widget() ?>
                          </div>
                     </section><!-- /#flat-map-2 -->
                </div><!-- /.col-md-6 -->
@@ -159,9 +157,23 @@ include('hotel-list_css.php')
                     hotelList: hotelList,
                     amenities: amenities,
                     sliderValue: [0, 24000000],
+                    selectedLocation: null
                },
                methods: {
-
+                    viewLocation: function(location){
+                         this.selectedLocation = location;
+                         this.zoomToMap(location.lat, location.lng);
+                         var iconMap = $('#image-object-on-map-' + location.id).parent();
+                         iconMap.trigger('click');
+                    },
+                    zoomToMap: function(lat, lng) {
+                         DATA.map.setView([lat, lng], 15);
+                         MARKER.setLatLng([lat, lng]);
+                    },
+                    showMarkerPopup: function(id) {
+                         var iconMap = $('#image-object-on-map-' + id).parent();
+                         iconMap.trigger('mouseout');
+                    }
                },
           })
      })(jQuery)

@@ -153,8 +153,8 @@ class PlaceService
                 }
             }
         }
-        dd($hotelsResult);
-        // return $hotelsResult;
+        // dd($hotelsResult);
+        return $hotelsResult;
     }
 
     public static function GetLocationBySlug($slug) {

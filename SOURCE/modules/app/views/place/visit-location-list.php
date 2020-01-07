@@ -1,5 +1,9 @@
 <?php
 use app\modules\app\AppConfig;
+use app\modules\app\widgets\CMSMapListWidget;
+use app\modules\contrib\gxassets\GxLeafletAsset;
+
+GxLeafletAsset::register($this);
 include('visit-location-list_css.php')
 ?>
 
@@ -8,7 +12,7 @@ include('visit-location-list_css.php')
           <div class="row">
                <div class="col-lg-6">
                     <div class="flat-filter">
-                         <div class="wrap-box-search style2 ">
+                         <div class="wrap-box-search style2 mt-0">
                               <form action="#" method="get" accept-charset="utf-8">
                                    <span>
                                         <input type="text" placeholder="Tìm kiếm ?" name="search">
@@ -44,15 +48,11 @@ include('visit-location-list_css.php')
                                         </div><!-- /.box-header -->
                                         <div class="box-content">
                                              <div class="box-title ad">
-                                                  <a href="javascript:void(0)" title="">{{visit.name}}
+                                                  <a href="javascript:void(0)" title="" @click="viewLocation(visit)" @mouseover="showMarkerPopup(visit.id)">{{visit.name}}</a>
                                              </div>
                                              <div class="address">
                                                   <p>{{visit.address}}</p>
                                              </div>
-                                             <!-- <ul class="location">
-                                                  <li class="address"><span class="ti-location-pin"></span>Hanoi, Vietnam</li>
-                                                  <li class="closed">Closed Now !</li>
-                                             </ul> -->
                                         </div><!-- /.box-content -->
                                    </div><!-- /.box-imagebox -->
                                    <div class="height30"></div>
@@ -65,10 +65,9 @@ include('visit-location-list_css.php')
                     </div><!-- /.flat-filter -->
                </div><!-- /.col-md-6 -->
                <div class="col-lg-6">
-                    <section class="pdmap" id="flat-map">
-                         <div class="flat-maps" data-address="Ngõ 178 Nguyễn Lương Bằng, Chợ Dừa, Đống Đa, Hà Nội, Việt Nam" data-image="images/icon/map.png" data-name="Themesflat Map"></div>
-                         <div class="gm-map">
-                              <div class="map s1"></div>
+                    <section class="pdmap">
+                         <div class="pdmap style2" style="height: 1500px;">
+                            <?= CMSMapListWidget::widget() ?>
                          </div>
                     </section><!-- /#flat-map-2 -->
                </div><!-- /.col-md-6 -->
@@ -84,10 +83,23 @@ include('visit-location-list_css.php')
                el: '#visit-location-list',
                data: {
                     visitList: visitLocationList,
-                    selectDestination: null
+                    selectLocation: null
                },
                methods: {
-
+                    viewLocation: function(location){
+                         this.selectedLocation = location;
+                         this.zoomToMap(location.lat, location.lng);
+                         var iconMap = $('#image-object-on-map-' + location.id).parent();
+                         iconMap.trigger('click');
+                    },
+                    zoomToMap: function(lat, lng) {
+                         DATA.map.setView([lat, lng], 15);
+                         MARKER.setLatLng([lat, lng]);
+                    },
+                    showMarkerPopup: function(id) {
+                         var iconMap = $('#image-object-on-map-' + id).parent();
+                         iconMap.trigger('mouseout');
+                    }
                },
           })
      })(jQuery)
