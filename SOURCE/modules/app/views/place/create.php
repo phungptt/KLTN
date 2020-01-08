@@ -269,7 +269,7 @@ include('_create_css.php');
                                 toastMessage('error', response.message);
                             } else {
                                 toastMessage('success', response.message);
-                                window.location.reload();
+                                // window.location.reload();
                             }
                             btnSubmit.empty().append('Lưu địa điểm');
                         },

@@ -1,4 +1,5 @@
 <?php
+
 use app\modules\app\AppConfig;
 use app\modules\contrib\gxassets\GxVueAsset;
 use app\modules\contrib\gxassets\GxLeafletAsset;
@@ -45,7 +46,7 @@ include('food-list_css.php')
                               </ul>
                          </div><!-- /.filter-result -->
                          <div class="wrap-imagebox style1">
-                              <div class="imagebox style3" v-for="food in foodList">
+                              <div class="imagebox style3" v-for="(food, index) in foodList.slice(pageStart, pageStart + countOfPage)">
                                    <div class="box-imagebox">
                                         <div class="box-header">
                                              <div class="box-image">
@@ -77,9 +78,17 @@ include('food-list_css.php')
                                    </div><!-- /.box-imagebox -->
                               </div><!-- /.imagebox style3 -->
                               <div class="clearfix"></div>
-                              <div class="btn-more">
-                                   <a href="#" title="">Load More</a>
-                              </div>
+                              <div class="row">
+                                   <div class="col-md-12">
+                                        <nav aria-label="Page navigation example">
+                                             <ul class="pagination justify-content-center">
+                                                  <li class="page-item" v-bind:class="{'disabled': (currPage === 1)}" @click.prevent="setPage(currPage-1)"><a class="page-link" href="">Trang trước</a></li>
+                                                  <li class="page-item" v-for="n in totalPage" v-bind:class="{'active': (currPage === (n))}" @click.prevent="setPage(n)"><a class="page-link" href="">{{n}}</a></li>
+                                                  <li class="page-item" v-bind:class="{'disabled': (currPage === totalPage)}" @click.prevent="setPage(currPage+1)"><a class="page-link" href="">Trang sau</a></li>
+                                             </ul>
+                                        </nav>
+                                   </div>
+                              </div><!-- /.row -->
                          </div><!-- /.wrap-imagebox -->
                     </div><!-- /.flat-filter -->
                </div><!-- /.col-md-6 -->
@@ -95,17 +104,33 @@ include('food-list_css.php')
 </section><!-- /.flat-map-zoom-in -->
 
 <script>
-     (function($){
+     (function($) {
           var foodList = <?= json_encode($foodList) ?>
 
           APP.vueInstance = new Vue({
                el: '#food-list',
                data: {
                     foodList: foodList,
-                    selectDestination: null
+                    selectDestination: null,
+                    countOfPage: 6,
+                    currPage: 1,
+               },
+               computed: {
+                    pageStart: function() {
+                         return (this.currPage - 1) * this.countOfPage;
+                    },
+                    totalPage: function() {
+                         return Math.ceil(this.foodList.length / this.countOfPage);
+                    }
                },
                methods: {
-                    viewLocation: function(location){
+                    setPage: function(idx) {
+                         if (idx <= 0 || idx > this.totalPage) {
+                              return;
+                         }
+                         this.currPage = idx;
+                    },
+                    viewLocation: function(location) {
                          this.selectedLocation = location;
                          this.zoomToMap(location.lat, location.lng);
                          var iconMap = $('#image-object-on-map-' + location.id).parent();
@@ -125,4 +150,3 @@ include('food-list_css.php')
 
      })(jQuery)
 </script>
-

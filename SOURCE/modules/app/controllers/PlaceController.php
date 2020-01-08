@@ -6,6 +6,8 @@ use app\modules\app\models\Food;
 use app\modules\app\models\Place;
 use app\modules\app\models\PlaceImage;
 use app\modules\app\models\Room;
+use app\modules\app\models\Comment;
+use app\modules\app\models\Rating;
 use app\modules\app\services\PlaceService;
 use app\modules\app\services\ImageService;
 use yii\web\UploadedFile;
@@ -51,6 +53,9 @@ class PlaceController extends Controller
           return true;
      }
 
+     public function actionCreateComment() {
+          $comment = new Place();
+     }
 
 
      public function actionDestinationDetail() {
@@ -74,12 +79,23 @@ class PlaceController extends Controller
      }
 
      public function actionFoodDetail($slug=null) {
+          
+          $comment = new Comment();
+          $rating = new Rating();
+          $request = Yii::$app->request;
+          if($request->isPost) {
+               $saved = PlaceService::CreatePlaceComment($request->post());
+               
+               return $this->asJson($saved);
+          }
           // - Select food location with slug
           $food = PlaceService::GetLocationBySlug($slug);
 
+          // - Select comment with ID
+          $comments = PlaceService::GetCommentListByPlaceId($food['id']);
           // - Select image relate of place
           $imagesRelate = PlaceService::GetImagesRelateByPlaceId($food['id']);
-          return $this->render('food-detail', compact('food', 'imagesRelate'));
+          return $this->render('food-detail', compact('food','comment', 'rating', 'imagesRelate', 'comments'));
      }
 
      public function actionVisitLocationList() {

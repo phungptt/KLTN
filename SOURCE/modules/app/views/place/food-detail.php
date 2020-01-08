@@ -1,4 +1,7 @@
 <?php
+     use kartik\form\ActiveForm;
+     use app\modules\app\APPConfig;
+     use app\modules\app\services\PlaceService;
      use app\modules\contrib\gxassets\GxSwiperAsset;
      use app\modules\contrib\gxassets\GxVueAsset;
 
@@ -63,30 +66,23 @@
                <div class="comment-area">
                     <h3 class="comment-title">Đánh giá</h3>
                     <ol class="comment-list">
-                         <li class="comment" style="display: list-item;">
+                         <li class="comment" style="display: list-item;" v-for="comment in comments">
                               <article class="comment-body">
                                    <div class="comment-image">
                                         <img src="<?= Yii::$app->homeUrl ?>resources/images/page/comment/comment_01.png" alt="">
                                    </div><!-- /.comment-image -->
                                    <div class="comment-content">
                                         <div class="comment-metadata">
-                                             April 8, 2017 9:48 pm
+                                             {{comment.create_at}}
                                         </div>
                                         <h5>
-                                             The food was amazing
-                                             <span>
-                                                  <i class="fa fa-star" aria-hidden="true"></i>
-                                                  <i class="fa fa-star" aria-hidden="true"></i>
-                                                  <i class="fa fa-star" aria-hidden="true"></i>
-                                                  <i class="fa fa-star" aria-hidden="true"></i>
-                                                  <i class="fa fa-star-half-o" aria-hidden="true"></i>
-                                             </span>
+                                             {{comment.short_description}}
                                         </h5>
                                         <div class="comment-author">
-                                             by <a href="#" title="">Alex luthor</a>
+                                             bởi <a href="#" title="">{{comment.user_name}}</a>
                                         </div>
                                         <p>
-                                             Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                                             {{comment.content}}
                                         </p>
                                    </div><!-- /.comment-content -->
                               </article><!-- /.comment-body -->
@@ -96,43 +92,51 @@
                          <a href="" title="">Tải thêm</a>
                     </div>
                     <div class="comment-respond">
+                         <?php $form = ActiveForm::begin([
+                              'id' => 'create-rating-form',
+                              'options' => [
+                                   'enctype' => 'multipart/form-data',
+                                   'class' => 'form-listing create-form'
+                              ]
+                         ]) ?>
                          <h2 class="comment-reply-title">Đánh giá của bạn</h2>
                          <div class="comment-vote">
                               <p>Rating</p>
                               <star-rating v-model="rating" :max-stars="5"></star-rating>
                          </div>
-                         <form action="#" class="comment-form" method="get" accept-charset="utf-8">
                               <div class="comment-form-title pl-0 w-100">
-                                   <label for="comment-title">Tiêu đề nhận xét</label>
-                                   <input type="text" id="comment-title" name="comment-title">
+                                   <?= $form->field($comment, 'short_description')->textInput()->label('Tiêu đề nhận xét') ?>
                               </div>
                               <div class="clearfix"></div>
                               <div class="comment-form-comment">
-                                   <label for="comment-comment">Nhận xét của bạn</label>
-                                   <textarea id="comment-comment" name="comment"></textarea>
+                                   <?= $form->field($comment, 'content')->textarea(['rows' => 5])->label('Nhận xét của bạn') ?>
                               </div>
                               <div class="submit-form">
-                                   <button type="submit">Gửi đánh giá</button>
+                                   <button id="btn-submit" @click="submitForm">Gửi đánh giá</button>
                               </div>
-                         </form><!-- /.comment-form -->
+                         <?php $form->end() ?>
                     </div><!-- /.comment-respond -->
                </div>
           </div>
      </section>
 </div>
+
 <template id="star-rating-template">
-  <span>
-    <i v-for="n in maxStars" 
-       :class="getClass(n)" 
-       :style="getStyle(n)"
-       @click="$emit('input', n)"></i>
-  </span>
+     <span>
+          <i v-for="n in maxStars" 
+                    :class="getClass(n)" 
+                    :style="getStyle(n)"
+                    @click="$emit('input', n)">
+          </i>
+     </span>
 </template>
+
 <script>
      (function ($) {
           var selectFood = <?= json_encode($food) ?>;
-          var imagesRelate = <?= json_encode($imagesRelate) ?>
-          
+          var imagesRelate = <?= json_encode($imagesRelate) ?>;
+          var comments = <?= json_encode($comments) ?>;
+
           Vue.component("star-rating", {
                props:{
                     value:{type: Number, default: 0},
@@ -147,7 +151,6 @@
                               "fa": true,
                               "fa-star": n <= this.value,
                               "fa-star-o": n > this.value,
-                              // "fa-star-half-o": (n / 2) == 0.5
                          }
                     },
                     getStyle(n){
@@ -163,11 +166,42 @@
                data: {
                     selectFood: selectFood,
                     imagesRelate: imagesRelate,
-                    rating: 0
+                    comments: comments,
+                    rating: 0,
+                    swiper: null,
+                    id_place: selectFood['id']
                },
-              
                methods: {
-                    
+                    submitForm: function(event) {
+                         event.preventDefault();
+                         var _this = this,
+                         btnSubmit = $("#btn-submit"),
+                         formData = new FormData($('#create-rating-form')[0]);
+                         this.id_place = 
+                         formData.append('id_place', this.id_place)
+                         btnSubmit.empty().append('Đang lưu đánh giá mới...')
+
+                         $.ajax({
+                              contentType: false,
+                              processData: false,
+                              type: 'POST',
+                              url: '<?= APPConfig::getUrl('place/food-detail') ?>',
+                              data: formData,
+                              success: function(response) {
+                                   if (response.status === false) {
+                                        toastMessage('error', response.message);
+                                   } else {
+                                        toastMessage('success', response.message);
+                                        window.location.reload();
+                                   }
+                                   btnSubmit.empty().append('Lưu nhận xét');
+                              },
+                              error: function() {
+                                   toastMessage('error', 'Upload failed');
+                                   btnSubmit.empty().append('Lưu nhận xét');
+                              }
+                         });
+                    }
                },
                // mounted() {
                //      this.swiper = new window.Swiper('.swiper-container', {

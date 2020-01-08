@@ -3,6 +3,7 @@
 namespace app\modules\app\services;
 
 use app\modules\app\models\Amenities;
+use app\modules\app\models\Comment;
 use app\modules\app\models\Food;
 use app\modules\app\models\Place;
 use app\modules\app\models\Room;
@@ -62,6 +63,43 @@ class PlaceService
             'status' => false,
             'message' => 'Vui lòng chọn ảnh đại diện cho địa điểm'
         ];
+    }
+
+    public static function CreatePlaceComment($data) {
+        $comment = new Comment();
+
+        $comment->load($data);
+        $comment->create_by = Yii::$app->user->id;
+        $comment->status = self::$AVALABLE;
+        $comment->delete = self::$ALIVE;
+        $comment->object_type = 'app\modules\app\models\Place';
+        $comment->object_id =  $data['id_place'];
+
+        if($comment->save(false)) {
+            $comment->save();
+            return [
+                'status' => true,
+                'message' => 'Thêm nhận xét thành công'
+            ];
+        }
+
+        return [
+            'status' => false,
+            'message' => 'Vui lòng điền đầy đủ các trường thông tin có dấu (*)'
+        ];
+    }
+
+    public static  function GetIdPlaceBySlug($slug)
+    {
+        $id_place = (new Query())
+                                    -> select([
+                                        'place.id'
+                                    ])
+                                    ->from('place')
+                                    ->where(['and', ['place.slug' => $slug]])
+                                    ->all();
+        dd($id_place);
+        return $id_place;
     }
 
     public static function CreatePlaceAndRef($data, $avatar, $imageRelateFiles) {
@@ -178,6 +216,22 @@ class PlaceService
             $img['path'] = ImageService::GetOriginalPath($img['path']);
         }                               
         return $images;
+    }
+
+    public static function GetCommentListByPlaceId($id) {
+        $comments = (new Query())
+                                        ->select([
+                                           'comment.short_description',
+                                           'comment.create_at',
+                                           'comment.content',
+                                           'u.fullname as user_name'
+                                        ])
+                                        ->from('comment')
+                                        ->innerJoin('place as p', 'comment.object_id = p.id')
+                                        ->innerJoin('user_info as u', 'comment.create_by = u.user_id')
+                                        ->where(['and', ['comment.object_id' => $id]])
+                                        ->all();
+        return $comments;
     }
 
     public static function GetPlaceListWithPaginations($destination, $type, $page, $keyword, $lat, $lng) {

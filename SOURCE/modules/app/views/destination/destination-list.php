@@ -32,7 +32,7 @@ include('destination-list_css.php');
 
 	<section class="flat-row flat-imagebox style3">
 		<div class="container">
-			<div class="wrap-imagebox style3" v-for="dest in destinations">
+			<div class="wrap-imagebox style3" v-for="(dest, index) in destinations.slice(pageStart, pageStart + countOfPage)">
 				<div class="row">
 					<div class="col-sm-12">
 						<div class="imagebox style2">
@@ -69,57 +69,45 @@ include('destination-list_css.php');
 			</div><!-- /.container -->
 			<div class="row">
 				<div class="col-md-12">
-				<pagination-control
-					@change="changePage"
-					:current-page="page"
-					:max-pages="totalPages">
-				</pagination-control>
+					<nav aria-label="Page navigation example">
+						<ul class="pagination justify-content-center">
+							<li class="page-item" v-bind:class="{'disabled': (currPage === 1)}" @click.prevent="setPage(currPage-1)"><a class="page-link" href="">Trang trước</a></li>
+							<li class="page-item" v-for="n in totalPage" v-bind:class="{'active': (currPage === (n))}" @click.prevent="setPage(n)"><a class="page-link" href="">{{n}}</a></li>
+							<li class="page-item" v-bind:class="{'disabled': (currPage === totalPage)}" @click.prevent="setPage(currPage+1)"><a class="page-link" href="">Trang sau</a></li>
+						</ul>
+					</nav>
 				</div>
 			</div><!-- /.row -->
 	</section><!-- /.flat-imagebox style3 -->
 </div>
 
-<!-- Pagination Template  Start-->
-<template id="pagination">
-	<ul class="pagination">
-		<li v-for="i in maxPages">
-			<a href='#' :class="{'active': currentPage === i}" @click="$emit('change', i)">
-				{{ i}}
-			</a>
-		</li>
-		<ul>
-</template>
-<!-- Pagination Template End -->
 <script>
 	(function($) {
 		var destinationList = <?= json_encode($destinations) ?>;
-		var pagination = Vue.component('pagination-control', {
-			template: '#pagination',
-			data() {
-				return {};
-			},
-			props: {
-				currentPage: {
-					default: 1,
-					required: true,
-				},
-				maxPages: {
-					type: Number,
-					default: 1,
-					required: true,
-				},
-			},
-		});
-
+		
 		APP.vueInstance = new Vue({
 			el: '#destination-list',
 			data: {
 				destinations: destinationList,
-				selectDestination: null
+				selectDestination: null,
+				countOfPage: 5,
+				currPage: 1,
 			},
-			components: { 'pagination-control': pagination },
+			computed: {
+				pageStart: function() {
+					return (this.currPage - 1) * this.countOfPage;
+				},
+				totalPage: function() {
+					return Math.ceil(this.destinations.length / this.countOfPage);
+				}
+			},
 			methods: {
-
+				setPage: function(idx){
+					if( idx <= 0 || idx > this.totalPage ){
+					return;
+					}
+					this.currPage = idx;
+				},
 			},
 		})
 	})(jQuery)
