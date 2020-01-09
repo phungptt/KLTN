@@ -4,6 +4,7 @@ namespace app\modules\app\services;
 
 use app\modules\app\models\Amenities;
 use app\modules\app\models\Comment;
+use app\modules\app\models\Rating;
 use app\modules\app\models\Food;
 use app\modules\app\models\Place;
 use app\modules\app\models\Room;
@@ -67,6 +68,10 @@ class PlaceService
 
     public static function CreatePlaceComment($data) {
         $comment = new Comment();
+        $rating = new Rating([
+            'id_user' => Yii::$app->user->id,
+            'rating' => $data['rating'],
+        ]);
 
         $comment->load($data);
         $comment->create_by = Yii::$app->user->id;
@@ -75,8 +80,10 @@ class PlaceService
         $comment->object_type = 'app\modules\app\models\Place';
         $comment->object_id =  $data['id_place'];
 
+
         if($comment->save(false)) {
             $comment->save();
+            $rating->save();
             return [
                 'status' => true,
                 'message' => 'Thêm nhận xét thành công'
@@ -174,25 +181,16 @@ class PlaceService
                             -> select([
                                 '*',
                                 'place_image.name as name',
-                                'r.name as room_name',
+                                // 'r.name as room_name',
                             ])
                             ->from('place_image')
-                            ->leftJoin('room as r','place_image.id = r.id_place')
+                            // ->leftJoin('room as r','place_image.id = r.id_place')
                             ->where(['and', ['place_image.id_type_of_place' => $type_of_place]])
                             ->all();
-        $hotelsResult = array();
-        for($i = 0; $i < count($hotels); $i++) {
-            $hotels[$i]['path'] = ImageService::GetOriginalPath($hotels[$i]['path']);
-            for($j = 1; $j < count($hotels); $j++) {
-                if($hotels[$i]['id_place'] == $hotels[$j]['id_place']) {
-                    if($hotels[$i]['price'] >= $hotels[$j]['price']) {
-                        array_push($hotelsResult,$hotels[$j]);
-                    }
-                }
-            }
-        }
-        // dd($hotelsResult);
-        return $hotelsResult;
+        foreach($hotels as &$hotel) {
+            $hotel['path'] = ImageService::GetOriginalPath($hotel['path']);
+        }                  
+        return $hotels;
     }
 
     public static function GetLocationBySlug($slug) {
@@ -216,6 +214,15 @@ class PlaceService
             $img['path'] = ImageService::GetOriginalPath($img['path']);
         }                               
         return $images;
+    }
+
+    public static function GetRoomByPlaceId($id) {
+        $rooms = (new Query())
+                                        ->select('*')
+                                        ->from('room as r')
+                                        ->where(['and', ['r.id_place' => $id]])
+                                        ->all();
+        return $rooms;
     }
 
     public static function GetCommentListByPlaceId($id) {

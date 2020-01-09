@@ -7,9 +7,9 @@ include('hotel-detail_css.php')
 
 <div class="hotel-detail" id="hotel-detail">
      <section class="banner-section">
-          <div class="banner-img"></div>
+          <div class="banner-img"  :style="{ backgroundImage: 'url(' +  selectHotel.path + ')' }"></div>
           <div class="text-box">
-               <h2 class="title">Khách sạn</h2>
+               <h2 class="title">{{selectHotel.name}}</h2>
           </div>
      </section>
      <section class="flat-title">
@@ -18,17 +18,17 @@ include('hotel-detail_css.php')
                     <div class="col-md-8">
                          <div class="title-left">
                               <div class="queue"><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star-half-o" aria-hidden="true"></i></div>
-                              <div class="box-title"><a href="#" title="">Azumi Villa Hoi An</a><i class="fa fa-check-circle" aria-hidden="true"></i></div>
+                              <div class="box-title"><a href="#" title="">{{selectHotel.name}}</a><i class="fa fa-check-circle" aria-hidden="true"></i></div>
                               <ul class="box-address">
-                                   <li class="address"><i class="fa fa-map-marker" aria-hidden="true"></i>104 Ly Thuong Kiet, Cam Chau ward, Hoi An, Quang Nam Province, Vietnam, 560000</li>
-                                   <li class="phone"><i class="fa fa-phone" aria-hidden="true"></i>(+84) 936 736 288</li>
-                                   <li class="open-hour"><i class="fa fa-clock-o" aria-hidden="true"></i>09:00 AM - 05:00 PM</li>
+                                   <li class="address"><i class="fa fa-map-marker" aria-hidden="true"></i>{{selectHotel.address}}</li>
+                                   <li class="phone"><i class="fa fa-phone" aria-hidden="true"></i>{{selectHotel.phone_number}}</li>
+                                   <li class="open-hour"><i class="fa fa-clock-o" aria-hidden="true"></i>{{selectHotel.time_open}} - {{selectHotel.time_closed}}</li>
                               </ul>
                          </div>
                     </div>
                     <div class="col-md-4 text-right">
                          <div class="title-right">
-                              <div class="btn-more review"><a href="#" title="">Write A Review</a></div>
+                              <div class="btn-more review"><a href="#" title="">Đánh giá</a></div>
                               <div class="clearfix"></div>
                          </div>
                     </div>
@@ -40,8 +40,7 @@ include('hotel-detail_css.php')
                <div class="text-box">
                     <h3>Thông tin</h3>
                     <div class="text-desc">
-                         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p><i>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla qui officia deserunt mollit anim id est laborum.</i>
-                         <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.</p>
+                         <p>{{selectHotel.description}}</p>
                     </div>
                </div>
                <div class="amenities">
@@ -88,26 +87,27 @@ include('hotel-detail_css.php')
                     <h3>Loại phòng</h3>
                </div>
                <div class="room-list d-flex">
-                    <div class="room-list__item">
-                         <div class="item-img"><img src="<?= Yii::$app->homeUrl ?>resources/images/icon/lux-room.svg"></div>
+                    <div class="room-list__item" v-for="room in rooms">
+                         <div class="item-img" v-if="room.contain_number >= 2"><img src="<?= Yii::$app->homeUrl ?>resources/images/icon/lux-room.svg"></div>
+                         <div class="item-img" v-else><img src="<?= Yii::$app->homeUrl ?>resources/images/icon/single-bed.svg"></div>
                          <div class="item-content">
-                              <div class="item-content__title">Lux Room</div>
-                              <div class="item-content__price item-detail"><span>200.000 VNĐ / đêm</span></div>
-                              <div class="item-content__guest item-detail"><i class="ti-user"></i><span>2 người</span></div>
+                              <div class="item-content__title">{{room.name}}</div>
+                              <div class="item-content__price item-detail line-center"><span>{{room.price}} VNĐ / đêm</span></div>
+                              <div class="item-content__guest item-detail"><i class="ti-user"></i><span>{{room.contain_number}} người</span></div>
                          </div>
                     </div>
-                    <div class="room-list__item">
+                    <!-- <div class="room-list__item">
                          <div class="item-img"><img src="<?= Yii::$app->homeUrl ?>resources/images/icon/single-bed.svg"></div>
                          <div class="item-content">
                               <div class="item-content__title">Single Room</div>
                               <div class="item-content__price item-detail"><span>200.000 VNĐ / đêm</span></div>
                               <div class="item-content__guest item-detail"><i class="ti-user"></i><span>1 người</span></div>
                          </div>
-                    </div>
+                    </div> -->
                </div>
           </div>
      </section>
-     <section class="comment-section">
+     <section class="comment-section mb-5">
           <div class="container">
                <div class="comment-area">
                          <h3 class="comment-title">Đánh giá</h3>
@@ -180,6 +180,9 @@ include('hotel-detail_css.php')
 </template>
 <script>
      (function ($) {
+          var selectHotel = <?= json_encode($hotel) ?>;
+          var imagesRelate = <?= json_encode($imagesRelate) ?>;
+          var rooms = <?= json_encode($rooms) ?>;
           Vue.component("star-rating", {
                props:{
                     value:{type: Number, default: 0},
@@ -207,7 +210,12 @@ include('hotel-detail_css.php')
           APP.vueInstance = new Vue({
                el: '#hotel-detail',
                data: {
-                    rating: 0
+                    selectHotel: selectHotel,
+                    imagesRelate: imagesRelate,
+                    rooms: rooms,
+                    rating: 0,
+                    swiper: null,
+                    id_place: selectHotel['id']
                },
                methods: {
                     

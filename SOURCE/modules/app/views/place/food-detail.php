@@ -177,8 +177,8 @@
                          var _this = this,
                          btnSubmit = $("#btn-submit"),
                          formData = new FormData($('#create-rating-form')[0]);
-                         this.id_place = 
-                         formData.append('id_place', this.id_place)
+                         formData.append('id_place', this.id_place);
+                         formData.append('rating', this.rating)
                          btnSubmit.empty().append('Đang lưu đánh giá mới...')
 
                          $.ajax({
@@ -203,21 +203,6 @@
                          });
                     }
                },
-               // mounted() {
-               //      this.swiper = new window.Swiper('.swiper-container', {
-               //           cssMode: true,
-               //           navigation: {
-               //                nextEl: '.swiper-button-next',
-               //                prevEl: '.swiper-button-prev',
-               //           },
-               //           pagination: {
-               //                el: '.swiper-pagination',
-               //                clickable: true,
-               //           },
-               //           mousewheel: true,
-               //           keyboard: true,
-               //      })
-               // },
           });
      })(jQuery);
 </script>

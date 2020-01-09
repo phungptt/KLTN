@@ -1,5 +1,5 @@
 <?php
-
+use app\modules\app\AppConfig;
 use app\modules\contrib\gxassets\GxBootstrapSliderAsset;
 use app\modules\app\widgets\CMSMapListWidget;
 use app\modules\contrib\gxassets\GxVueAsset;
@@ -88,7 +88,7 @@ include('hotel-list_css.php')
                                         <div class="box-header">
                                              <div class="box-image">
                                                   <img :src="hotel.path" alt="" class="w-100">
-                                                  <a href="#" title="">Xem</a>
+                                                  <a :href="'<?= AppConfig::getUrl('place/hotel-detail?slug=') ?>'  + hotel.slug" title="">Xem</a>
                                                   <div class="overlay"></div>
                                                   <div class="queue">
                                                        <i class="fa fa-star" aria-hidden="true"></i>
