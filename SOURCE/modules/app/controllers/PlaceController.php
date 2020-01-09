@@ -94,8 +94,8 @@ class PlaceController extends Controller
 
      public function actionFoodDetail($slug = null)
      {
-          // $comment = new Comment();
-          // $rating = new Rating();
+          $comment = new Comment();
+          $rating = new Rating();
           $request = Yii::$app->request;
 
           if ($request->isPost) {
