@@ -51,7 +51,11 @@ include('food-list_css.php')
                                         <div class="box-header">
                                              <div class="box-image">
                                                   <img :src="food.path" alt="" class="w-100">
-                                                  <a :href="'<?= AppConfig::getUrl('place/food-detail?slug=') ?>'  + food.slug" title="">Xem</a>
+                                                  <a @click="viewLocation(food)" @mouseover="showMarkerPopup(food.id)" title="">
+                                                       <i aria-hidden="true" class="fas fa-map-marked-alt" 
+                                                            style=" color: white; font-size: 36px;">
+                                                       </i>
+                                                  </a>
                                                   <div class="overlay"></div>
                                                   <div class="queue">
                                                        <i class="fa fa-star" aria-hidden="true"></i>
@@ -64,7 +68,7 @@ include('food-list_css.php')
                                         </div><!-- /.box-header -->
                                         <div class="box-content">
                                              <div class="box-title ad">
-                                                  <a href="#" title="" @click="viewLocation(food)" @mouseover="showMarkerPopup(food.id)">{{food.name}}</a>
+                                                  <a :href="'<?= AppConfig::getUrl('place/food-detail?slug=') ?>'  + food.slug" title="" >{{food.name}}</a>
                                              </div>
                                              <ul class="rating">
                                                   <li>5 rating</li>
@@ -72,8 +76,7 @@ include('food-list_css.php')
                                              </ul>
                                         </div><!-- /.box-content -->
                                         <ul class="location">
-                                             <li class="address"><span class="ti-location-pin"></span>Hà Nội</li>
-                                             <li class="closed">Closed Now !</li>
+                                             <div class="address"><span class="fas fa-map-marker-alt"></span>{{food.name_destination}}</div>
                                         </ul><!-- /.location -->
                                    </div><!-- /.box-imagebox -->
                               </div><!-- /.imagebox style3 -->

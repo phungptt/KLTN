@@ -1273,10 +1273,11 @@
     height: 50px;
     padding: 0px 24px; }
   .wrap-box-search.style2 form > span select {
-    border-color: #c2c2c2;
-    border-radius: 30px;
-    height: 50px;
-    padding: 0px 24px; }
+    border-color: #c2c2c2 !important;
+    border-radius: 30px !important;
+    height: 50px !important;
+    padding: 0px 24px;
+    border-width: 1px !important; }
   .wrap-box-search.style2 form > span > span {
     top: 17px;
     right: 40px; }

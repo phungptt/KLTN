@@ -93,10 +93,17 @@ include('hotel-detail_css.php')
                               </article><!-- /.comment-body -->
                          </li><!-- /.comment -->
                     </ol><!-- /.comment-list -->
-                    <div class="load-more">
-                         <a href="" title="">Tải thêm</a>
+                    <div class="load-more" v-if="totalPage > 1">
+                         <nav aria-label="Page navigation example">
+                                   <ul class="pagination justify-content-center">
+                                   <li class="page-item" v-bind:class="{'disabled': (currPage === 1)}" @click.prevent="setPage(currPage-1)"><a class="page-link" href="">Trang trước</a></li>
+                                   <li class="page-item" v-for="n in totalPage" v-bind:class="{'active': (currPage === (n))}" @click.prevent="setPage(n)"><a class="page-link" href="">{{n}}</a></li>
+                                   <li class="page-item" v-bind:class="{'disabled': (currPage === totalPage)}" @click.prevent="setPage(currPage+1)"><a class="page-link" href="">Trang sau</a></li>
+                              </ul>
+                         </nav>
                     </div>
                     <div class="comment-respond">
+                         <div class="overlay"></div>
                          <?php $form = ActiveForm::begin([
                               'id' => 'create-rating-form',
                               'options' => [
@@ -171,9 +178,25 @@ include('hotel-detail_css.php')
                     imagesRelate: imagesRelate,
                     rating: 0,
                     comments: comments,
-                    id_place: selectVisit['id']
+                    id_place: selectVisit['id'],
+                    countOfPage: 4,
+                    currPage: 1,
+               },
+               computed: {
+                    pageStart: function() {
+                         return (this.currPage - 1) * this.countOfPage;
+                    },
+                    totalPage: function() {
+                         return Math.ceil(this.comments.length / this.countOfPage);
+                    }
                },
                methods: {
+                    setPage: function(idx) {
+                         if (idx <= 0 || idx > this.totalPage) {
+                              return;
+                         }
+                         this.currPage = idx;
+                    },
                     submitForm: function(event) {
                          event.preventDefault();
                          var _this = this,

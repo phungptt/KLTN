@@ -1640,10 +1640,11 @@
 				padding: 0px 24px;
 			}
 			select {
-				border-color: #c2c2c2;
-				border-radius: 30px;
-				height: 50px;
+				border-color: #c2c2c2 !important;
+				border-radius: 30px !important;
+				height: 50px !important;
 				padding: 0px 24px;
+				border-width: 1px !important;
 			}
 			>span {
 				top: 17px;

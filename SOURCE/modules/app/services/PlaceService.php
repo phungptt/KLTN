@@ -168,7 +168,15 @@ class PlaceService
     }
 
     public static function GetLocationAvailable($type_of_place = null) {
-        $visits = PlaceImage::find()->where(['and', ['status' => self::$AVALABLE], ['deleted' => self::$ALIVE], ['id_type_of_place' => $type_of_place]])->asArray()->all();
+        $visits = (new Query())
+                            -> select([
+                                '*',
+                                'place_image.name as name',
+                            ])
+                            ->from('place_image')
+                            ->leftJoin('room as r','place_image.id = r.id_place')
+                            ->where(['and', ['place_image.id_type_of_place' => $type_of_place]])
+                            ->all();
 
         foreach($visits as &$visit) {
             $visit['path'] = ImageService::GetOriginalPath($visit['path']);
@@ -177,19 +185,25 @@ class PlaceService
     }
 
     public static function GetHotelLocationAvailable($type_of_place = null) {
-        $hotels = (new Query())
+        $query = (new Query())
                             -> select([
                                 '*',
                                 'place_image.name as name',
-                                // 'r.name as room_name',
+                                'r.name as room_name',
                             ])
                             ->from('place_image')
-                            // ->leftJoin('room as r','place_image.id = r.id_place')
+                            ->leftJoin('room as r','place_image.id = r.id_place')
                             ->where(['and', ['place_image.id_type_of_place' => $type_of_place]])
+                            ->orderBy('price')
                             ->all();
-        foreach($hotels as &$hotel) {
-            $hotel['path'] = ImageService::GetOriginalPath($hotel['path']);
-        }                  
+        $hotels = [];
+        foreach($query as &$h) {
+            if(!isset($hotels[$h['id_place']])) {
+                $h['path'] = ImageService::GetOriginalPath($h['path']);
+                $h['price'] = number_format($h['price']);
+                $hotels[$h['id_place']] = $h;
+            }
+        }      
         return $hotels;
     }
 

@@ -35,7 +35,11 @@ include('visit-location-list_css.php')
                                         <div class="box-header">
                                              <div class="box-image">
                                                   <img :src="visit.path" alt="" class="w-100">
-                                                  <a  @click="viewLocation(visit)" @mouseover="showMarkerPopup(visit.id)">Xem</a>
+                                                  <a  @click="viewLocation(visit)" @mouseover="showMarkerPopup(visit.id)">
+                                                       <i aria-hidden="true" class="fas fa-map-marked-alt" 
+                                                            style=" color: white; font-size: 36px;">
+                                                       </i>
+                                                  </a>
                                                   <div class="overlay"></div>
                                                   <div class="queue">
                                                        <i class="fa fa-star" aria-hidden="true"></i>
@@ -48,12 +52,16 @@ include('visit-location-list_css.php')
                                         </div><!-- /.box-header -->
                                         <div class="box-content">
                                              <div class="box-title ad">
-                                                  <a :href="'<?= AppConfig::getUrl('place/visit-location-detail?slug=') ?>'  + visit.slug" title="">{{visit.name}}</a>
+                                                  <a :href="'<?= AppConfig::getUrl('place/visit-detail?slug=') ?>'  + visit.slug" title="" >{{visit.name}}</a>
                                              </div>
-                                             <div class="address">
-                                                  <p>{{visit.address}}</p>
-                                             </div>
+                                             <ul class="rating">
+                                                  <li>5 rating</li>
+                                                  <li>5 reviews</li>
+                                             </ul>
                                         </div><!-- /.box-content -->
+                                        <ul class="location">
+                                             <div class="address"><span class="fas fa-map-marker-alt"></span>{{visit.name_destination}}</div>
+                                        </ul><!-- /.location -->
                                    </div><!-- /.box-imagebox -->
                                    <div class="height30"></div>
                               </div>

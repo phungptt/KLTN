@@ -69,9 +69,13 @@ class PlaceController extends Controller
 
      public function actionHotelList()
      {
+          $model = new Place();
+          $destinations = DestinationService::GetArrayDestination();
+
           $hotelList = PlaceService::GetHotelLocationAvailable(0);
           $amenities = Amenities::find()->asArray()->all();
-          return $this->render('hotel-list', compact('hotelList', 'amenities'));
+          // dd($hotelList);
+          return $this->render('hotel-list', compact('model','hotelList', 'amenities', 'destinations'));
      }
 
      public function actionHotelDetail($slug = null)
