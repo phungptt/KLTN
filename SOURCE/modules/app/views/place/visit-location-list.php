@@ -12,7 +12,7 @@ include('visit-location-list_css.php')
           <div class="row">
                <div class="col-lg-6">
                     <div class="flat-filter">
-                         <div class="wrap-box-search style2 mt-0">
+                         <div class="wrap-box-search style2">
                               <form action="#" method="get" accept-charset="utf-8">
                                    <span>
                                         <input type="text" placeholder="Tìm kiếm ?" name="search">
@@ -29,13 +29,13 @@ include('visit-location-list_css.php')
                          </div><!-- /.wrap-box-search -->
                          <div class="clearfix"></div>
                          
-                         <div class="wrap-imagebox style3">
-                              <div class="imagebox style2" style="display: block;" v-for="(visit, index) in visitList.slice(pageStart, pageStart + countOfPage)">
+                         <div class="wrap-imagebox style1">
+                              <div class="imagebox style3" style="display: block;" v-for="(visit, index) in visitList.slice(pageStart, pageStart + countOfPage)">
                                    <div class="box-imagebox">
                                         <div class="box-header">
                                              <div class="box-image">
-                                                  <img :src="visit.path" alt="">
-                                                  <a :href="'<?= AppConfig::getUrl('place/visit-location-detail?slug=') ?>'  + visit.slug" title="">Xem</a>
+                                                  <img :src="visit.path" alt="" class="w-100">
+                                                  <a  @click="viewLocation(visit)" @mouseover="showMarkerPopup(visit.id)">Xem</a>
                                                   <div class="overlay"></div>
                                                   <div class="queue">
                                                        <i class="fa fa-star" aria-hidden="true"></i>
@@ -48,7 +48,7 @@ include('visit-location-list_css.php')
                                         </div><!-- /.box-header -->
                                         <div class="box-content">
                                              <div class="box-title ad">
-                                                  <a href="javascript:void(0)" title="" @click="viewLocation(visit)" @mouseover="showMarkerPopup(visit.id)">{{visit.name}}</a>
+                                                  <a :href="'<?= AppConfig::getUrl('place/visit-location-detail?slug=') ?>'  + visit.slug" title="">{{visit.name}}</a>
                                              </div>
                                              <div class="address">
                                                   <p>{{visit.address}}</p>
@@ -74,7 +74,7 @@ include('visit-location-list_css.php')
                </div><!-- /.col-md-6 -->
                <div class="col-lg-6">
                     <section class="pdmap">
-                         <div class="pdmap style2" style="height: 1500px;">
+                         <div class="pdmap style2" style="height: 1200px;">
                             <?= CMSMapListWidget::widget() ?>
                          </div>
                     </section><!-- /#flat-map-2 -->
@@ -92,7 +92,7 @@ include('visit-location-list_css.php')
                data: {
                     visitList: visitLocationList,
                     selectLocation: null,
-                    countOfPage: 6,
+                    countOfPage: 4,
                     currPage: 1,
                },
                computed: {
