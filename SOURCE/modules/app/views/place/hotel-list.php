@@ -1,4 +1,5 @@
 <?php
+
 use app\modules\api\APIConfig;
 use app\modules\app\AppConfig;
 use app\modules\app\services\PlaceService;
@@ -82,8 +83,7 @@ include('hotel-list_css.php')
                                              <div class="box-image">
                                                   <img :src="hotel.path" alt="" class="w-100">
                                                   <a @click="viewLocation(hotel)" @mouseover="showMarkerPopup(hotel.id)" title="">
-                                                       <i aria-hidden="true" class="fas fa-map-marked-alt" 
-                                                            style=" color: white; font-size: 36px;">
+                                                       <i aria-hidden="true" class="fas fa-map-marked-alt" style=" color: white; font-size: 36px;">
                                                        </i>
                                                   </a>
                                                   <div class="overlay"></div>
@@ -101,7 +101,7 @@ include('hotel-list_css.php')
                                                   <a :href="'<?= AppConfig::getUrl('place/hotel-detail?slug=') ?>'  + hotel.slug" title="">{{hotel.name}}</a>
                                              </div>
                                              <ul class="rating">
-                                                  <li>Từ  {{hotel.price}} VNĐ / đêm</li>
+                                                  <li>Từ {{hotel.price}} VNĐ / đêm</li>
                                              </ul>
                                              <div class="box-desc">
                                                   {{hotel.short_description}}
@@ -143,30 +143,27 @@ include('hotel-list_css.php')
 
 <script>
      (function($) {
-          var hotelList = <?= json_encode($hotelList) ?>;
           var amenities = <?= json_encode($amenities) ?>
 
           APP.vueInstance = new Vue({
                el: '#hotel-list',
                data: {
-                    hotelList: hotelList,
                     amenities: amenities,
-                    selectedLocation: null,
                     countOfPage: 6,
                     currPage: 1,
                     places: {
-					data: {},
+                         data: {},
                          paginations: {},
                          query: {
                               type: '<?= PlaceService::$HOTEL_TYPE ?>',
                               keyword: null,
                          }
-				}
+                    }
                },
                created: function() {
                     var _this = this;
                     _this.$nextTick(function() {
-                         _this.getPlaceLocation(_this.places.query.type,_this.places.query.keyword)
+                         _this.getPlaceLocation(_this.places.query.type, _this.places.query.keyword)
                     })
                },
                methods: {
@@ -175,8 +172,19 @@ include('hotel-list_css.php')
                          this.zoomToMap(location.lat, location.lng);
                          var iconMap = $('#image-object-on-map-' + location.id).parent();
                          iconMap.trigger('click');
-                         console.log(this.hotelList.price);
-                         console.log(new Intl.NumberFormat().format(this.hotelList[19].price))
+                    },
+                    viewObjectById: function(id) {
+                         var _this = this;
+                         var dest = _this.getDestinationById(id);
+                         _this.viewDestination(dest);
+                    },
+                    getDestinationById: function(id) {
+                         for (var i in this.places.data) {
+                              if (this.places.data[i].id === id) {
+                                   return this.places.data[i];
+                              }
+                         }
+                         return null;
                     },
                     zoomToMap: function(lat, lng) {
                          DATA.map.setView([lat, lng], 15);
@@ -203,7 +211,7 @@ include('hotel-list_css.php')
                               success: function(resp) {
                                    window.addEventListener("load", _this.removePreLoader(new Date().getTime() - this.start_time));
 
-                                   if(resp.status) {
+                                   if (resp.status) {
                                         _this.places.data = resp.places.data
                                    } else {
                                         toastMessage('error', resp.message)
@@ -216,8 +224,8 @@ include('hotel-list_css.php')
                     },
                     removePreLoader: function(time) {
                          setTimeout(function() {
-                              $('.preloader').hide(); }, time           
-                         ); 
+                              $('.preloader').hide();
+                         }, time);
                     },
                },
           })

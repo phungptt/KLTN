@@ -168,22 +168,6 @@ class PlaceService
     }
 
     public static function GetLocationAvailable($type_of_place = null, $keyword='') {
-        $visits = (new Query())
-                            -> select([
-                                '*',
-                            ])
-                            ->from('place_image')
-                            ->where(['and', ['place_image.id_type_of_place' => $type_of_place], ['like', 'place_image.name', $keyword]])
-                            ->all();
-
-        foreach($visits as &$visit) {
-            $visit['path'] = ImageService::GetOriginalPath($visit['path']);
-        }
-
-        return $visits;
-    }
-
-    public static function GetHotelLocationAvailable($type_of_place = null) {
         $query = (new Query())
                             -> select([
                                 '*',
@@ -192,18 +176,26 @@ class PlaceService
                             ])
                             ->from('place_image')
                             ->leftJoin('room as r','place_image.id = r.id_place')
-                            ->where(['and', ['place_image.id_type_of_place' => $type_of_place]])
+                            ->where(['and', ['place_image.id_type_of_place' => $type_of_place], ['like', 'place_image.name', $keyword]])
                             ->orderBy('price')
                             ->all();
-        $hotels = [];
-        foreach($query as &$h) {
-            if(!isset($hotels[$h['id_place']])) {
-                $h['path'] = ImageService::GetOriginalPath($h['path']);
-                $h['price'] = number_format($h['price']);
-                $hotels[$h['id_place']] = $h;
+        
+        if($type_of_place == self::$HOTEL_TYPE) {
+            $hotels = [];
+            foreach($query as &$h) {
+                if(!isset($hotels[$h['id_place']])) {
+                    $h['path'] = ImageService::GetOriginalPath($h['path']);
+                    $h['price'] = number_format($h['price']);
+                    $hotels[$h['id_place']] = $h;
+                }
+            }      
+            return $hotels;
+        } else {
+            foreach($query as &$location) {
+                $location['path'] = ImageService::GetOriginalPath($location['path']);
             }
-        }      
-        return $hotels;
+            return $query;
+        }
     }
 
     public static function GetLocationBySlug($slug) {

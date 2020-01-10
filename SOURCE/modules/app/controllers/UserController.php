@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\contrib\auth\controllers;
+namespace app\modules\app\controllers;
 
 use app\modules\app\services\AuthHandler;
 use app\modules\app\services\UserService;
@@ -96,7 +96,7 @@ class UserController extends \yii\web\Controller
         return 'success';
     }
 
-    // public function actionUserProfile() {
-    //     return $this->render('user-profile');
-    // }
+    public function actionUserProfile() {
+        return $this->render('user-profile');
+    }
 }

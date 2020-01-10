@@ -33,16 +33,46 @@ include('user-profile_css.php')
      <section class="profile-content-section">
           <div class="profile-body">
                <div class="tab-content py-5" id="myTabContent">
-                    <div class="tab-pane" id="user-profile" role="tabpanel" aria-labelledby="user-profile-tab">
+                    <div class="tab-pane active" id="user-profile" role="tabpanel" aria-labelledby="user-profile-tab">
                          <div class="container">
-                              <div class="user-seen user-section-card">
-                                   <div class="col-12 block-content country-block d-md-flex align-items-center">
-                                        <div class="country-block__img"><img src="<?= Yii::$app->homeUrl ?>resources/images/icon/country.jpg" alt=""></div>
-                                        <div class="country-block__content">
-                                             <div class="title">1 Điểm đến</div>
-                                             <div class="description">Bạn đã từng trải nghiệm</div>
+                              <div class="account-profile">
+                                   <form action="" class="form-listing">
+                                        <div class="inner-box form">
+                                             <div class="form-group">
+                                                  <label class="control-label">Họ tên</label>
+                                                  <input type="email" name="email" placeholder="" class="input-wrap">
+                                             </div>
+                                             <div class="form-group">
+                                                  <label class="control-label">Số điện thoại</label>
+                                                  <input type="email" name="email" placeholder="" class="input-wrap">
+                                             </div>
+                                             <div class="form-group">
+                                                  <label class="control-label">Email</label>
+                                                  <input type="email" name="email" placeholder="" class="input-wrap">
+                                             </div>
+                                             <div class="form-group gender-select-wrap">
+                                                  <label class="control-label">Giới tính</label>
+                                                  <div class="input-wrap row">
+                                                       <div class="col-4">
+                                                            <label>
+                                                                 <input type="radio" class="option-input radio" name="example" checked />
+                                                                 Nam
+                                                            </label>
+                                                       </div>
+                                                       <div class="col-4">
+                                                            <label>
+                                                                 <input type="radio" class="option-input radio" name="example" checked />
+                                                                 Nữ
+                                                            </label>
+                                                       </div>
+                                                  </div>
+                                             </div>
+                                             <div class="form-group">
+                                                  <label class="control-label">Email</label>
+                                                  <input type="date" name="email" placeholder="" class="input-wrap">
+                                             </div>
                                         </div>
-                                   </div>
+                                   </form>
                               </div>
                               <div class="user-seen user-section-card d-flex mt-5">
                                    <div class="col-md-6 col-sm-12 block-content country-block d-md-flex align-items-center">
@@ -68,7 +98,7 @@ include('user-profile_css.php')
                               </div>
                          </div>
                     </div>
-                    <div class="tab-pane user-plan-block active" id="user-plan" role="tabpanel" aria-labelledby="user-plan-tab">
+                    <div class="tab-pane user-plan-block " id="user-plan" role="tabpanel" aria-labelledby="user-plan-tab">
                          <div class="container">
                               <div class="plan-section">
                                    <div class="destination-block">
