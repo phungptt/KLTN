@@ -1,8 +1,13 @@
 <?php
+use app\modules\api\APIConfig;
+use app\modules\app\AppConfig;
+use app\modules\contrib\gxassets\GxVueAsset;
+
+GxVueAsset::register($this);
 include('user-profile_css.php')
 ?>
 
-<div class="user-profile">
+<div class="user-profile" id="user-profile">
      <section class="user-tab-menu parallax parallax1">
           <div class="container">
                <div class="profile-head text-center">
@@ -16,8 +21,7 @@ include('user-profile_css.php')
                          </div>
                     </div>
                     <div class="profile-info">
-                         <div class="profile-info__name">Phạm Trương Tiểu Phụng</div>
-                         <div class="profile-info__des">Đà Nẵng, Việt Nam</div>
+                         <div class="profile-info__name">{{userProfile.fullname}}</div>
                     </div>
                     <div class="profile-controls">
                          <ul class="nav" id="myTab" role="tablist">
@@ -70,6 +74,11 @@ include('user-profile_css.php')
                                              <div class="form-group">
                                                   <label class="control-label">Email</label>
                                                   <input type="date" name="email" placeholder="" class="input-wrap">
+                                             </div>
+                                             <div class="form-group">
+                                                  <div class="input-wrap margin">
+                                                       <button type="submit" class="btn btn-info btn-block btn-update">Cập nhật</button>
+                                                  </div>
                                              </div>
                                         </div>
                                    </form>
@@ -139,3 +148,22 @@ include('user-profile_css.php')
           </div>
      </section>
 </div>
+
+<script>
+     (function($) {
+          var userProfile = <?= json_encode($userPro) ?>;
+
+          APP.vueInstance = new Vue({
+               el: '#user-profile',
+               data: {
+                    userProfile: userProfile
+               },
+               created: function() {
+                    var _this = this;
+                    console.log(_this.userProfile) ;
+               },
+               methods: {
+               },
+          })
+     })(jQuery)
+</script>

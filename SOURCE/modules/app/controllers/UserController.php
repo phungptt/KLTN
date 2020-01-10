@@ -97,6 +97,8 @@ class UserController extends \yii\web\Controller
     }
 
     public function actionUserProfile() {
-        return $this->render('user-profile');
+        $user = Yii::$app->user->getIdentity();
+        $userPro = UserService::GetUserProfile($user->id);
+        return $this->render('user-profile', compact('userPro'));
     }
 }

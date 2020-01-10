@@ -55,8 +55,8 @@
                     </div>
                     <div class="slider-box">
                          <div class="swiper-container">
-                              <div class="swiper-wrapper" v-for="image in imagesRelate">
-                                   <div class="swiper-slide"> <img :src="image.path"></div>
+                              <div class="swiper-wrapper">
+                                   <div class="swiper-slide"  v-for="image in imagesRelate"> <img :src="image.path"></div>
                               </div>
                               <div class="swiper-button-next"></div>
                               <div class="swiper-button-prev"></div>
@@ -168,9 +168,9 @@
                     imagesRelate: imagesRelate,
                     comments: comments,
                     rating: 0,
-                    swiper: null,
-                    id_place: selectFood['id']
-               },
+                    id_place: selectFood['id'],
+                    swiper: null
+               },   
                methods: {
                     submitForm: function(event) {
                          event.preventDefault();

@@ -69,9 +69,7 @@ include('hotel-detail_css.php')
                     <div class="slider-box">
                          <div class="swiper-container">
                               <div class="swiper-wrapper">
-                                   <div class="swiper-slide"> <img src="<?= Yii::$app->homeUrl ?>resources/images/page/hotel-detail/slider-1.png"></div>
-                                   <div class="swiper-slide"> <img src="<?= Yii::$app->homeUrl ?>resources/images/page/hotel-detail/slider-2.png"></div>
-                                   <div class="swiper-slide"> <img src="<?= Yii::$app->homeUrl ?>resources/images/page/hotel-detail/slider-3.png"></div>
+                                   <div class="swiper-slide"  v-for="image in imagesRelate"> <img :src="image.path"></div>
                               </div>
                               <!-- Add Arrows-->
                               <div class="swiper-button-next"></div>

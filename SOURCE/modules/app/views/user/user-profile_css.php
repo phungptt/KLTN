@@ -218,6 +218,15 @@
     position: relative;
   }
 
+  .account-profile .form-group .input-wrap.margin{
+    margin-left: 20%;
+  }
+
+  .account-profile .form-group .input-wrap.margin .btn-update {
+    width: 176px;
+    height: 40px;
+  }
+
   .account-profile form.form-listing .form-group label {
     float: left;
     width: 20%;

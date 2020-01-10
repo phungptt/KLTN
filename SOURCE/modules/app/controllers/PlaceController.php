@@ -79,8 +79,7 @@ class PlaceController extends Controller
 
      public function actionFoodList()
      {
-          $foodList = PlaceService::GetLocationAvailable(1);
-          return $this->render('food-list', compact('foodList'));
+          return $this->render('food-list');
      }
 
      public function actionFoodDetail($slug = null)

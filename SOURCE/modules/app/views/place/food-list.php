@@ -24,7 +24,7 @@ include('food-list_css.php')
                     <div class="flat-filter">
                          <div class="wrap-box-search style2">
                               <form action="#" method="get" accept-charset="utf-8">
-                                   <span>
+                                   <span  class="w-100" >
                                         <input type="text" placeholder="Tìm kiếm ?" name="search" v-model="places.query.keyword" v-on:change="getPlaceLocation(places.query.type,places.query.keyword)">
                                    </span>
                                    <span class="categories">
@@ -72,13 +72,13 @@ include('food-list_css.php')
                               <div class="clearfix"></div>
                               <div class="row">
                                    <div class="col-md-12">
-                                        <nav aria-label="Page navigation example">
+                                        <!--<nav aria-label="Page navigation example">
                                              <ul class="pagination justify-content-center">
                                                   <li class="page-item" v-bind:class="{'disabled': (currPage === 1)}" @click.prevent="setPage(currPage-1)"><a class="page-link" href="">Trang trước</a></li>
                                                   <li class="page-item" v-for="n in totalPage" v-bind:class="{'active': (currPage === (n))}" @click.prevent="setPage(n)"><a class="page-link" href="">{{n}}</a></li>
                                                   <li class="page-item" v-bind:class="{'disabled': (currPage === totalPage)}" @click.prevent="setPage(currPage+1)"><a class="page-link" href="">Trang sau</a></li>
                                              </ul>
-                                        </nav>
+                                        </nav>-->
                                    </div>
                               </div><!-- /.row -->
                          </div><!-- /.wrap-imagebox -->
@@ -97,13 +97,9 @@ include('food-list_css.php')
 
 <script>
      (function($) {
-          var foodList = <?= json_encode($foodList) ?>
-
           APP.vueInstance = new Vue({
                el: '#food-list',
                data: {
-                    foodList: foodList,
-                    selectDestination: null,
                     countOfPage: 6,
                     currPage: 1,
                     places: {
@@ -121,21 +117,21 @@ include('food-list_css.php')
                          _this.getPlaceLocation(_this.places.query.type,_this.places.query.keyword);
                     });
                },
-               computed: {
-                    pageStart: function() {
-                         return (this.currPage - 1) * this.countOfPage;
-                    },
-                    totalPage: function() {
-                         return Math.ceil(this.foodList.length / this.countOfPage);
-                    }
-               },
+               // computed: {
+               //      pageStart: function() {
+               //           return (this.currPage - 1) * this.countOfPage;
+               //      },
+               //      totalPage: function() {
+               //           return Math.ceil(this.foodList.length / this.countOfPage);
+               //      }
+               // },
                methods: {
-                    setPage: function(idx) {
-                         if (idx <= 0 || idx > this.totalPage) {
-                              return;
-                         }
-                         this.currPage = idx;
-                    },
+                    // setPage: function(idx) {
+                    //      if (idx <= 0 || idx > this.totalPage) {
+                    //           return;
+                    //      }
+                    //      this.currPage = idx;
+                    // },
                     viewLocation: function(location) {
                          this.selectedLocation = location;
                          this.zoomToMap(location.lat, location.lng);
@@ -185,7 +181,5 @@ include('food-list_css.php')
                     },
                },
           })
-
-
      })(jQuery)
 </script>

@@ -43,6 +43,15 @@ class UserService
         return $isSuperUser ? true : false;
     }
 
+    public static function GetUserProfile($userId=null) {
+        $query = (new Query())
+                                ->select('*')
+                                ->from('user_info')
+                                ->where(['and', ['user_id' => $userId]])
+                                ->all();
+        return $query;
+    }
+
     public static function GetUserFullName($userId = null)
     {
         if (!$userId) {

@@ -2,7 +2,6 @@
 
 use kartik\form\ActiveForm;
 use app\modules\app\APPConfig;
-use app\modules\app\services\PlaceService;
 use app\modules\contrib\gxassets\GxSwiperAsset;
 use app\modules\contrib\gxassets\GxVueAsset;
 
@@ -57,11 +56,8 @@ include('hotel-detail_css.php')
                     <div class="slider-box">
                          <div class="swiper-container">
                               <div class="swiper-wrapper">
-                                   <div class="swiper-slide"> <img src="<?= Yii::$app->homeUrl ?>resources/images/visit-location.jpg"></div>
-                                   <div class="swiper-slide"> <img src="<?= Yii::$app->homeUrl ?>resources/images/nha-tho-1.jpg"></div>
-                                   <div class="swiper-slide"> <img src="<?= Yii::$app->homeUrl ?>resources/images/nha-tho-2.jpg"></div>
+                                   <div class="swiper-slide"  v-for="image in imagesRelate"> <img :src="image.path"></div>
                               </div>
-                              <!-- Add Arrows-->
                               <div class="swiper-button-next"></div>
                               <div class="swiper-button-prev"></div>
                          </div>
@@ -181,6 +177,7 @@ include('hotel-detail_css.php')
                     id_place: selectVisit['id'],
                     countOfPage: 4,
                     currPage: 1,
+                    swiper: null
                },
                computed: {
                     pageStart: function() {

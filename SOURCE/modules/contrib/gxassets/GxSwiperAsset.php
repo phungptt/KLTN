@@ -8,15 +8,15 @@ class GxSwiperAsset extends \yii\web\AssetBundle {
     public $sourcePath = '@app/modules/contrib/gxassets/assets/swiper';
 
     public $css = [
-        'swiper.css',
+        'swiper.min.css',
     ];
 
     public $js = [
-        'vue-awesome-swiper.js',
+        'swiper.min.js',
     ];
 
     public $depends = [
-        'app\modules\contrib\gxassets\GxVueAsset',
+        'app\modules\contrib\gxassets\GxJqueryAsset',
     ];
 
     public $jsOptions = ['position' => \yii\web\View::POS_HEAD];
