@@ -25,7 +25,7 @@ class PlaceService
 
     public static $VISIT_TYPE = 2;
     public static $FOOD_TYPE = 1;
-    public static $HOTEL_TYPE = 3;
+    public static $HOTEL_TYPE = 0;
 
     public static $PLACE_PERPAGE_PLAN = 10;
 
@@ -167,20 +167,19 @@ class PlaceService
         return $amenities;
     }
 
-    public static function GetLocationAvailable($type_of_place = null) {
+    public static function GetLocationAvailable($type_of_place = null, $keyword='') {
         $visits = (new Query())
                             -> select([
                                 '*',
-                                'place_image.name as name',
                             ])
                             ->from('place_image')
-                            ->leftJoin('room as r','place_image.id = r.id_place')
-                            ->where(['and', ['place_image.id_type_of_place' => $type_of_place]])
+                            ->where(['and', ['place_image.id_type_of_place' => $type_of_place], ['like', 'place_image.name', $keyword]])
                             ->all();
 
         foreach($visits as &$visit) {
             $visit['path'] = ImageService::GetOriginalPath($visit['path']);
         }
+
         return $visits;
     }
 
@@ -236,6 +235,9 @@ class PlaceService
                                         ->from('room as r')
                                         ->where(['and', ['r.id_place' => $id]])
                                         ->all();
+        foreach($rooms as &$r) {
+            $r['price'] = number_format($r['price']);
+        }
         return $rooms;
     }
 

@@ -56,17 +56,6 @@ class PlaceController extends Controller
           return true;
      }
 
-     public function actionCreateComment()
-     {
-          $comment = new Place();
-     }
-
-
-     public function actionDestinationDetail()
-     {
-          return $this->render('destination-detail');
-     }
-
      public function actionHotelList()
      {
           $model = new Place();

@@ -1,17 +1,19 @@
 <?php
 
+use app\modules\api\APIConfig;
 use app\modules\app\AppConfig;
 use app\modules\contrib\gxassets\GxVueAsset;
-use app\modules\contrib\gxassets\GxLeafletAsset;
-use app\modules\app\widgets\AppObjectMapWidget;
-use app\modules\app\widgets\CMSMapDetailWidget;
 
-GxLeafletAsset::register($this);
 GxVueAsset::register($this);
 include('destination-list_css.php');
 ?>
 
 <div class="destination-list" id="destination-list">
+	<div class="preloader" :class="activeClass">
+          <div class="clear-loading loading-effect-2">
+               <span></span>
+          </div>
+     </div>
 	<section class="page-title style1 parallax parallax1">
 		<div class="container">
 			<div class="row">
@@ -19,9 +21,9 @@ include('destination-list_css.php');
 					<div class="wrap-box-search style1">
 						<form action="#" method="get" accept-charset="utf-8">
 							<span class="w-100">
-								<input type="text" placeholder="Nhập điểm đến" name="search">
+								<input type="text" placeholder="Nhập điểm đến" name="search" v-model="des.query.keyword" v-on:change="getDesLocations(des.query.keyword)">
 							</span>
-							<button type="submit" class="search-btn">Tìm kiếm</button>
+							<button type="submit" class="search-btn" @click="getDesLocations(des.query.keyword)">Tìm kiếm</button>
 						</form><!-- /form -->
 					</div><!-- /.wrap-box-search -->
 				</div><!-- /.col-md-12 -->
@@ -32,7 +34,7 @@ include('destination-list_css.php');
 
 	<section class="flat-row flat-imagebox style3">
 		<div class="container">
-			<div class="wrap-imagebox style3" v-for="(dest, index) in destinations.slice(pageStart, pageStart + countOfPage)">
+			<div class="wrap-imagebox style3" v-for="dest in des.data">
 				<div class="row">
 					<div class="col-sm-12">
 						<div class="imagebox style2">
@@ -69,13 +71,13 @@ include('destination-list_css.php');
 			</div><!-- /.container -->
 			<div class="row">
 				<div class="col-md-12">
-					<nav aria-label="Page navigation example">
+					<!-- <nav aria-label="Page navigation example">
 						<ul class="pagination justify-content-center">
 							<li class="page-item" v-bind:class="{'disabled': (currPage === 1)}" @click.prevent="setPage(currPage-1)"><a class="page-link" href="">Trang trước</a></li>
 							<li class="page-item" v-for="n in totalPage" v-bind:class="{'active': (currPage === (n))}" @click.prevent="setPage(n)"><a class="page-link" href="">{{n}}</a></li>
 							<li class="page-item" v-bind:class="{'disabled': (currPage === totalPage)}" @click.prevent="setPage(currPage+1)"><a class="page-link" href="">Trang sau</a></li>
 						</ul>
-					</nav>
+					</nav> -->
 				</div>
 			</div><!-- /.row -->
 	</section><!-- /.flat-imagebox style3 -->
@@ -83,31 +85,71 @@ include('destination-list_css.php');
 
 <script>
 	(function($) {
-		var destinationList = <?= json_encode($destinations) ?>;
-		
 		APP.vueInstance = new Vue({
 			el: '#destination-list',
 			data: {
-				destinations: destinationList,
-				selectDestination: null,
 				countOfPage: 5,
 				currPage: 1,
-			},
-			computed: {
-				pageStart: function() {
-					return (this.currPage - 1) * this.countOfPage;
-				},
-				totalPage: function() {
-					return Math.ceil(this.destinations.length / this.countOfPage);
+				des: {
+					data: {},
+					paginations: {},
+					query: {
+                              keyword: null
+                         }
 				}
 			},
+			created: function() {
+                    var _this = this;
+                    _this.$nextTick(function() {
+                         _this.getDesLocations(_this.des.query.keyword)
+                    })
+               },
+			// computed: {
+			// 	pageStart: function() {
+			// 		return (this.currPage - 1) * this.countOfPage;
+			// 	},
+			// 	totalPage: function() {
+			// 		return Math.ceil(this.des.data.length / this.countOfPage);
+			// 	}
+			// },
 			methods: {
-				setPage: function(idx){
-					if( idx <= 0 || idx > this.totalPage ){
-					return;
-					}
-					this.currPage = idx;
+				// setPage: function(idx){
+				// 	if( idx <= 0 || idx > this.totalPage ){
+				// 	return;
+				// 	}
+				// 	this.currPage = idx;
+				// },
+				getDesLocations: function(keyword) {
+					 // - Loader 
+					 $('.preloader').show();
+
+					var _this = this;
+                         var api = '<?= APIConfig::getUrl('destination/get-destination-list') ?>';
+                         $.ajax({
+                              url: api,
+                              type: 'POST',
+                              data: {
+                                   keyword: keyword,
+                              },
+                              success: function(resp) {
+							window.addEventListener("load", _this.removePreLoader(new Date().getTime() - this.start_time));
+
+                                   if(resp.status) {
+                                        _this.des.data = resp.des.data
+                                   } else {
+                                        toastMessage('error', resp.message)
+                                   }
+                              },
+                              error: function(msg) {
+                                   toastMessage('error', msg)
+                              }
+                         })
 				},
+				removePreLoader: function(time) {
+                         setTimeout(function() {
+                              $('.preloader').hide(); }, time           
+                         ); 
+                    },
 			},
 		})
 	})(jQuery)

@@ -1,5 +1,7 @@
 <?php
+use app\modules\api\APIConfig;
 use app\modules\app\AppConfig;
+use app\modules\app\services\PlaceService;
 use app\modules\app\widgets\CMSMapListWidget;
 use app\modules\contrib\gxassets\GxLeafletAsset;
 
@@ -8,6 +10,12 @@ include('visit-location-list_css.php')
 ?>
 
 <section class="flat-map-zoom-in" id="visit-location-list">
+     <div class="preloader">
+          <div class="clear-loading loading-effect-2">
+               <span></span>
+          </div>
+     </div>
+
      <div class="container-fluid">
           <div class="row">
                <div class="col-lg-6">
@@ -15,11 +23,7 @@ include('visit-location-list_css.php')
                          <div class="wrap-box-search style2">
                               <form action="#" method="get" accept-charset="utf-8">
                                    <span>
-                                        <input type="text" placeholder="Tìm kiếm ?" name="search">
-                                   </span>
-                                   <span class="location">
-                                        <span class="fas fa-map-marker-alt"></span>
-                                        <input type="text" placeholder="Địa điểm" name="location">
+                                        <input type="text" placeholder="Tìm kiếm ?" name="search" v-model="places.query.keyword" v-on:change="getPlaceLocation(places.query.type,places.query.keyword)">
                                    </span>
                                    <span class="categories">
                                         <span class="ti-angle-down"></span>
@@ -30,7 +34,7 @@ include('visit-location-list_css.php')
                          <div class="clearfix"></div>
                          
                          <div class="wrap-imagebox style1">
-                              <div class="imagebox style3" style="display: block;" v-for="(visit, index) in visitList.slice(pageStart, pageStart + countOfPage)">
+                              <div class="imagebox style3" style="display: block;" v-for="(visit, index) in places.data">
                                    <div class="box-imagebox">
                                         <div class="box-header">
                                              <div class="box-image">
@@ -102,6 +106,20 @@ include('visit-location-list_css.php')
                     selectLocation: null,
                     countOfPage: 4,
                     currPage: 1,
+                    places: {
+					data: {},
+                         paginations: {},
+                         query: {
+                              type: '<?= PlaceService::$VISIT_TYPE ?>',
+                              keyword: null,
+                         }
+				}, 
+               },
+               created: function() {
+                    var _this = this;
+                    _this.$nextTick(function() {
+                         _this.getPlaceLocation(_this.places.query.type,_this.places.query.keyword);
+                    });
                },
                computed: {
                     pageStart: function() {
@@ -131,7 +149,40 @@ include('visit-location-list_css.php')
                     showMarkerPopup: function(id) {
                          var iconMap = $('#image-object-on-map-' + id).parent();
                          iconMap.trigger('mouseout');
-                    }
+                    },
+                    getPlaceLocation: function(type, keyword) {
+                         // - Loader 
+                         $('.preloader').show();
+
+                         var _this = this;
+                         var api = '<?= APIConfig::getUrl('place/get-place-location') ?>';
+                         $.ajax({
+                              url: api,
+                              type: 'POST',
+                              start_time: new Date().getTime(),
+                              data: {
+                                   type: type,
+                                   keyword: keyword,
+                              },
+                              success: function(resp) {
+                                   window.addEventListener("load", _this.removePreLoader(new Date().getTime() - this.start_time));
+
+                                   if(resp.status) {
+                                        _this.places.data = resp.places.data
+                                   } else {
+                                        toastMessage('error', resp.message)
+                                   }
+                              },
+                              error: function(msg) {
+                                   toastMessage('error', msg)
+                              }
+                         });
+                    },
+                    removePreLoader: function(time) {
+                         setTimeout(function() {
+                              $('.preloader').hide(); }, time           
+                         ); 
+                    },
                },
           })
      })(jQuery)

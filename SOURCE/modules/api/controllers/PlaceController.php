@@ -34,4 +34,25 @@ class PlaceController extends Controller
 
         throw new \yii\web\NotFoundHttpException();
     }
+
+    public function actionGetPlaceLocation() {
+        $request = Yii::$app->request;
+        if($request->isPost) {
+            $keyword = $request->post('keyword');
+            $type = $request->post('type');
+
+            $location = PlaceService::GetLocationAvailable($type, $keyword);
+
+            $response = [
+                'status' => true,
+                'places' => [
+                    'data' => $location
+                ]
+            ];
+
+            return $this->asJson($response);
+        }
+
+        throw new \yii\web\NotFoundHttpException();
+    }
 }

@@ -54,8 +54,7 @@ class DestinationController extends Controller
      }
 
      public function actionDestinationList() {
-          $destinations = DestinationService::GetDestinationsAvailable();
-          return $this->render('destination-list', compact('destinations'));
+          return $this->render('destination-list');
      }
 
      public function actionDestinationDetail($slug=null) {

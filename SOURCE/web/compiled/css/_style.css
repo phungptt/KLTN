@@ -2630,6 +2630,10 @@ article.post-single .featured-post {
   -ms-transition: all 0.3s ease-in-out;
   -o-transition: all 0.3s ease-in-out;
   transition: all 0.3s ease-in-out; }
+  .preloader.hide {
+    display: none; }
+  .preloader.active {
+    display: block; }
 
 .clear-loading {
   text-align: center;

@@ -75,8 +75,8 @@ class DestinationService
         ];
     }
 
-    public static function GetDestinationsAvailable() {
-        $destinations = DestinationImage::find()->where(['and', ['status' => self::$AVALABLE], ['deleted' => self::$ALIVE]])->asArray()->all();
+    public static function GetDestinationsAvailable($name = null) {
+        $destinations = DestinationImage::find()->where(['and', ['status' => self::$AVALABLE], ['deleted' => self::$ALIVE],['like','name', $name]])->asArray()->all();
 
         foreach($destinations as &$dest) {
             $dest['path'] = ImageService::GetThumbnailPath($dest['path']);
