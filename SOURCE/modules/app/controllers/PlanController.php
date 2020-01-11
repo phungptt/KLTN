@@ -11,6 +11,7 @@ use yii\web\Controller;
 
 class PlanController extends Controller
 {
+     public $enableCsrfValidation = false;
      public function actionCreatePlan() {
           $model = new Plan();
           $destinations = DestinationService::GetArrayDestination();
@@ -36,10 +37,23 @@ class PlanController extends Controller
 
      public function actionCreatePlanDetail($slug = null) {
           $plan = PlanService::GetPlanBySlug($slug);
+          $request = Yii::$app->request;
+
+          if($request->isPost) {
+               $trip = $request->post('trip');
+               $planslug = PlanService::SavePlanDetails($trip, $plan['id']);
+               if($planslug) {
+                    Yii::$app->session->setFlash('success', 'Tạo lịch trình thành công');
+                    return $this->redirect(AppConfig::getUrl('plan/plan-trip-detail?slug=' . $planslug));
+               } else {
+                    return $this->asJson($planslug);
+               }
+          }
           return $this->render('create-plan-detail', compact('plan'));
      }
 
-     public function actionPlanTripDetail() {
+     public function actionPlanTripDetail($slug = null) {
+          $plan = PlanService::GetPlanBySlug($slug);
           return $this->render('plan-trip-detail');
      }
 

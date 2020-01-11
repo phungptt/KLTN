@@ -20,8 +20,9 @@ use Yii;
  * @property int $date_index
  * @property string $path
  * @property string $note
- * @property int $distance
- * @property int $time_free
+ * @property string $slug
+ * @property double $distance
+ * @property int $free_time
  */
 class PlanDetail extends \yii\db\ActiveRecord
 {
@@ -39,10 +40,11 @@ class PlanDetail extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id_plan', 'id_place', 'id_type_of_transport', 'time_start', 'time_stay', 'time_move', 'date_index', 'distance', 'time_free'], 'default', 'value' => null],
-            [['id_plan', 'id_place', 'id_type_of_transport', 'time_start', 'time_stay', 'time_move', 'date_index', 'distance', 'time_free'], 'integer'],
+            [['id_plan', 'id_place', 'id_type_of_transport', 'time_start', 'time_stay', 'time_move', 'date_index', 'free_time'], 'default', 'value' => null],
+            [['id_plan', 'id_place', 'id_type_of_transport', 'time_start', 'time_stay', 'time_move', 'date_index', 'free_time'], 'integer'],
             [['note'], 'string'],
-            [['place_name', 'lat', 'lng', 'path'], 'string', 'max' => 255],
+            [['distance'], 'number'],
+            [['place_name', 'lat', 'lng', 'path', 'slug'], 'string', 'max' => 255],
         ];
     }
 
@@ -65,8 +67,9 @@ class PlanDetail extends \yii\db\ActiveRecord
             'date_index' => 'Date Index',
             'path' => 'Path',
             'note' => 'Note',
+            'slug' => 'Slug',
             'distance' => 'Distance',
-            'time_free' => 'Time Free',
+            'free_time' => 'Free Time',
         ];
     }
 }

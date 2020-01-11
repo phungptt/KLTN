@@ -6,12 +6,15 @@
      .imagebox:hover .box-header .box-image:after {
           opacity: 0;
      }
+
      .btn-more {
           text-align: left;
      }
+
      .imagebox .box-imagebox {
-    margin: 20px 0;
+          margin: 20px 0;
      }
+
      .create-plan-detail .trip-panel-detail {
           width: 100%;
      }
@@ -282,4 +285,78 @@
      .create-plan-detail .step-pick-location.hide {
           display: none;
      }
+
+     .transfer-type {
+          background: #fff;
+          font-weight: bold;
+     }
+
+     .place-editing-box {
+          box-shadow: 0px 2px 4px 0px rgba(34, 36, 38, 0.12),
+               0px 2px 10px 0px rgba(34, 36, 38, 0.15);
+          border: 1px solid rgba(0, 0, 0, .125);
+          border-radius: .1875rem;
+          background: #fff;
+          opacity: 0;
+          animation: 1s ease;
+          z-index: 100;
+     }
+
+     .place-editing-box:before {
+          top: -0.30714286em;
+          left: 1em;
+          right: auto;
+          bottom: auto;
+          margin-left: 0em;
+          box-shadow: -1px -1px 0px 0px #bababc;
+          position: absolute;
+          content: '';
+          width: 0.71428571em;
+          height: 0.71428571em;
+          background: #FFFFFF;
+          -webkit-transform: rotate(45deg);
+          transform: rotate(45deg);
+          z-index: 2;
+     }
+
+     .btn-box-custom {
+          padding: .1875rem .6125rem;
+     }
 </style>
+
+<script>
+     function convertTimeToMinute(hour, minute) {
+          return parseInt(hour) * 60 + parseInt(minute);
+     }
+
+     function convertMinuteToTime(minute, type) {
+          var hour = Math.floor(minute / 60);
+          var min = Math.floor(minute % 60);
+          var time = '';
+          if (type === 'range') {
+               if (hour !== 0) {
+                    time += hour + 'h';
+               }
+               if (min !== 0) {
+                    time += min + "'";
+               }
+          }
+          if (type === 'oclock') {
+               hour = hour >= 24 ? hour % 24 : hour;
+               hour = hour < 10 ? '0' + hour : hour;
+               min = min < 10 ? '0' + min : min;
+               time += hour + ':' + min;
+          }
+          return time;
+     }
+
+     function formatDate(date) {
+          let dd = date.getDate();
+          let mm = date.getMonth() + 1;
+          let yyyy = date.getFullYear();
+
+          dd = dd < 10 ? '0' + dd : dd;
+          mm = mm < 10 ? '0' + mm : mm;
+          return dd + '/' + mm + '/' + yyyy;
+     }
+</script>

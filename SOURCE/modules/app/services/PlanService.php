@@ -3,6 +3,7 @@
 namespace app\modules\app\services;
 
 use app\modules\app\models\Plan;
+use app\modules\app\models\PlanDetail;
 use Yii;
 
 class PlanService
@@ -59,4 +60,83 @@ class PlanService
         $plan = Plan::find()->where(['slug' => $slug])->andWhere(['and', ['status' => self::$AVALABLE], ['deleted' => self::$ALIVE]])->asArray()->one();
         return $plan;
     }
+
+    public static function SavePlanDetails($trip, $planid = null) {
+        $transaction = Yii::$app->db->beginTransaction();
+        try{
+            //duplicate
+            $plan = $planid ? Plan::findOne($planid) : self::DuplicatePlan($planid);
+            self::DeleteAllPlanDetail($planid);
+            $planid = $plan->id;
+            $flag = true;
+            foreach($trip as &$date) {
+                foreach($date['details'] as $place) {
+                    $plan_detail = new PlanDetail();
+                    $plan_detail->id_plan = $planid;
+                    $plan_detail->id_place = (int)$place['id_place'];
+                    $plan_detail->place_name = $place['place_name'];
+                    $plan_detail->time_start = (int)$place['time_start'];
+                    $plan_detail->time_stay = (int)$place['time_stay'];
+                    $plan_detail->free_time = (int)$place['free_time'];
+                    $plan_detail->time_move = (int)$place['time_move'];
+                    $plan_detail->distance = (float)$place['distance'];
+                    $plan_detail->id_type_of_transport = (int)$place['id_type_of_transport'];
+                    $plan_detail->note = $place['note'];
+                    $plan_detail->date_index = (int)$place['date_index'];
+                    $plan_detail->path = $place['path'];
+                    $plan_detail->slug = $place['slug'];
+                    $plan_detail->lat = $place['lat'];
+                    $plan_detail->lng = $place['lng'];
+                    if(!($flag = $plan_detail->save(false))) {
+                        $transaction->rollBack();
+                        break;
+                    }
+                }
+            }
+
+            if($flag) {
+                $plan->route_json = json_encode($trip, true);
+                if($plan->save()) {
+                    $transaction->commit();
+                    return $plan->slug;
+                }
+            }
+            
+        } catch(\Exception $e) {
+            $transaction->rollBack();
+            throw $e;
+        } catch(\Throwable $e) {
+            $transaction->rollBack();
+            throw $e;
+        }
+        return false;
+    }
+
+    public static function DeleteAllplanDetail($planid) {
+        PlanDetail::deleteAll(['id_plan' => $planid]);
+    }
+
+    public static function IsCurrentUserOwnedPlan($id) {
+        $userid = Yii::$app->user->id;
+        $plan = Plan::findOne($id);
+        if($plan) {
+            if($plan->created_by == $userid) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static function DuplicatePlan($id) {
+        $oldPlan = Plan::findOne($id);
+        $newPlan = new Plan();
+
+        $newPlan->setAttributes($oldPlan->attributes);
+        $newPlan->created_by = Yii::$app->user->id;
+        $newPlan->slug = SiteService::uniqid();
+        $newPlan->save();
+
+        return $newPlan;
+    }
+
 }
