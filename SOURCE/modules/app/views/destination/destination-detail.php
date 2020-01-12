@@ -28,8 +28,8 @@
                     </div>
                     <div class="slider-box">
                          <div class="swiper-container">
-                              <div class="swiper-wrapper" v-for="image in imagesRelate">
-                                   <div class="swiper-slide"> <img :src="image.path"></div>
+                              <div class="swiper-wrapper">
+                                   <div class="swiper-slide"  v-for="image in imagesRelate"> <img :src="image.path"></div>
                               </div>
                               <div class="swiper-button-next"></div>
                               <div class="swiper-button-prev"></div>
@@ -94,24 +94,8 @@
                data: {
                     selectDestination: selectDestination,
                     imagesRelate: imagesRelate,
-                    swiper: null,
                },
                methods: {
-               },
-               mounted() {
-                    this.swiper = new window.Swiper('.swiper-container', {
-                         cssMode: true,
-                         navigation: {
-                              nextEl: '.swiper-button-next',
-                              prevEl: '.swiper-button-prev',
-                         },
-                         pagination: {
-                              el: '.swiper-pagination',
-                              clickable: true,
-                         },
-                         mousewheel: true,
-                         keyboard: true,
-                    })
                },
           });
 

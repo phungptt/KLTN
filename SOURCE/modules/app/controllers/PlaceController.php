@@ -16,6 +16,7 @@ use app\modules\app\models\UploadImages;
 use app\modules\app\models\VisitLocation;
 use app\modules\app\models\Amenities;
 use app\modules\app\services\DestinationService;
+use app\modules\app\services\PlanService;
 use Yii;
 use yii\web\Controller;
 
@@ -78,37 +79,25 @@ class PlaceController extends Controller
      }
 
      public function actionFoodList()
-     {
+     {    
           return $this->render('food-list');
      }
 
      public function actionFoodDetail($slug = null)
      {
           $comment = new Comment();
-          $rating = new Rating();
-          $request = Yii::$app->request;
-
-          if ($request->isPost) {
-               $saved = PlaceService::CreatePlaceComment($request->post());
-
-               return $this->asJson($saved);
-          }
           // - Select food location with slug
           $food = PlaceService::GetLocationBySlug($slug);
-
-          // - Select comment with ID
-          $comments = PlaceService::GetCommentListByPlaceId($food['id']);
 
           // - Select image relate of place
           $imagesRelate = PlaceService::GetImagesRelateByPlaceId($food['id']);
 
-          return $this->render('food-detail', compact('food', 'comment', 'rating', 'imagesRelate', 'comments'));
+          return $this->render('food-detail', compact('food', 'comment', 'imagesRelate'));
      }
 
      public function actionVisitLocationList()
      {
-          $visit = PlaceService::GetLocationAvailable(2);
-          return $this->render('visit-location-list', compact('visit'));
+          return $this->render('visit-location-list');
      }
 
      public function actionVisitLocationDetail($slug = null)
