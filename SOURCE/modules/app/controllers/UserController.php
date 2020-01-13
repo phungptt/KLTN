@@ -11,6 +11,8 @@ use app\modules\app\APPConfig;
 
 class UserController extends \yii\web\Controller
 {
+    public $enableCsrfValidation = false;
+
     public function actions()
     {
         return [
@@ -98,7 +100,13 @@ class UserController extends \yii\web\Controller
 
     public function actionUserProfile() {
         $user = Yii::$app->user->getIdentity();
-        $userPro = UserService::GetUserProfile($user->id);
-        return $this->render('user-profile', compact('userPro'));
+        $userInfo = UserService::GetUserProfile($user->id);
+
+        $request = Yii::$app->request;
+        if ($request->isPost) {
+            $save = UserService::UpdateUserProfile($request->post(), $user->id);
+            return $this->asJson($save);
+       }
+        return $this->render('user-profile', compact('userInfo'));
     }
 }

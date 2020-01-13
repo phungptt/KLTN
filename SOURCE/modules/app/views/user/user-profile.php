@@ -17,11 +17,12 @@ include('user-profile_css.php')
                               <label for="profile-image-upload"></label>
                          </div>
                          <div class="avatar-preview">
-                              <div id="profile-image-preview" style="background-image:url('../../resources/images/page/user-profile.jpg');"></div>
+                              <div id="profile-image-preview" style="background-image:url('../../resources/images/page/user-profile/man.png');" v-if="userInfo.gender == 0"></div>
+                              <div id="profile-image-preview" style="background-image:url('../../resources/images/page/user-profile/woman.png');" v-else></div>
                          </div>
                     </div>
                     <div class="profile-info">
-                         <div class="profile-info__name">{{userProfile.fullname}}</div>
+                         <div class="profile-info__name">{{userInfo.fullname}}</div>
                     </div>
                     <div class="profile-controls">
                          <ul class="nav" id="myTab" role="tablist">
@@ -40,19 +41,19 @@ include('user-profile_css.php')
                     <div class="tab-pane active" id="user-profile" role="tabpanel" aria-labelledby="user-profile-tab">
                          <div class="container">
                               <div class="account-profile">
-                                   <form action="" class="form-listing">
+                                   <form action="" class="form-listing" id="user-profile-form">
                                         <div class="inner-box form">
                                              <div class="form-group">
                                                   <label class="control-label">Họ tên</label>
-                                                  <input type="email" name="email" placeholder="" class="input-wrap">
+                                                  <input type="email" name="UserInfo[fullname]" placeholder="" class="input-wrap" :value ="userInfo.fullname">
                                              </div>
                                              <div class="form-group">
                                                   <label class="control-label">Số điện thoại</label>
-                                                  <input type="email" name="email" placeholder="" class="input-wrap">
+                                                  <input type="email" name="UserInfo[phone]" placeholder="" class="input-wrap" :value ="userInfo.phone">
                                              </div>
                                              <div class="form-group">
                                                   <label class="control-label">Email</label>
-                                                  <input type="email" name="email" placeholder="" class="input-wrap">
+                                                  <input type="email" name="UserInfo[email]" placeholder="" class="input-wrap" :value ="userInfo.email"disabled>
                                              </div>
                                              <div class="form-group gender-select-wrap">
                                                   <label class="control-label">Giới tính</label>
@@ -72,12 +73,12 @@ include('user-profile_css.php')
                                                   </div>
                                              </div>
                                              <div class="form-group">
-                                                  <label class="control-label">Email</label>
-                                                  <input type="date" name="email" placeholder="" class="input-wrap">
+                                                  <label class="control-label">Ngày sinh</label>
+                                                  <input type="date" name="UserInfo[birthday]" placeholder="" class="input-wrap" :value ="userInfo.birthday">
                                              </div>
                                              <div class="form-group">
                                                   <div class="input-wrap margin">
-                                                       <button type="submit" class="btn btn-info btn-block btn-update">Cập nhật</button>
+                                                       <button type="submit" class="btn btn-info btn-block btn-update" id="#btn-submit" @click="submitForm">Cập nhật</button>
                                                   </div>
                                              </div>
                                         </div>
@@ -109,21 +110,9 @@ include('user-profile_css.php')
                     </div>
                     <div class="tab-pane user-plan-block " id="user-plan" role="tabpanel" aria-labelledby="user-plan-tab">
                          <div class="container">
-                              <div class="plan-section">
-                                   <div class="destination-block">
-                                        <div class="des-wrap"><a href=""><img src="<?= Yii::$app->homeUrl ?>resources/images/page/user-profile/unnamed.jpg" alt=""><span class="des-content txt-white">
-                                                       <div class="des-content__name">Đà Lạt</div>
-                                                       <div class="des-content__time">2 Ngày</div>
-                                                  </span></a>
-                                             <div class="dropdown-style-1"><a href="javascript:void(0)">
-                                                       <div class="dailist-sub-menu"><i class="fa fa-ellipsis-v" aria-hidden="true"></i></div>
-                                                  </a>
-                                                  <ul class="list">
-                                                       <li><a href="#">Sửa</a></li>
-                                                       <li><a href="#">Xóa</a></li>
-                                                  </ul>
-                                             </div>
-                                        </div>
+                              <div class="wrap-imagebox style1">
+                                   <div class="imagebox style3">
+                                        
                                    </div>
                               </div>
                               <div class="create-plan-btn">
@@ -151,14 +140,43 @@ include('user-profile_css.php')
 
 <script>
      (function($) {
-          var userProfile = JSON.parse('<?= json_encode($userPro, true) ?>');
+          var userInfo = JSON.parse('<?= json_encode($userInfo, true) ?>');
 
           APP.vueInstance = new Vue({
                el: '#user-profile',
                data: {
-                    userProfile: userProfile
+                    userInfo: userInfo
                },
                methods: {
+                    submitForm: function() {
+                         event.preventDefault();
+                         var _this = this,
+                         btnSubmit = $("#btn-submit"),
+                         formData = new FormData($('#user-profile-form')[0]);
+
+                         btnSubmit.empty().append('Đang lưu thông tin...')
+
+                         $.ajax({
+                              contentType: false,
+                              processData: false,
+                              type: 'POST',
+                              url: '<?= APPConfig::getUrl('user/user-profile') ?>',
+                              data: formData,
+                              success: function(response) {
+                                   if (response.status === false) {
+                                        toastMessage('error', response.message);
+                                   } else {
+                                        toastMessage('success', response.message);
+                                        window.location.reload();
+                                   }
+                                   btnSubmit.empty().append('Lưu thông tin');
+                              },
+                              error: function() {
+                                   toastMessage('error', 'Upload failed');
+                                   btnSubmit.empty().append('Lưu thông tin');
+                              }
+                         });
+                    }
                },
           })
      })(jQuery)

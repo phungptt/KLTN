@@ -255,7 +255,6 @@ include('_create_css.php');
                     var _this = this,
                         btnSubmit = $("#btn-submit"),
                         formData = new FormData($('#create-place-form')[0]);
-
                     btnSubmit.empty().append('Đang lưu địa điểm mới...')
 
                     $.ajax({
@@ -269,7 +268,7 @@ include('_create_css.php');
                                 toastMessage('error', response.message);
                             } else {
                                 toastMessage('success', response.message);
-                                // window.location.reload();
+                                window.location.reload();
                             }
                             btnSubmit.empty().append('Lưu địa điểm');
                         },

@@ -208,6 +208,14 @@ class UserService
         return true;
     }
 
+    public static function UpdateUserProfile($data, $id) {
+        $userInfo = UserInfo::findOne(['user_id' => $id]);
+        $userInfo->load($data);
+        $userInfo->save();
+
+        return $userInfo;
+    }
+
     public static function UpdateUserInfo($request) {
         $user_info = self::GetUserInfo($request);
         if($user_info->load($request->post()) && $user_info->save()) {

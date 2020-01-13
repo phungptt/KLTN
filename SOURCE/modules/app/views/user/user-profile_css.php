@@ -57,6 +57,7 @@
   }
 
   .user-profile .user-tab-menu .profile-head .profile-avatar .avatar-preview {
+    background: #fff;
     width: 192px;
     height: 192px;
     position: relative;
