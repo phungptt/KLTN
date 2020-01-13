@@ -5,6 +5,7 @@ namespace app\modules\app\services;
 use app\modules\app\models\Plan;
 use app\modules\app\models\PlanDetail;
 use Yii;
+use yii\db\Query;
 
 class PlanService
 {
@@ -153,4 +154,29 @@ class PlanService
         return $placesGroup;
     }
 
+    public static function GetPlanList() {
+        $query = (new Query())
+                                    -> select([
+                                        'plan.slug as plan_slug',
+                                        'plan.id_destination',
+                                        'plan.total_day',
+                                        'des.path as des_path',
+                                        'des.name as des_name',
+                                        'u.fullname as fullname'
+                                    ])
+                                    ->from('plan')
+                                    ->innerJoin('user_info as u','u.user_id = plan.created_by')
+                                    ->innerJoin('destination_image as des','des.id = plan.id_destination')
+                                    ->all();
+
+        $plan = [];
+
+        foreach($query as &$q) {
+            if(!isset($plan[$q['id_destination']])) {
+                $q['des_path'] = ImageService::GetThumbnailPath($q['des_path']);
+                $plan[$q['id_destination']] = $q;
+            }
+        }
+        return $plan;
+    }
 }

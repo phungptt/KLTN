@@ -9,6 +9,11 @@ use app\models\LoginForm;
 use app\models\RegisterForm;
 use app\models\ContactForm;
 use app\modules\app\services\UserService;
+use app\modules\app\services\DestinationService;
+use app\modules\app\services\PlaceService;
+use app\modules\app\services\PlanService;
+
+
 use yii\helpers\Url;
 
 class SiteController extends Controller
@@ -45,8 +50,15 @@ class SiteController extends Controller
 
     public function actionIndex()
     {
-        // dd('kfhgdfkjh');
-        return $this->render('index');
+        // - Select top destination
+        $topDes = DestinationService::GetTopDestination();
+
+        // - Select top location
+        $topLocation = PlaceService::GetTopPlace();
+
+        // - Select list plan
+        $planList = PlanService::GetPlanList();
+        return $this->render('index', compact('topDes', 'topLocation', 'planList'));
     }
 
     public function actionLogin()

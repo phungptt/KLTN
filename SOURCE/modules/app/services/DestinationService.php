@@ -239,4 +239,25 @@ class DestinationService
 
         return $rating;
     }
+
+    public static function GetTopDestination() {
+        $query = (new Query())
+                                ->select([
+                                    'des.name',
+                                    'des.slug',
+                                    'des.path',
+                                    'AVG(r.rating) as rating_avg',
+                                ])
+                                ->from('destination_image as des')
+                                ->innerJoin('rating as r', 'r.object_id = des.id')
+                                ->where(['and',  ['r.object_type' => 'app\modules\app\models\DiemDen']])
+                                ->groupBy(['des.name', 'des.slug', 'des.path'])
+                                ->orderBy(['rating_avg' => SORT_DESC])
+                                ->all();
+        foreach($query as &$q) {
+            $q['path'] = ImageService::GetThumbnailPath($q['path']);
+        }         
+
+        return $query;
+    }
 }
