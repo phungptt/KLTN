@@ -2626,17 +2626,11 @@ article.post-single .featured-post {
   background-color: #fff;
   position: fixed;
   top: 0;
-  left: 0;
-  z-index: 99999;
-  -webkit-transition: all 0.3s ease-in-out;
+  webkit-transition: all 0.3s ease-in-out;
   -moz-transition: all 0.3s ease-in-out;
   -ms-transition: all 0.3s ease-in-out;
   -o-transition: all 0.3s ease-in-out;
   transition: all 0.3s ease-in-out; }
-  .preloader.hide {
-    display: none; }
-  .preloader.active {
-    display: block; }
 
 .clear-loading {
   text-align: center;

@@ -208,6 +208,26 @@ class UserService
         return true;
     }
 
+    public static function GetPlanList($keyword = null) {
+        $plans = (new Query())
+                                    -> select([
+                                        'plan.slug as plan_slug',
+                                        'plan.total_day',
+                                        'des.path as des_path',
+                                        'des.name as des_name',
+                                        'u.fullname as fullname'
+                                    ])
+                                    ->from('plan')
+                                    ->innerJoin('user_info as u','u.user_id = plan.created_by')
+                                    ->innerJoin('destination_image as des','des.id = plan.id_destination')
+                                    ->where(['and', ['plan.created_by' => $keyword]])
+                                    ->all();
+        foreach($plans as &$p) {
+            $p['path'] = ImageService::GetThumbnailPath($p['des_path']);
+        }    
+        return $plans;
+    }
+
     public static function UpdateUserProfile($data, $id) {
         $userInfo = UserInfo::findOne(['user_id' => $id]);
         $userInfo->load($data);

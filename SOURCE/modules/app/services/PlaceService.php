@@ -108,7 +108,6 @@ class PlaceService
                                     ->from('place')
                                     ->where(['and', ['place.slug' => $slug]])
                                     ->all();
-        dd($id_place);
         return $id_place;
     }
 

@@ -95,7 +95,7 @@ include('user-profile_css.php')
                                    <div class="col-md-6 col-sm-12 block-content country-block d-md-flex align-items-center">
                                         <div class="country-block__img"><img src="<?= Yii::$app->homeUrl ?>resources/images/icon/backpack.jpg" alt=""></div>
                                         <div class="country-block__content">
-                                             <div class="title">1 Lịch trình</div>
+                                             <div class="title">{{plan.data.length}} Lịch trình</div>
                                              <div class="description">Bạn đã thực hiện</div>
                                         </div>
                                    </div>
@@ -111,10 +111,44 @@ include('user-profile_css.php')
                     <div class="tab-pane user-plan-block " id="user-plan" role="tabpanel" aria-labelledby="user-plan-tab">
                          <div class="container">
                               <div class="wrap-imagebox style1">
-                                   <div class="imagebox style3">
-                                        
+                                   <div class="imagebox style3" v-for="plan in plan.data">
+                                        <div class="box-imagebox">
+                                             <div class="box-header">
+                                                  <div class="box-image">
+                                                       <img :src="plan.path" alt="" class="w-100">
+                                                       <a title="">
+                                                            <i aria-hidden="true" class="fas fa-map-marked-alt" 
+                                                                 style=" color: white; font-size: 36px;">
+                                                            </i>
+                                                       </a>
+                                                       <div class="overlay"></div>
+                                                  </div>
+                                             </div><!-- /.box-header -->
+                                             <div class="box-content">
+                                                  <div class="box-title ad">
+                                                       <a  :href="'<?= AppConfig::getUrl('plan/plan-trip-detail?slug=') ?>'  + plan.plan_slug"  title="" >{{plan.des_name}}</a>
+                                                  </div>
+                                                  <ul class="rating">
+                                                       <li >Thời gian: {{plan.total_day}} ngày</li>
+                                                  </ul>
+                                                  <ul class="rating">
+                                                       <li >Người tạo: {{plan.fullname}}</li>
+                                                  </ul>
+                                             </div><!-- /.box-content -->
+                                        </div><!-- /.box-imagebox -->
                                    </div>
+                                 
                               </div>
+                              <div class="line-center">
+                                        <div class="loader1" style="display: none">
+                                             <span></span>
+                                             <span></span>
+                                             <span></span>
+                                             <span></span>
+                                             <span></span>
+                                        </div>
+                                   </div>    
+                              <div class="clearfix"></div>
                               <div class="create-plan-btn">
                                    <div class="btn-more"><a href="#" title="">Tạo lịch trình</a></div>
                               </div>
@@ -145,9 +179,23 @@ include('user-profile_css.php')
           APP.vueInstance = new Vue({
                el: '#user-profile',
                data: {
-                    userInfo: userInfo
+                    userInfo: userInfo,
+                    plan: {
+                         data: {},
+                    }
+               },
+               created: function() {
+                    var _this = this;
+                    _this.$nextTick(function() {
+                         _this.getPlan(_this.userInfo.user_id);
+                    });
                },
                methods: {
+                    removePreLoader: function(time) {
+                         setTimeout(function() {
+                              $('.loader1').hide(); }, time           
+                         ); 
+                    },
                     submitForm: function() {
                          event.preventDefault();
                          var _this = this,
@@ -174,6 +222,32 @@ include('user-profile_css.php')
                               error: function() {
                                    toastMessage('error', 'Upload failed');
                                    btnSubmit.empty().append('Lưu thông tin');
+                              }
+                         });
+                    },
+                    getPlan: function(id_user) {
+                         $('.loader1').show();
+
+                         var _this = this;
+                         var api = '<?= APIConfig::getUrl('user/get-plan-list') ?>';
+                         $.ajax({
+                              url: api,
+                              type: 'POST',
+                              start_time: new Date().getTime(),
+                              data: {
+                                   id_user: id_user
+                              },
+                              success: function(resp) {
+                                   window.addEventListener("load", _this.removePreLoader(new Date().getTime() - this.start_time));
+
+                                   if(resp.status) {
+                                        _this.plan.data = resp.plan.data
+                                   } else {
+                                        toastMessage('error', resp.message)
+                                   }
+                              },
+                              error: function(msg) {
+                                   toastMessage('error', msg)
                               }
                          });
                     }
