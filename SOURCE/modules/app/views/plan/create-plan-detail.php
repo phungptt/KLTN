@@ -468,6 +468,7 @@ include('create-plan-detail_css.php')
                                    _this.openNoteBox = true;
                                    break;
                          }
+
                          //Set position for box is opened
                          _this.$nextTick(function() {
                               var ofssetTop = offset.top + 25;

@@ -139,4 +139,18 @@ class PlanService
         return $newPlan;
     }
 
+    public static function GetPlacesOfPlan($planid) {
+        $places = PlanDetail::find(['id_plan' => $planid])->asArray()->all();
+        $placesGroup = [];
+        foreach($places as $place) {
+            if(!isset($placesGroup[$place['date_index']])) {
+                $placesGroup[$place['date_index']] = [];
+            }
+
+            array_push($placesGroup[$place['date_index']], $place);
+        }
+        
+        return $placesGroup;
+    }
+
 }

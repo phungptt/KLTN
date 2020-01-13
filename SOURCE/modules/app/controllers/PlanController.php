@@ -54,7 +54,8 @@ class PlanController extends Controller
 
      public function actionPlanTripDetail($slug = null) {
           $plan = PlanService::GetPlanBySlug($slug);
-          return $this->render('plan-trip-detail');
+          $places = PlanService::GetPlacesOfPlan($plan['id']);
+          return $this->render('plan-trip-detail', compact('plan'));
      }
 
      public function actionPlanList() {

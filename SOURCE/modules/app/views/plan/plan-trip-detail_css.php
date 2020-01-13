@@ -126,3 +126,26 @@
         width: 20px; }
 
 </style>
+
+<script>
+    function convertMinuteToTime(minute, type) {
+          var hour = Math.floor(minute / 60);
+          var min = Math.floor(minute % 60);
+          var time = '';
+          if (type === 'range') {
+               if (hour !== 0) {
+                    time += hour + 'h';
+               }
+               if (min !== 0) {
+                    time += min + "'";
+               }
+          }
+          if (type === 'oclock') {
+               hour = hour >= 24 ? hour % 24 : hour;
+               hour = hour < 10 ? '0' + hour : hour;
+               min = min < 10 ? '0' + min : min;
+               time += hour + ':' + min;
+          }
+          return time;
+     }
+</script>
