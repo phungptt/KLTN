@@ -68,6 +68,7 @@ class PlaceController extends Controller
 
      public function actionHotelDetail($slug = null)
      {
+          $comment = new Comment();
           // - Select hotel location with slug
           $hotel = PlaceService::GetLocationBySlug($slug);
           // - Select image relate of place
@@ -75,7 +76,7 @@ class PlaceController extends Controller
           // - Select  hotel room
           $rooms = PlaceService::GetRoomByPlaceId($hotel['id']);
 
-          return $this->render('hotel-detail', compact('hotel', 'imagesRelate', 'rooms'));
+          return $this->render('hotel-detail', compact('hotel', 'imagesRelate', 'rooms', 'comment'));
      }
 
      public function actionFoodList()
@@ -103,23 +104,14 @@ class PlaceController extends Controller
      public function actionVisitLocationDetail($slug = null)
      {
           $comment = new Comment();
-          $rating = new Rating();
-          $request = Yii::$app->request;
-
-          if ($request->isPost) {
-               $saved = PlaceService::CreatePlaceComment($request->post());
-
-               return $this->asJson($saved);
-          }
           // - Select food location with slug
           $visit = PlaceService::GetLocationBySlug($slug);
 
           // - Select image relate of place
           $imagesRelate = PlaceService::GetImagesRelateByPlaceId($visit['id']);
 
-          // - Select comment with ID
-          $comments = PlaceService::GetCommentListByPlaceId($visit['id']);
+     
 
-          return $this->render('visit-location-detail', compact('visit', 'comment', 'imagesRelate', 'comments'));
+          return $this->render('visit-location-detail', compact('visit', 'comment', 'imagesRelate'));
      }
 }

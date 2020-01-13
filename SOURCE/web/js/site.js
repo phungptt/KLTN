@@ -18,14 +18,14 @@ $(function () {
     new Swiper('.swiper-container', {
         loop: true,
         pagination: {
-             el: '.swiper-pagination',
-             clickable: true,
+            el: '.swiper-pagination',
+            clickable: true,
         },
         navigation: {
-             nextEl: '.swiper-button-next',
-             prevEl: '.swiper-button-prev',
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
         },
-   });
+    });
 
 });
 
@@ -108,3 +108,29 @@ function reverseDate(date) {
     var reverse = date.split("-").reverse().join("/");
     return reverse;
 }
+
+
+// var starRating = Vue.component({
+//     props:{
+//         value:{type: Number, default: 0},
+//         maxStars: {type: Number, default: 5},
+//         starredColor: {type: String, default: "#f0dd09"},
+//         blankColor: {type: String, default: "darkgray"}
+//    },
+//    template:"#star-rating-template",
+//    methods:{
+//         getClass(n){
+//              return {
+//                   "fa": true,
+//                   "fa-star": n <= this.value,
+//                   "fa-star-o": n > this.value,
+//                   'fa-star-half-o': (this.value / n == 0 && this.value % 2 != 0)
+//              }
+//         },
+//         getStyle(n){
+//              return {
+//                   color: n <= this.value ? this.starredColor : this.blankColor
+//              }
+//         }
+//    }
+// })

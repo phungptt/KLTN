@@ -1,6 +1,7 @@
 <?php
 
 use kartik\form\ActiveForm;
+use app\modules\api\APIConfig;
 use app\modules\app\APPConfig;
 use app\modules\contrib\gxassets\GxSwiperAsset;
 use app\modules\contrib\gxassets\GxVueAsset;
@@ -22,7 +23,7 @@ include('hotel-detail_css.php')
                <div class="row">
                     <div class="col-md-8">
                          <div class="title-left">
-                              <div class="queue"><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star-half-o" aria-hidden="true"></i></div>
+                              <star-rating :value = "review.rating"></star-rating>
                               <div class="box-title"><a href="#" title="">{{selectVisit.name}}</a></i></div>
                               <ul class="box-address">
                                    <li class="address"><i class="fa fa-map-marker" aria-hidden="true"></i>{{selectVisit.address}}</li>
@@ -63,69 +64,75 @@ include('hotel-detail_css.php')
                          </div>
                     </div>
                </div>
-
+          </div>
+     </section>
+     <section class="comment-section mb-5" id="comment-section">
+          <div class="container">
                <div class="comment-area">
-                    <h3 class="comment-title">Đánh giá</h3>
-                    <ol class="comment-list">
-                         <li class="comment" style="display: list-item;">
-                              <article class="comment-body">
-                                   <div class="comment-image">
-                                        <img src="<?= Yii::$app->homeUrl ?>resources/images/page/comment/comment_01.png" alt="">
-                                   </div><!-- /.comment-image -->
-                                   <div class="comment-content">
-                                        <div class="comment-metadata">
-                                             April 8, 2017 9:48 pm
-                                        </div>
-                                        <h5>
-                                             The food was amazing
-                                        </h5>
-                                        <div class="comment-author">
-                                             by <a href="#" title="">Alex luthor</a>
-                                        </div>
-                                        <p>
-                                             Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                                        </p>
-                                   </div><!-- /.comment-content -->
-                              </article><!-- /.comment-body -->
-                         </li><!-- /.comment -->
-                    </ol><!-- /.comment-list -->
-                    <div class="load-more" v-if="totalPage > 1">
-                         <nav aria-label="Page navigation example">
-                                   <ul class="pagination justify-content-center">
-                                   <li class="page-item" v-bind:class="{'disabled': (currPage === 1)}" @click.prevent="setPage(currPage-1)"><a class="page-link" href="">Trang trước</a></li>
-                                   <li class="page-item" v-for="n in totalPage" v-bind:class="{'active': (currPage === (n))}" @click.prevent="setPage(n)"><a class="page-link" href="">{{n}}</a></li>
-                                   <li class="page-item" v-bind:class="{'disabled': (currPage === totalPage)}" @click.prevent="setPage(currPage+1)"><a class="page-link" href="">Trang sau</a></li>
-                              </ul>
-                         </nav>
-                    </div>
-                    <div class="comment-respond">
-                         <div class="overlay"></div>
-                         <?php $form = ActiveForm::begin([
-                              'id' => 'create-rating-form',
-                              'options' => [
-                                   'enctype' => 'multipart/form-data',
-                                   'class' => 'form-listing create-form'
-                              ]
-                         ]) ?>
-                         <h2 class="comment-reply-title">Đánh giá của bạn</h2>
-                         <div class="comment-vote">
-                              <p>Rating</p>
-                              <star-rating v-model="rating" :max-stars="5"></star-rating>
-                         </div>
-                         <div class="comment-form-title pl-0 w-100">
-                              <?= $form->field($comment, 'short_description')->textInput()->label('Tiêu đề nhận xét') ?>
-                         </div>
-                         <div class="clearfix"></div>
-                         <div class="comment-form-comment">
-                              <?= $form->field($comment, 'content')->textarea(['rows' => 5])->label('Nhận xét của bạn') ?>
-                         </div>
-                         <div class="submit-form">
-                              <button id="btn-submit" @click="submitForm">Gửi đánh giá</button>
-                         </div>
-                         <?php $form->end() ?>
-                    </div><!-- /.comment-respond -->
+                         <div class="comment-respond mb-5">
+                              <?php $form = ActiveForm::begin([
+                                   'id' => 'create-rating-form',
+                                   'options' => [
+                                        'enctype' => 'multipart/form-data',
+                                        'class' => 'form-listing create-form',
+                                   ],
+                              ]) ?>
+                              <h2 class="comment-reply-title">Đánh giá của bạn</h2>
+                              <div class="comment-vote">
+                                   <div>
+                                        <label>Rating</label>
+                                   </div>
+                                   <star-rating v-model="rating" :max-stars="5"></star-rating>
+                              </div>
+                                   <div class="comment-form-title pl-0 w-100">
+                                        <?= $form->field($comment, 'short_description')->textInput(['class' => 'required'])->label('Tiêu đề nhận xét') ?>
+                                   </div>
+                                   <div class="clearfix"></div>
+                                   <div class="comment-form-comment">
+                                        <?= $form->field($comment, 'content')->textarea(array('rows' => 5))->label('Nhận xét của bạn') ?>
+                                   </div>
+                                   <div class="submit-form">
+                                        <button id="btn-submit" @click="submitForm">Gửi đánh giá</button>
+                                   </div>
+                              <?php $form->end() ?>
+                         </div><!-- /.comment-respond -->
+                         <h3 class="comment-title">Đánh giá từ người dùng </h3>
+                         <ol class="comment-list">
+                              <li class="comment" style="display: list-item;" v-for="comment in review.comments">
+                                   <article class="comment-body">
+                                        <div class="comment-image">
+                                             <img src="<?= Yii::$app->homeUrl ?>resources/images/page/comment/man.png" alt="" v-if="comment.gender == 0">
+                                             <img src="<?= Yii::$app->homeUrl ?>resources/images/page/comment/woman.png" alt="" v-else>
+                                        </div><!-- /.comment-image -->
+                                        <div class="comment-content">
+                                             <div class="comment-metadata">
+                                                  {{comment.create_at}}
+                                             </div>
+                                             <h5>
+                                                  {{comment.short_description}}
+                                             </h5>
+                                             <div class="comment-author">
+                                                  bởi <a href="#" title="">{{comment.user_name}}</a>
+                                             </div>
+                                             <p>
+                                                  {{comment.content}}
+                                             </p>
+                                        </div><!-- /.comment-content -->
+                                   </article><!-- /.comment-body -->
+                              </li><!-- /.comment -->
+                              <div class="line-center">
+                                   <div class="loader1">
+                                        <span></span>
+                                        <span></span>
+                                        <span></span>
+                                        <span></span>
+                                        <span></span>
+                                   </div>
+                              </div>
+                         </ol><!-- /.comment-list -->
                </div>
           </div>
+     </section>
 </div>
 
 </section>
@@ -133,7 +140,12 @@ include('hotel-detail_css.php')
 
 <template id="star-rating-template">
      <span>
-          <i v-for="n in maxStars" :class="getClass(n)" :style="getStyle(n)" @click="$emit('input', n)"></i>
+          <i v-for="n in maxStars" 
+                    :class="getClass(n)" 
+                    :style="getStyle(n)"
+                    @click="$emit('input', n)"
+                    style="font-size: 20px">
+          </i>
      </span>
 </template>
 
@@ -141,7 +153,6 @@ include('hotel-detail_css.php')
      (function($) {
           var selectVisit = <?= json_encode($visit) ?>;
           var imagesRelate = <?= json_encode($imagesRelate) ?>;
-          var comments = <?= json_encode($comments) ?>;
 
           Vue.component("star-rating", {
                props:{
@@ -173,40 +184,37 @@ include('hotel-detail_css.php')
                     selectVisit: selectVisit,
                     imagesRelate: imagesRelate,
                     rating: 0,
-                    comments: comments,
                     id_place: selectVisit['id'],
-                    countOfPage: 4,
-                    currPage: 1,
-                    swiper: null
-               },
-               computed: {
-                    pageStart: function() {
-                         return (this.currPage - 1) * this.countOfPage;
+                    review: {
+                         comments: {},
+                         rating: {}
                     },
-                    totalPage: function() {
-                         return Math.ceil(this.comments.length / this.countOfPage);
-                    }
+               },
+               created: function() {
+                    var _this = this;
+                    _this.$nextTick(function() {
+                         _this.getReview();
+                    });
                },
                methods: {
-                    setPage: function(idx) {
-                         if (idx <= 0 || idx > this.totalPage) {
-                              return;
-                         }
-                         this.currPage = idx;
+                    removePreLoader: function(time) {
+                         setTimeout(function() {
+                              $('.loader1').hide(); }, time           
+                         ); 
                     },
                     submitForm: function(event) {
                          event.preventDefault();
-                         var _this = this,
                          btnSubmit = $("#btn-submit"),
                          formData = new FormData($('#create-rating-form')[0]);
-                         formData.append('id_place', this.id_place)
-                         btnSubmit.empty().append('Đang lưu đánh giá mới...')
-
+                         formData.append('id_place', this.id_place);
+                         formData.append('rating', this.rating);
+                         btnSubmit.empty().append('Đang lưu đánh giá mới...');
+                         var api = '<?= APIConfig::getUrl('place/create-comment') ?>';
                          $.ajax({
                               contentType: false,
                               processData: false,
                               type: 'POST',
-                              url: '<?= APPConfig::getUrl('place/visit-location-detail') ?>',
+                              url: api,
                               data: formData,
                               success: function(response) {
                                    if (response.status === false) {
@@ -222,7 +230,33 @@ include('hotel-detail_css.php')
                                    btnSubmit.empty().append('Lưu nhận xét');
                               }
                          });
-                    }
+                    },
+                    getReview: function() {
+                         $('.loader1').show();
+
+                         var _this = this;
+                         var api = '<?= APIConfig::getUrl('place/get-review') ?>';
+                         $.ajax({
+                              url: api,
+                              type: 'POST',
+                              start_time: new Date().getTime(),
+                              data: {
+                                   id: _this.id_place
+                              },
+                              success: function(resp) {
+                                   window.addEventListener("load", _this.removePreLoader(new Date().getTime() - this.start_time));
+                                   if(resp.status) {
+                                        _this.review.comments = resp.review.comments;
+                                        _this.review.rating = parseFloat(resp.review.rating['avg']);
+                                   } else {
+                                        toastMessage('error', resp.message)
+                                   }
+                              },
+                              error: function(msg) {
+                                   toastMessage('error', msg)
+                              }
+                         });
+                    },
                },
           });
      })(jQuery);
