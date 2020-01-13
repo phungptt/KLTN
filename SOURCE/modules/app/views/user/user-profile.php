@@ -151,16 +151,12 @@ include('user-profile_css.php')
 
 <script>
      (function($) {
-          var userProfile = <?= json_encode($userPro) ?>;
+          var userProfile = JSON.parse('<?= json_encode($userPro, true) ?>');
 
           APP.vueInstance = new Vue({
                el: '#user-profile',
                data: {
                     userProfile: userProfile
-               },
-               created: function() {
-                    var _this = this;
-                    console.log(_this.userProfile) ;
                },
                methods: {
                },

@@ -52,7 +52,7 @@ include('visit-location-list_css.php')
                                         </div><!-- /.box-header -->
                                         <div class="box-content">
                                              <div class="box-title ad">
-                                                  <a :href="'<?= AppConfig::getUrl('place/visit-detail?slug=') ?>'  + visit.slug" title="" >{{visit.name}}</a>
+                                                  <a :href="'<?= AppConfig::getUrl('place/visit-location-detail?slug=') ?>'  + visit.slug" title="" >{{visit.name}}</a>
                                              </div>
                                              <ul class="rating">
                                                   <li v-if="visit.rating > 0">{{visit.rating_number}} rating</li>

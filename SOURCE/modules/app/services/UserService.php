@@ -48,7 +48,7 @@ class UserService
                                 ->select('*')
                                 ->from('user_info')
                                 ->where(['and', ['user_id' => $userId]])
-                                ->all();
+                                ->one();
         return $query;
     }
 
