@@ -84,8 +84,8 @@ use app\modules\app\APPConfig;
         <div class="row">
             <div class="col-md-12">
                 <div class="flat-row-title center">
-                    <h2>Ăn uống</h2>
-                    <p>Khám phá các điểm ăn uống tuyệt vời</p>
+                    <h2>Những địa điểm tuyệt vời</h2>
+                    <p>Khám phá các điểm vui chơi tuyệt vời và phù hợp</p>
                 </div>
                 <div class="row">
                     <div class="col-md-4">
@@ -161,42 +161,6 @@ use app\modules\app\APPConfig;
                                     <div class="address"><span class="ti-location-pin"></span>Đà Lạt</div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-<section class="flat-row flat-imagebox background" id="hotel-section">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="flat-row-title center">
-                    <h2>Khách Sạn</h2>
-                    <p></p>Chọn một nơi bạn có thể nghỉ ngơi và relax
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-4">
-                <div class="imagebox">
-                    <div class="box-imagebox">
-                        <div class="box-header">
-                            <div class="box-image"><img src="<?= Yii::$app->homeUrl ?>resources/images/page/home-page/img-01.png" alt=""><a href="#" title="">Preview</a>
-                                <div class="overlay"></div>
-                                <div class="queue"><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star-half-o" aria-hidden="true"></i></div>
-                            </div>
-                        </div>
-                        <div class="box-content">
-                            <div class="box-title ad"><a href="#" title="">AN Hotel</a><i class="fa fa-check-circle" aria-hidden="true"></i></div>
-                            <ul class="rating">
-                                <li>500.000 VND / đêm</li>
-                            </ul>
-                            <div class="box-desc">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</div>
-                        </div>
-                        <div class="location">
-                            <div class="address"><span class="ti-location-pin"></span>Đà Lạt</div>
                         </div>
                     </div>
                 </div>

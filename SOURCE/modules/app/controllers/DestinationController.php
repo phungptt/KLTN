@@ -5,6 +5,7 @@ namespace app\modules\app\controllers;
 use app\modules\app\models\DiemDen;
 use app\modules\app\models\DestinationImage;
 use app\modules\app\models\ImageFile;
+use app\modules\app\models\Comment;
 use app\modules\app\services\DestinationService;
 use yii\web\UploadedFile;
 use app\modules\app\models\UploadImage;
@@ -58,12 +59,15 @@ class DestinationController extends Controller
      }
 
      public function actionDestinationDetail($slug=null) {
+          $comment = new Comment();
           // - Select destination with slug 
           $destination = DestinationService::GetDestinationBySlug($slug);
 
           // - Select image relate of destination
           $imagesRelate = DestinationService::GetImagesRelateByDestinationId($destination['id']);
 
-          return $this->render('destination-detail', compact('destination', 'imagesRelate'));
+          // - Select top place
+          $topPlace = DestinationService::GetTopPlace($destination['id'], 3);
+          return $this->render('destination-detail', compact('destination', 'imagesRelate', 'topPlace', 'comment'));
      }
 }

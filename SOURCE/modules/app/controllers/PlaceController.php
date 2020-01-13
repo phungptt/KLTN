@@ -110,8 +110,6 @@ class PlaceController extends Controller
           // - Select image relate of place
           $imagesRelate = PlaceService::GetImagesRelateByPlaceId($visit['id']);
 
-     
-
           return $this->render('visit-location-detail', compact('visit', 'comment', 'imagesRelate'));
      }
 }

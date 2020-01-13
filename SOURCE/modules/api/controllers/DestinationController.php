@@ -30,4 +30,36 @@ class DestinationController extends Controller
    
            throw new \yii\web\NotFoundHttpException();
     }
+
+    public function actionCreateComment() {
+        $request = Yii::$app->request;
+        if ($request->isPost) {
+            $saved = DestinationService::CreateDestinationComment($request->post());
+            return $this->asJson($saved);
+        }
+
+        throw new \yii\web\NotFoundHttpException();
+    }
+
+    public function actionGetReview() {
+        $request = Yii::$app->request;
+
+        if($request->isPost) {
+            $id = $request->post('id');
+
+            $comments = DestinationService::GetCommentListByPlaceId($id);
+            $rating = DestinationService::GetRatingByPlaceId($id);
+
+            $response = [
+                'status' => true,
+                'review' => [
+                    'comments' => $comments,
+                    'rating' => $rating
+                ]
+            ];
+            return $this->asJson($response);
+        }
+
+        throw new \yii\web\NotFoundHttpException();
+    }
 }

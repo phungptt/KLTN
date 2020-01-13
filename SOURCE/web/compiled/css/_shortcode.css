@@ -279,8 +279,11 @@
   .flat-main-blog .btn-more a {
     padding: 15px 36px; }
 
+.d-flex {
+  display: flex; }
+
 .flat-imagebox.background {
-  background: url('../images/page/bg-01.png') top center repeat-y;
+  background: url('../../resources/images/page/home-page/bg-01.png') top center repeat-y;
   padding: 70px 0; }
 
 .flat-imagebox.style3 {

@@ -45,6 +45,7 @@ class SiteController extends Controller
 
     public function actionIndex()
     {
+        // dd('kfhgdfkjh');
         return $this->render('index');
     }
 
