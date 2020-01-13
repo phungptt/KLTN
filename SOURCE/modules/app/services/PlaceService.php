@@ -68,28 +68,31 @@ class PlaceService
 
     public static function CreatePlaceComment($data) {
         $comment = new Comment();
-        $rating = new Rating([
-            'id_user' => Yii::$app->user->id,
-            'rating' => $data['rating'],
-        ]);
-
-        $comment->load($data);
-        $comment->create_by = Yii::$app->user->id;
-        $comment->status = self::$AVALABLE;
-        $comment->delete = self::$ALIVE;
-        $comment->object_type = 'app\modules\app\models\Place';
-        $comment->object_id =  $data['id_place'];
-
-
-        if($comment->save(false)) {
-            $comment->save();
-            $rating->save();
-            return [
-                'status' => true,
-                'message' => 'Thêm nhận xét thành công'
-            ];
+        if($data['rating'] != 0 && $data['Comment']['short_description'] != '' && $data['Comment']['content']) {
+            $rating = new Rating([
+                'id_user' => Yii::$app->user->id,
+                'rating' => $data['rating'],
+                'object_type' => 'app\modules\app\models\Place',
+                'object_id' =>  $data['id_place']
+            ]);
+    
+            $comment->load($data);
+            $comment->create_by = Yii::$app->user->id;
+            $comment->status = self::$AVALABLE;
+            $comment->delete = self::$ALIVE;
+            $comment->object_type = 'app\modules\app\models\Place';
+            $comment->object_id =  $data['id_place'];
+    
+    
+            if($comment->save(false)) {
+                $comment->save();
+                $rating->save();
+                return [
+                    'status' => true,
+                    'message' => 'Thêm nhận xét thành công'
+                ];
+            }
         }
-
         return [
             'status' => false,
             'message' => 'Vui lòng điền đầy đủ các trường thông tin có dấu (*)'
@@ -171,6 +174,7 @@ class PlaceService
         $query = (new Query())
                             -> select([
                                 '*',
+                                'place_image.id as id_place',
                                 'place_image.name as name',
                                 'r.name as room_name',
                             ])
@@ -179,13 +183,42 @@ class PlaceService
                             ->where(['and', ['place_image.id_type_of_place' => $type_of_place], ['like', 'place_image.name', $keyword]])
                             ->orderBy('price')
                             ->all();
-        
+        $queryRating = (new Query())
+                                                -> select([
+                                                    'AVG(rating.rating)',
+                                                    'COUNT(rating.rating) as rating_number',
+                                                    'rating.object_id as id'
+                                                ])
+                                                ->from('rating')
+                                                ->groupBy(['rating.object_id'])
+                                                ->all();
+        $queryComment = (new Query())
+                                                -> select([
+                                                    'COUNT(comment.content) as comment_count',
+                                                    'comment.object_id as id'
+                                                ])
+                                                ->from('comment')
+                                                ->groupBy(['comment.object_id'])
+                                                ->all();
+
         if($type_of_place == self::$HOTEL_TYPE) {
             $hotels = [];
             foreach($query as &$h) {
                 if(!isset($hotels[$h['id_place']])) {
                     $h['path'] = ImageService::GetOriginalPath($h['path']);
                     $h['price'] = number_format($h['price']);
+
+                    for($i = 0; $i < count($queryRating); $i++) {
+                        if($h['id_place'] == $queryRating[$i]['id']) {
+                            list($h['rating'], $h['rating_number']) = array($queryRating[$i]['avg'], $queryRating[$i]['rating_number']);
+                        }
+                    }
+
+                    for($i = 0; $i < count($queryComment); $i++) {
+                        if($h['id_place'] == $queryComment[$i]['id']) {
+                            $h['comment_number'] = $queryComment[$i]['comment_count'];
+                        }
+                    }
                     $hotels[$h['id_place']] = $h;
                 }
             }      
@@ -193,9 +226,20 @@ class PlaceService
         } else {
             foreach($query as &$location) {
                 $location['path'] = ImageService::GetOriginalPath($location['path']);
+                for($i = 0; $i < count($queryRating); $i++) {
+                    if($location['id_place'] == $queryRating[$i]['id']) {
+                        list($location['rating'], $location['rating_number']) = array($queryRating[$i]['avg'], $queryRating[$i]['rating_number']);
+                    }
+                }
+                for($i = 0; $i < count($queryComment); $i++) {
+                    if($location['id_place'] == $queryComment[$i]['id']) {
+                        $location['comment_number'] = $queryComment[$i]['comment_count'];
+                    }
+                }
             }
-            return $query;
         }
+       
+        return $query;
     }
 
     public static function GetLocationBySlug($slug) {
@@ -204,6 +248,17 @@ class PlaceService
         $location['path'] = ImageService::GetOriginalPath($location['path']);
 
         return $location;
+    }
+
+    public static function GetRatingByPlaceId($id) {
+        $rating = (new Query())
+                            -> select('AVG(rating)')
+                            ->from('rating as r')
+                            ->innerJoin('place as p', 'p.id = object_id')
+                            ->where(['and', ['r.object_type' => 'app\modules\app\models\Place'], ['r.object_id' => $id]])
+                            ->one();
+
+        return $rating;
     }
 
     public static function GetImagesRelateByPlaceId($id) {

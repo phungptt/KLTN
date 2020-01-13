@@ -88,11 +88,7 @@ include('hotel-list_css.php')
                                                   </a>
                                                   <div class="overlay"></div>
                                                   <div class="queue">
-                                                       <i class="fa fa-star" aria-hidden="true"></i>
-                                                       <i class="fa fa-star" aria-hidden="true"></i>
-                                                       <i class="fa fa-star" aria-hidden="true"></i>
-                                                       <i class="fa fa-star" aria-hidden="true"></i>
-                                                       <i class="fa fa-star" aria-hidden="true"></i>
+                                                       <star-rating :value = "hotel.rating"></star-rating>
                                                   </div>
                                              </div>
                                         </div><!-- /.box-header -->
@@ -101,10 +97,13 @@ include('hotel-list_css.php')
                                                   <a :href="'<?= AppConfig::getUrl('place/hotel-detail?slug=') ?>'  + hotel.slug" title="">{{hotel.name}}</a>
                                              </div>
                                              <ul class="rating">
-                                                  <li>Từ {{hotel.price}} VNĐ / đêm</li>
+                                                  <li v-if="hotel.rating > 0">{{hotel.rating_number}} rating</li>
+                                                  <li v-else="hotel.rating <= 0">0 rating</li>
+                                                  <li v-if="hotel.comment_number > 0">{{hotel.comment_number}} đánh giá</li>
+                                                  <li v-else="hotel.comment_number <= 0">0 đánh giá</li>
                                              </ul>
                                              <div class="box-desc">
-                                                  {{hotel.short_description}}
+                                                  Từ {{hotel.price}} VNĐ / đêm
                                              </div>
                                         </div><!-- /.box-content -->
                                         <div class="location">
@@ -140,10 +139,44 @@ include('hotel-list_css.php')
      </div><!-- /.container-fluid -->
 </section><!-- /.flat-map-zoom-in -->
 
+<template id="star-rating-template">
+     <span>
+          <i v-for="n in maxStars" 
+                    :class="getClass(n)" 
+                    :style="getStyle(n)"
+                    @click="$emit('input', n)"
+                    style="font-size: 20px">
+          </i>
+     </span>
+</template>
 
 <script>
      (function($) {
-          var amenities = <?= json_encode($amenities) ?>
+          var amenities = JSON.parse('<?= json_encode($amenities, true) ?>');
+
+          Vue.component("star-rating", {
+               template: "#star-rating-template",
+               props:{
+                    value:{type: Number, default: 0},
+                    maxStars: {type: Number, default: 5},
+                    starredColor: {type: String, default: "#f0dd09"},
+                    blankColor: {type: String, default: "#f0dd09"}
+               },
+               methods:{
+                    getClass(n){
+                         return {
+                              "fa": true,
+                              "fa-star": n <= this.value,
+                              "fa-star-o": this.value <= n,
+                         }
+                    },
+                    getStyle(n){
+                         return {
+                              color: n <= this.value ? this.starredColor : this.blankColor
+                         }
+                    }
+               }
+          });
 
           APP.vueInstance = new Vue({
                el: '#hotel-list',

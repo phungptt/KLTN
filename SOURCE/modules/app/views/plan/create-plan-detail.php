@@ -56,6 +56,7 @@ include('create-plan-detail_css.php')
                                                                       <span class="text-primary-700 font-weight-bold cursor-pointer" 
                                                                            @click="openEditingBox($event, didx, pidx, place, 'time_stay')">{{ rangeTimeFormat(place.time_stay) }}</span>
                                                                  </div>
+                                                                 <?php include('_plan_popup_box.php') ?>
                                                                  <button class="delete-btn" @click="getRecentPlaces(didx, place.lat, place.lng)"><i class="fa fa-search-location mr-2"></i><span>Quanh đây</span></button>
                                                                  <button class="delete-btn" @click="removePlaceFromTrip(didx, pidx)"><span>Xóa</span></button>
                                                             </div>
@@ -102,7 +103,6 @@ include('create-plan-detail_css.php')
                <button class="submit-form-listing w-100" id="btn-submit" @click="savePlan">Lưu lịch trình</button>
           </div>
 
-          <?php include('_plan_popup_box.php') ?>
      </section>
      <section class="add-place-modal dailylist-modal" v-if="toggleListPlace">
           <div class="container">

@@ -3,6 +3,8 @@
 namespace app\modules\api\controllers;
 
 use app\modules\app\services\PlaceService;
+use app\modules\app\models\Comment;
+use app\modules\app\models\Rating;
 use Yii;
 use yii\web\Controller;
 
@@ -55,4 +57,38 @@ class PlaceController extends Controller
 
         throw new \yii\web\NotFoundHttpException();
     }
+
+    public function actionCreateComment() {
+        $request = Yii::$app->request;
+        if ($request->isPost) {
+            $saved = PlaceService::CreatePlaceComment($request->post());
+            return $this->asJson($saved);
+        }
+
+        throw new \yii\web\NotFoundHttpException();
+    }
+
+    public function actionGetReview() {
+        $request = Yii::$app->request;
+
+        if($request->isPost) {
+            $id = $request->post('id');
+
+            $comments = PlaceService::GetCommentListByPlaceId($id);
+            $rating = PlaceService::GetRatingByPlaceId($id);
+
+            $response = [
+                'status' => true,
+                'review' => [
+                    'comments' => $comments,
+                    'rating' => $rating
+                ]
+            ];
+            return $this->asJson($response);
+        }
+
+        throw new \yii\web\NotFoundHttpException();
+    }
+
+    
 }

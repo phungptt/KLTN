@@ -1,5 +1,6 @@
 <?php
      use kartik\form\ActiveForm;
+     use app\modules\api\APIConfig;
      use app\modules\app\APPConfig;
      use app\modules\app\services\PlaceService;
      use app\modules\contrib\gxassets\GxSwiperAsset;
@@ -22,7 +23,7 @@
                <div class="row">
                     <div class="col-md-8">
                          <div class="title-left">
-                              <div class="queue"><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star-half-o" aria-hidden="true"></i></div>
+                              <star-rating :value = "review.rating"></star-rating>
                               <div class="box-title"><a href="#" title="">{{selectFood.name}}</a></div>
                               <ul class="box-address">
                                    <li class="address"><i class="fa fa-map-marker" aria-hidden="true"></i>{{selectFood.address}}</li>
@@ -64,12 +65,40 @@
                     </div>
                </div>
                <div class="comment-area">
-                    <h3 class="comment-title">Đánh giá</h3>
+                    <div class="comment-respond mb-5">
+                         <?php $form = ActiveForm::begin([
+                              'id' => 'create-rating-form',
+                              'options' => [
+                                   'enctype' => 'multipart/form-data',
+                                   'class' => 'form-listing create-form',
+                              ],
+                         ]) ?>
+                         <h2 class="comment-reply-title">Đánh giá của bạn</h2>
+                         <div class="comment-vote">
+                              <div>
+                                   <label>Rating</label>
+                              </div>
+                              <star-rating v-model="rating" :max-stars="5"></star-rating>
+                         </div>
+                              <div class="comment-form-title pl-0 w-100">
+                                   <?= $form->field($comment, 'short_description')->textInput(['class' => 'required'])->label('Tiêu đề nhận xét') ?>
+                              </div>
+                              <div class="clearfix"></div>
+                              <div class="comment-form-comment">
+                                   <?= $form->field($comment, 'content')->textarea(array('rows' => 5))->label('Nhận xét của bạn') ?>
+                              </div>
+                              <div class="submit-form">
+                                   <button id="btn-submit" @click="submitForm">Gửi đánh giá</button>
+                              </div>
+                         <?php $form->end() ?>
+                    </div><!-- /.comment-respond -->
+                    <h3 class="comment-title">Đánh giá từ người dùng </h3>
                     <ol class="comment-list">
-                         <li class="comment" style="display: list-item;" v-for="comment in comments">
+                         <li class="comment" style="display: list-item;" v-for="comment in review.comments">
                               <article class="comment-body">
                                    <div class="comment-image">
-                                        <img src="<?= Yii::$app->homeUrl ?>resources/images/page/comment/comment_01.png" alt="">
+                                        <img src="<?= Yii::$app->homeUrl ?>resources/images/page/comment/man.png" alt="" v-if="comment.gender == 0">
+                                        <img src="<?= Yii::$app->homeUrl ?>resources/images/page/comment/woman.png" alt="" v-else>
                                    </div><!-- /.comment-image -->
                                    <div class="comment-content">
                                         <div class="comment-metadata">
@@ -87,35 +116,20 @@
                                    </div><!-- /.comment-content -->
                               </article><!-- /.comment-body -->
                          </li><!-- /.comment -->
+                         <div class="line-center">
+                              <div class="loader1">
+                                   <span></span>
+                                   <span></span>
+                                   <span></span>
+                                   <span></span>
+                                   <span></span>
+                              </div>
+                         </div>
                     </ol><!-- /.comment-list -->
                     <div class="load-more">
                          <a href="" title="">Tải thêm</a>
                     </div>
-                    <div class="comment-respond">
-                         <?php $form = ActiveForm::begin([
-                              'id' => 'create-rating-form',
-                              'options' => [
-                                   'enctype' => 'multipart/form-data',
-                                   'class' => 'form-listing create-form'
-                              ]
-                         ]) ?>
-                         <h2 class="comment-reply-title">Đánh giá của bạn</h2>
-                         <div class="comment-vote">
-                              <p>Rating</p>
-                              <star-rating v-model="rating" :max-stars="5"></star-rating>
-                         </div>
-                              <div class="comment-form-title pl-0 w-100">
-                                   <?= $form->field($comment, 'short_description')->textInput()->label('Tiêu đề nhận xét') ?>
-                              </div>
-                              <div class="clearfix"></div>
-                              <div class="comment-form-comment">
-                                   <?= $form->field($comment, 'content')->textarea(['rows' => 5])->label('Nhận xét của bạn') ?>
-                              </div>
-                              <div class="submit-form">
-                                   <button id="btn-submit" @click="submitForm">Gửi đánh giá</button>
-                              </div>
-                         <?php $form->end() ?>
-                    </div><!-- /.comment-respond -->
+                   
                </div>
           </div>
      </section>
@@ -126,7 +140,8 @@
           <i v-for="n in maxStars" 
                     :class="getClass(n)" 
                     :style="getStyle(n)"
-                    @click="$emit('input', n)">
+                    @click="$emit('input', n)"
+                    style="font-size: 20px">
           </i>
      </span>
 </template>
@@ -135,13 +150,12 @@
      (function ($) {
           var selectFood = <?= json_encode($food) ?>;
           var imagesRelate = <?= json_encode($imagesRelate) ?>;
-          var comments = <?= json_encode($comments) ?>;
 
           Vue.component("star-rating", {
                props:{
                     value:{type: Number, default: 0},
                     maxStars: {type: Number, default: 5},
-                    starredColor: {type: String, default: "orange"},
+                    starredColor: {type: String, default: "#f0dd09"},
                     blankColor: {type: String, default: "darkgray"}
                },
                template:"#star-rating-template",
@@ -151,6 +165,7 @@
                               "fa": true,
                               "fa-star": n <= this.value,
                               "fa-star-o": n > this.value,
+                              'fa-star-half-o': (this.value / n == 0 && this.value % 2 != 0)
                          }
                     },
                     getStyle(n){
@@ -166,26 +181,38 @@
                data: {
                     selectFood: selectFood,
                     imagesRelate: imagesRelate,
-                    comments: comments,
                     rating: 0,
                     id_place: selectFood['id'],
-                    swiper: null
+                    review: {
+                         comments: {},
+                         rating: {}
+                    },
                },   
+               created: function() {
+                    var _this = this;
+                    _this.$nextTick(function() {
+                         _this.getReview();
+                    });
+               },
                methods: {
+                    removePreLoader: function(time) {
+                         setTimeout(function() {
+                              $('.loader1').hide(); }, time           
+                         ); 
+                    },
                     submitForm: function(event) {
                          event.preventDefault();
-                         var _this = this,
                          btnSubmit = $("#btn-submit"),
                          formData = new FormData($('#create-rating-form')[0]);
                          formData.append('id_place', this.id_place);
-                         formData.append('rating', this.rating)
-                         btnSubmit.empty().append('Đang lưu đánh giá mới...')
-
+                         formData.append('rating', this.rating);
+                         btnSubmit.empty().append('Đang lưu đánh giá mới...');
+                         var api = '<?= APIConfig::getUrl('place/create-comment') ?>';
                          $.ajax({
                               contentType: false,
                               processData: false,
                               type: 'POST',
-                              url: '<?= APPConfig::getUrl('place/food-detail') ?>',
+                              url: api,
                               data: formData,
                               success: function(response) {
                                    if (response.status === false) {
@@ -201,7 +228,34 @@
                                    btnSubmit.empty().append('Lưu nhận xét');
                               }
                          });
-                    }
+                    },
+                    getReview: function() {
+                         $('.loader1').show();
+
+                         var _this = this;
+                         var api = '<?= APIConfig::getUrl('place/get-review') ?>';
+                         $.ajax({
+                              url: api,
+                              type: 'POST',
+                              start_time: new Date().getTime(),
+                              data: {
+                                   id: _this.id_place
+                              },
+                              success: function(resp) {
+                                   window.addEventListener("load", _this.removePreLoader(new Date().getTime() - this.start_time));
+                                   if(resp.status) {
+                                        _this.review.comments = resp.review.comments;
+                                        _this.review.rating = parseFloat(resp.review.rating['avg']);
+                                   } else {
+                                        toastMessage('error', resp.message)
+                                   }
+                              },
+                              error: function(msg) {
+                                   toastMessage('error', msg)
+                              }
+                         });
+                    },
+                   
                },
           });
      })(jQuery);

@@ -2526,6 +2526,9 @@ article.post-single .featured-post {
     font-weight: bold;
     margin-bottom: 24px;
     font-size: 24px; }
+  .comment-respond label::after {
+    content: " *";
+    color: red; }
   .comment-respond form .comment-form-email {
     float: left;
     width: 50%;

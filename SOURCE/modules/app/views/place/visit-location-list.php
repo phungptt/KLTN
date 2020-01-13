@@ -46,11 +46,7 @@ include('visit-location-list_css.php')
                                                   </a>
                                                   <div class="overlay"></div>
                                                   <div class="queue">
-                                                       <i class="fa fa-star" aria-hidden="true"></i>
-                                                       <i class="fa fa-star" aria-hidden="true"></i>
-                                                       <i class="fa fa-star" aria-hidden="true"></i>
-                                                       <i class="fa fa-star" aria-hidden="true"></i>
-                                                       <i class="fa fa-star-half-o" aria-hidden="true"></i>
+                                                       <star-rating :value = "visit.rating"></star-rating>
                                                   </div>
                                              </div>
                                         </div><!-- /.box-header -->
@@ -59,8 +55,10 @@ include('visit-location-list_css.php')
                                                   <a :href="'<?= AppConfig::getUrl('place/visit-detail?slug=') ?>'  + visit.slug" title="" >{{visit.name}}</a>
                                              </div>
                                              <ul class="rating">
-                                                  <li>5 rating</li>
-                                                  <li>5 reviews</li>
+                                                  <li v-if="visit.rating > 0">{{visit.rating_number}} rating</li>
+                                                  <li v-else="visit.rating <= 0">0 rating</li>
+                                                  <li v-if="visit.comment_number > 0">{{visit.comment_number}} đánh giá</li>
+                                                  <li v-else="visit.comment_number <= 0">0 đánh giá</li>
                                              </ul>
                                         </div><!-- /.box-content -->
                                         <ul class="location">
@@ -72,13 +70,7 @@ include('visit-location-list_css.php')
                               <div class="clearfix"></div>
                               <div class="row">
                                    <div class="col-md-12">
-                                        <nav aria-label="Page navigation example">
-                                             <ul class="pagination justify-content-center">
-                                                  <li class="page-item" v-bind:class="{'disabled': (currPage === 1)}" @click.prevent="setPage(currPage-1)"><a class="page-link" href="">Trang trước</a></li>
-                                                  <li class="page-item" v-for="n in totalPage" v-bind:class="{'active': (currPage === (n))}" @click.prevent="setPage(n)"><a class="page-link" href="">{{n}}</a></li>
-                                                  <li class="page-item" v-bind:class="{'disabled': (currPage === totalPage)}" @click.prevent="setPage(currPage+1)"><a class="page-link" href="">Trang sau</a></li>
-                                             </ul>
-                                        </nav>
+                                        
                                    </div>
                               </div><!-- /.row -->
                          </div><!-- /.wrap-imagebox -->
@@ -95,14 +87,48 @@ include('visit-location-list_css.php')
      </div><!-- /.container-fluid -->
 </section><!-- /.flat-map-zoom-in -->
 
+<template id="star-rating-template">
+     <span>
+          <i v-for="n in maxStars" 
+                    :class="getClass(n)" 
+                    :style="getStyle(n)"
+                    @click="$emit('input', n)"
+                    style="font-size: 20px">
+          </i>
+     </span>
+</template>
+
 <script>
      (function($) {
-          var visitLocationList = <?= json_encode($visit) ?>
+          Vue.component("star-rating", {
+               template: "#star-rating-template",
+               props:{
+                    value:{type: Number, default: 0},
+                    maxStars: {type: Number, default: 5},
+                    starredColor: {type: String, default: "#f0dd09"},
+                    blankColor: {type: String, default: "#f0dd09"}
+               },
+               methods:{
+                    getClass(n){
+                         return {
+                              "fa": true,
+                              "fa-star": n <= this.value,
+                              "fa-star-o": this.value < n,
+                              'fa-star-half-o': this.value > (n - 1)
+                         }
+                    },
+                    getStyle(n){
+                         return {
+                              color: n <= this.value ? this.starredColor : this.blankColor
+                         }
+                    }
+               }
+          });
+
 
           APP.vueInstance = new Vue({
                el: '#visit-location-list',
                data: {
-                    visitList: visitLocationList,
                     selectLocation: null,
                     countOfPage: 4,
                     currPage: 1,
@@ -120,14 +146,6 @@ include('visit-location-list_css.php')
                     _this.$nextTick(function() {
                          _this.getPlaceLocation(_this.places.query.type,_this.places.query.keyword);
                     });
-               },
-               computed: {
-                    pageStart: function() {
-                         return (this.currPage - 1) * this.countOfPage;
-                    },
-                    totalPage: function() {
-                         return Math.ceil(this.visitList.length / this.countOfPage);
-                    }
                },
                methods: {
                     setPage: function(idx) {
