@@ -34,10 +34,6 @@
           initGoogleLayer();
      };
 
-     function initExtends() {
-          initDragMarker(null);
-     };
-
      function initGoogleLayer() {
           DATA.layers.base['Google'] = L.tileLayer('https://{s}.google.com/vt/lyrs=' + 'r' + '&x={x}&y={y}&z={z}', {
                maxZoom: 26,
@@ -46,36 +42,58 @@
           DATA.layers.base['Google'].addTo(DATA.map);
      };
 
-     function initDragMarker(coords) {
-          coords = coords === null ? [10.780196902937137, 106.6872198151157] : coords;
+     function initPlacesLayer(places, fitBounds = false) {
+          PruneCluster.Cluster.ENABLE_MARKERS_LIST = true
+          imagesLayer = new PruneClusterForLeaflet();
 
-          MARKER = L.marker(coords, {
-               draggable: true
-          }).bindPopup('<p>Move the marker or manually enter in the <b>Lat</b> and <b>Lng</b> below to update your image coordinates</p>');
-          MARKER.addTo(DATA.map);
-          initBindingMarkerAndGeometryInput();
-     };
+          var markers = [];
+          var arrBounds = [];
+          for (var i = 0; i < images.length; ++i) {
+               var img = images[i];
+               var marker = new PruneCluster.Marker(img['lat'], img['lng']);
+               arrBounds.push([img['lat'], img['lng']]);
 
-     function initBindingMarkerAndGeometryInput() {
-          var inlat = $('#geom_lat');
-          var inlng = $('#geom_lng');
+               marker.data.ID = img['id'];
+               marker.data.name = img['name'] ? img['name'] : 'No title';
+               marker.data.author = img['author'];
+               marker.data.created_by = img['created_by'];
+               marker.data.created_at = img['created_at'];
+               marker.data.path = img['path'];
 
-          var latlng = MARKER.getLatLng();
-          inlat.val(latlng.lat);
-          inlng.val(latlng.lng);
+               var imgIcon = '<img src="' + img['path'] + '" id="image-object-on-map-' + img['id'] + '">';
+               marker.data.icon = L.divIcon({
+                    html: imgIcon,
+                    className: 'image-object-on-map position-relative',
+                    iconSize: [44, 44],
+                    iconAnchor: [22, 49],
+                    popupAnchor: [0, -40]
+               });
 
-          inlat.on('change', function() {
-               MARKER.setLatLng([inlat.val(), inlng.val()]);
-          });
+               marker.data.popup = contentImagePopup(img['path'], marker.data);
 
-          inlng.on('change', function() {
-               MARKER.setLatLng([inlat.val(), inlng.val()]);
-          })
+               markers.push(marker);
+               imagesLayer.RegisterMarker(marker);
+          }
 
-          MARKER.on('dragend', function(e) {
-               var latlng = e.target._latlng;
-               inlat.val(latlng.lat);
-               inlng.val(latlng.lng);
-          })
-     };
+          imagesLayer.BuildLeafletClusterIcon = function(cluster) {
+               var count = cluster.population;
+               var marker = cluster.lastMarker;
+
+               var imgIcon = '<img src="' + marker.data.path + '" id="image-object-on-map-' + marker.data.ID + '"><span class="count-cluster">' + count + '</span>';
+               return L.divIcon({
+                    html: imgIcon,
+                    className: 'image-object-on-map position-relative',
+                    iconSize: [48, 48],
+                    iconAnchor: [24, 53],
+                    popupAnchor: [0, -44]
+               });
+          };
+
+          DATA.map.addLayer(imagesLayer);
+          if (fitBounds) {
+               DATA.map.fitBounds(arrBounds, {
+                    padding: [100, 100]
+               });
+          }
+     }
 </script>
