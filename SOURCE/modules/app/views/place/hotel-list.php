@@ -3,13 +3,12 @@
 use app\modules\api\APIConfig;
 use app\modules\app\AppConfig;
 use app\modules\app\services\PlaceService;
-use app\modules\contrib\gxassets\GxBootstrapSliderAsset;
 use app\modules\app\widgets\CMSMapListWidget;
-use app\modules\contrib\gxassets\GxVueAsset;
 use app\modules\contrib\gxassets\GxLeafletAsset;
+use app\modules\contrib\gxassets\GxLeafletPruneClusterAsset;
 
 GxLeafletAsset::register($this);
-GxVueAsset::register($this);
+GxLeafletPruneClusterAsset::register($this);
 include('hotel-list_css.php')
 ?>
 
@@ -131,7 +130,7 @@ include('hotel-list_css.php')
                <div class="col-lg-6">
                     <section class="pdmap" id="flat-map">
                          <div class="pdmap style2" style="height: 1500px;">
-                              <?= CMSMapListWidget::widget() ?>
+                              <?php //CMSMapListWidget::widget() ?>
                          </div>
                     </section><!-- /#flat-map-2 -->
                </div><!-- /.col-md-6 -->
@@ -152,6 +151,8 @@ include('hotel-list_css.php')
 
 <script>
      (function($) {
+
+          
           var amenities = JSON.parse('<?= json_encode($amenities, true) ?>');
 
           Vue.component("star-rating", {
