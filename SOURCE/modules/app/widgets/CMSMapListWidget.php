@@ -13,9 +13,8 @@ use yii\base\Widget;
 
 class CMSMapListWidget extends Widget
 {
-     public $places;
      public function run()
      {
-          return $this->render('cmsMapListWidget', compact('places'));
+          return $this->render('cmsMapListWidget');
      }
 }

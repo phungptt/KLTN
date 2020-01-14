@@ -532,7 +532,7 @@ include('create-plan-detail_css.php')
                          var _this = this;
                          var hour = $('input#stay-time-hour').val();
                          var minute = $('input#stay-time-minute').val();
-                         var old_stay_time = _this.trip[_this.dataOfPlaceEditing.didx].details[_this.dataOfPlaceEditing.pidx].time_stay;
+                         var old_stay_time = _this.trip[_this.dataOfPlaceEditing.didx].details[_this.dataOfPlaceEditing.pidx].time_xstay;
                          var new_stay_time = convertTimeToMinute(hour, minute);
                          if (old_stay_time != new_stay_time) {
                               _this.dataOfPlaceEditing.time_stay = new_stay_time;
@@ -605,14 +605,12 @@ include('create-plan-detail_css.php')
                               _this.trip[didx].details[0].time_start = _this.trip[didx].time_start;
                          } else if (_this.trip[didx].details.length > 1) {
                               _this.showOverlayProcessSchedule(didx)
-                              var promise = $.when();
-                              _this.trip[didx].details.forEach((place, index) => {
+                              _this.trip[didx].details.reduce((p, place, index) => {
                                    if(index < _this.trip[didx].details.length - 1) {
-                                        promise = promise.then(function() { 
+                                        return p.then(() => {
                                              var prePlace = _this.trip[didx].details[index]
                                              var nextPlace = _this.trip[didx].details[index + 1]
-                                             
-                                             return _this.getRoutesAndDistancesBetweenLocations(prePlace, nextPlace, _this.transferType[prePlace.id_type_of_transport].type, function(summary) {
+                                             _this.getRoutesAndDistancesBetweenLocations(prePlace, nextPlace, _this.transferType[prePlace.id_type_of_transport].type, function(summary) {
                                                   if (summary == false) {
                                                        toastMessage('error', 'Có lỗi sảy ra, vui lòng thử lại');
                                                   } else {
@@ -627,10 +625,35 @@ include('create-plan-detail_css.php')
                                                        _this.updateStartTimeFromIdxToIdx(didx, index + 1, _this.trip[didx].details.length - 1, totalTime)
                                                   }
                                              })
-                                        });
+                                        }) 
                                    }
+                              }, Promise.resolve());
+                              // var promise = $.when();
+                              // _this.trip[didx].details.forEach((place, index) => {
+                              //      if(index < _this.trip[didx].details.length - 1) {
+                              //           promise = promise.then(function() { 
+                              //                var prePlace = _this.trip[didx].details[index]
+                              //                var nextPlace = _this.trip[didx].details[index + 1]
+                                             
+                              //                return _this.getRoutesAndDistancesBetweenLocations(prePlace, nextPlace, _this.transferType[prePlace.id_type_of_transport].type, function(summary) {
+                              //                     if (summary == false) {
+                              //                          toastMessage('error', 'Có lỗi sảy ra, vui lòng thử lại');
+                              //                     } else {
+                              //                          prePlace.distance = summary.distance / 1000;
+                              //                          prePlace.time_move = summary.travelTime / 60;
+
+                              //                          if(index == 0) {
+                              //                               prePlace.time_start = _this.trip[didx].time_start
+                              //                          }
+
+                              //                          let totalTime = _this.getTotalTimeFormFristPlace(didx, index);
+                              //                          _this.updateStartTimeFromIdxToIdx(didx, index + 1, _this.trip[didx].details.length - 1, totalTime)
+                              //                     }
+                              //                })
+                              //           });
+                              //      }
                                    
-                              });
+                              // });
 
                               _this.hideOverlayProcessSchedule(didx)
                          }
@@ -658,7 +681,7 @@ include('create-plan-detail_css.php')
                          var _this = this;
                          $.ajax({
                               data: {
-                                   trip: _this.trip
+                                   trip: JSON.stringify(_this.trip)
                               },
                               type: 'POST',
                               success: function(resp) {

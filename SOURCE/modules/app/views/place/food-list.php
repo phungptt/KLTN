@@ -2,27 +2,26 @@
 use app\modules\api\APIConfig;
 use app\modules\app\AppConfig;
 use app\modules\app\services\PlaceService;
-use app\modules\contrib\gxassets\GxVueAsset;
 use app\modules\contrib\gxassets\GxLeafletAsset;
-use app\modules\app\widgets\AppObjectMapWidget;
 use app\modules\app\widgets\CMSMapListWidget;
+use app\modules\contrib\gxassets\GxLeafletPruneClusterAsset;
 
 GxLeafletAsset::register($this);
-GxVueAsset::register($this);
+GxLeafletPruneClusterAsset::register($this);
 include('food-list_css.php')
 ?>
 
 <section class="flat-map-zoom-in" id="food-list">
-     <div class="preloader">
+     <div class="preloader" style="z-index: 2000">
           <div class="clear-loading loading-effect-2">
                <span></span>
           </div>
      </div>
-     <div class="container-fluid">
-          <div class="row">
-               <div class="col-lg-6">
-                    <div class="flat-filter">
-                         <div class="wrap-box-search style2">
+     <div class="container-fluid px-0">
+          <div class="row mx-0">
+               <div class="col-lg-6 px-0">
+                    <div class="flat-filter place-list" style="overflow-y: scroll; overflow-x: hidden">
+                         <div class="wrap-box-search style2" style="margin-left: 0; margin-right: 0">
                               <form action="#" method="get" accept-charset="utf-8">
                                    <span  class="w-100" >
                                         <input type="text" placeholder="Tìm kiếm ?" name="search" v-model="places.query.keyword" v-on:change="getPlaceLocation(places.query.type,places.query.keyword)">
@@ -82,9 +81,9 @@ include('food-list_css.php')
                          </div><!-- /.wrap-imagebox -->
                     </div><!-- /.flat-filter -->
                </div><!-- /.col-md-6 -->
-               <div class="col-lg-6">
+               <div class="col-lg-6 px-0">
                     <section class="pdmap h-100" id="flat-map">
-                         <div class="pdmap style2" style="height: 1500px;">
+                         <div class="pdmap style2 h-100">
                               <?= CMSMapListWidget::widget() ?>
                          </div>
                     </section><!-- /#flat-map-2 -->
@@ -106,6 +105,8 @@ include('food-list_css.php')
 
 <script>
      (function($) {
+          setPageHeight();
+
           Vue.component("star-rating", {
                template: "#star-rating-template",
                props:{
@@ -168,12 +169,11 @@ include('food-list_css.php')
                     viewLocation: function(location) {
                          this.selectedLocation = location;
                          this.zoomToMap(location.lat, location.lng);
-                         var iconMap = $('#image-object-on-map-' + location.id).parent();
+                         var iconMap = $('#image-object-on-map-' + location.id_place).parent();
                          iconMap.trigger('click');
                     },
                     zoomToMap: function(lat, lng) {
-                         DATA.map.setView([lat, lng], 15);
-                         MARKER.setLatLng([lat, lng]);
+                         DATA.map.setView([lat, lng], 17);
                     },
                     showMarkerPopup: function(id) {
                          var iconMap = $('#image-object-on-map-' + id).parent();
@@ -198,6 +198,7 @@ include('food-list_css.php')
 
                                    if(resp.status) {
                                         _this.places.data = resp.places.data
+                                        initPlacesLayer(resp.places.data, true)
                                    } else {
                                         toastMessage('error', resp.message)
                                    }
@@ -215,4 +216,16 @@ include('food-list_css.php')
                },
           })
      })(jQuery)
+
+     $(window).on('resize', function() {
+          setPageHeight()
+     })
+
+     function setPageHeight() {
+          var headerHeight = $('.header').height()
+          var windowHeight = $(window).height()
+
+          $('.place-list').height(windowHeight - headerHeight)
+          $('#flat-map').height(windowHeight - headerHeight)
+     }
 </script>

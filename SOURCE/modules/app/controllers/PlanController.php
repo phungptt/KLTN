@@ -40,7 +40,7 @@ class PlanController extends Controller
           $request = Yii::$app->request;
 
           if($request->isPost) {
-               $trip = $request->post('trip');
+               $trip = json_decode($request->post('trip'), true);
                $planslug = PlanService::SavePlanDetails($trip, $plan['id']);
                if($planslug) {
                     Yii::$app->session->setFlash('success', 'Tạo lịch trình thành công');

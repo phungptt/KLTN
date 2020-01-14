@@ -13,16 +13,16 @@ include('hotel-list_css.php')
 ?>
 
 <section class="flat-map-zoom-in" id="hotel-list">
-     <div class="preloader">
+     <div class="preloader" style="z-index: 2000">
           <div class="clear-loading loading-effect-2">
                <span></span>
           </div>
      </div>
-     <div class="container-fluid">
-          <div class="row">
-               <div class="col-lg-6">
-                    <div class="flat-filter">
-                         <div class="wrap-box-search style2">
+     <div class="container-fluid px-0">
+          <div class="row mx-0">
+               <div class="col-lg-6 px-0">
+                    <div class="flat-filter place-list" style="overflow-y: scroll; overflow-x: hidden">
+                         <div class="wrap-box-search style2" style="margin-left: 0; margin-right: 0">
                               <form action="">
                                    <span>
                                         <input type="text" placeholder="Tìm kiếm ?" name="search" v-model="places.query.keyword" v-on:change="getPlaceLocation(places.query.type,places.query.keyword)">
@@ -127,10 +127,10 @@ include('hotel-list_css.php')
                          </div><!-- /.row -->
                     </div><!-- /.flat-filter -->
                </div><!-- /.col-md-6 -->
-               <div class="col-lg-6">
+               <div class="col-lg-6 px-0">
                     <section class="pdmap" id="flat-map">
-                         <div class="pdmap style2" style="height: 1500px;">
-                              <?php //CMSMapListWidget::widget() ?>
+                         <div class="pdmap style2 h-100">
+                              <?= CMSMapListWidget::widget() ?>
                          </div>
                     </section><!-- /#flat-map-2 -->
                </div><!-- /.col-md-6 -->
@@ -151,8 +151,7 @@ include('hotel-list_css.php')
 
 <script>
      (function($) {
-
-          
+          setPageHeight();
           var amenities = JSON.parse('<?= json_encode($amenities, true) ?>');
 
           Vue.component("star-rating", {
@@ -204,7 +203,7 @@ include('hotel-list_css.php')
                     viewLocation: function(location) {
                          this.selectedLocation = location;
                          this.zoomToMap(location.lat, location.lng);
-                         var iconMap = $('#image-object-on-map-' + location.id).parent();
+                         var iconMap = $('#image-object-on-map-' + location.id_place).parent();
                          iconMap.trigger('click');
                     },
                     viewObjectById: function(id) {
@@ -221,8 +220,7 @@ include('hotel-list_css.php')
                          return null;
                     },
                     zoomToMap: function(lat, lng) {
-                         DATA.map.setView([lat, lng], 15);
-                         MARKER.setLatLng([lat, lng]);
+                         DATA.map.setView([lat, lng], 17);
                     },
                     showMarkerPopup: function(id) {
                          var iconMap = $('#image-object-on-map-' + id).parent();
@@ -247,6 +245,7 @@ include('hotel-list_css.php')
 
                                    if (resp.status) {
                                         _this.places.data = resp.places.data
+                                        initPlacesLayer(resp.places.data, true)
                                    } else {
                                         toastMessage('error', resp.message)
                                    }
@@ -264,4 +263,16 @@ include('hotel-list_css.php')
                },
           })
      })(jQuery)
+
+     $(window).on('resize', function() {
+          setPageHeight()
+     })
+
+     function setPageHeight() {
+          var headerHeight = $('.header').height()
+          var windowHeight = $(window).height()
+
+          $('.place-list').height(windowHeight - headerHeight)
+          $('#flat-map').height(windowHeight - headerHeight)
+     }
 </script>
