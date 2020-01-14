@@ -368,7 +368,7 @@
 		margin-bottom: 56px;
 	}
 
-	background: url('../../resources/images/page/home-page/bg-01.png') top center repeat-y;
+	background: url('../../resources/images/page/home-page/bg-01.png');
 	padding: 80px 0 92px;
 
 	.btn-more {
@@ -380,8 +380,12 @@
 	}
 }
 
+.d-flex {
+	display: flex;
+}
+
 .flat-imagebox.background {
-	background: url('../images/page/bg-01.png') top center repeat-y;
+	background: url('../../resources/images/page/home-page/bg-01.png');
 	padding: 70px 0;
 }
 
@@ -510,11 +514,12 @@
 
 	.box-content {
 		padding: 30px 25px 43px;
-		min-height: 150px;
+		// min-height: 150px;
 
 		.box-desc {
 			margin-top: 18px;
 			margin: 18px 0 13px;
+			min-height: 100px;
 		}
 
 		.box-title.ad {

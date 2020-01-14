@@ -270,7 +270,7 @@
     font-size: 16px; }
 
 .flat-main-blog {
-  background: url('../../resources/images/page/home-page/bg-01.png') top center repeat-y;
+  background: url('../../resources/images/page/home-page/bg-01.png');
   padding: 80px 0 92px; }
   .flat-main-blog .flat-row-title {
     margin-bottom: 56px; }
@@ -279,8 +279,11 @@
   .flat-main-blog .btn-more a {
     padding: 15px 36px; }
 
+.d-flex {
+  display: flex; }
+
 .flat-imagebox.background {
-  background: url('../images/page/bg-01.png') top center repeat-y;
+  background: url('../../resources/images/page/home-page/bg-01.png');
   padding: 70px 0; }
 
 .flat-imagebox.style3 {
@@ -362,11 +365,11 @@
     .imagebox:hover .box-header .box-image:after {
       opacity: 1; }
   .imagebox .box-content {
-    padding: 30px 25px 43px;
-    min-height: 150px; }
+    padding: 30px 25px 43px; }
   .imagebox .box-content .box-desc {
     margin-top: 18px;
-    margin: 18px 0 13px; }
+    margin: 18px 0 13px;
+    min-height: 100px; }
   .imagebox .box-content .box-title.ad {
     position: relative; }
   .imagebox .box-content .box-title.ad span {

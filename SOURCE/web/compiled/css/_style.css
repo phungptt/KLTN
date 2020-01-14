@@ -2200,6 +2200,69 @@ input[type="email"] {
     color: #fff; }
   #mainnav-mobi ul.sub-menu > li > a:hover {
     color: #fff; }
+/* Button menu mobile */
+.btn-menu {
+  display: none;
+  position: relative;
+  background: transparent;
+  cursor: pointer;
+  float: right;
+  top: 37px;
+  width: 25px;
+  height: 25px;
+  z-index: 9999;
+  -webkit-transition: all ease 0.238s;
+  -moz-transition: all ease 0.238s;
+  transition: all ease 0.238s; }
+
+.btn-menu:before, .btn-menu:after, .btn-menu span {
+  background-color: #4ca1af;
+  -webkit-transition: all ease 0.238s;
+  -moz-transition: all ease 0.238s;
+  transition: all ease 0.238s; }
+
+.btn-menu:before, .btn-menu:after {
+  content: '';
+  position: absolute;
+  height: 2px;
+  width: 25px;
+  left: 0;
+  top: 50%;
+  -webkit-transform-origin: 50% 50%;
+  -ms-transform-origin: 50% 50%;
+  transform-origin: 50% 50%; }
+
+.btn-menu span {
+  position: absolute;
+  width: 25px;
+  height: 2px;
+  left: 0;
+  top: 50%;
+  overflow: hidden;
+  text-indent: 200%; }
+
+.btn-menu:before {
+  -webkit-transform: translate3d(0, -7px, 0);
+  transform: translate3d(0, -7px, 0); }
+
+.btn-menu:after {
+  width: 25px;
+  -webkit-transform: translate3d(0, 7px, 0);
+  transform: translate3d(0, 7px, 0); }
+
+.btn-menu.active:after {
+  width: 25px; }
+
+.btn-menu.active span {
+  opacity: 0; }
+
+.btn-menu.active:before {
+  -webkit-transform: rotate3d(0, 0, 1, 45deg);
+  transform: rotate3d(0, 0, 1, 45deg); }
+
+.btn-menu.active:after {
+  -webkit-transform: rotate3d(0, 0, 1, -45deg);
+  transform: rotate3d(0, 0, 1, -45deg); }
 
 .btn-submenu {
   position: absolute;
@@ -2626,17 +2689,11 @@ article.post-single .featured-post {
   background-color: #fff;
   position: fixed;
   top: 0;
-  left: 0;
-  z-index: 99999;
-  -webkit-transition: all 0.3s ease-in-out;
+  webkit-transition: all 0.3s ease-in-out;
   -moz-transition: all 0.3s ease-in-out;
   -ms-transition: all 0.3s ease-in-out;
   -o-transition: all 0.3s ease-in-out;
   transition: all 0.3s ease-in-out; }
-  .preloader.hide {
-    display: none; }
-  .preloader.active {
-    display: block; }
 
 .clear-loading {
   text-align: center;

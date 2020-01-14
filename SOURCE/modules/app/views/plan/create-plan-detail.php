@@ -26,7 +26,13 @@ include('create-plan-detail_css.php')
                          <div class="day-of-trip"><span>Ngày {{ didx + 1 }}</span></div>
                          <div class="trip-wrap position-relative">
                               <div class="overlay-loading-schedule position-absolute w-100 h-100 top-0 left-0 d-flex justify-content-center align-items-center" style="background:rgba(255,255,255,.9);z-index:100;" v-if="tripItem.calculating">
-                                   <i class="spinner icon-spinner3 icon-3x"></i>
+                                   <div class="loader1">
+                                        <span></span>
+                                        <span></span>
+                                        <span></span>
+                                        <span></span>
+                                        <span></span>
+                                   </div>
                               </div>
                               <ul class="step-list">
                                    <li class="first-step">

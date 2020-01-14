@@ -108,7 +108,6 @@ class PlaceService
                                     ->from('place')
                                     ->where(['and', ['place.slug' => $slug]])
                                     ->all();
-        dd($id_place);
         return $id_place;
     }
 
@@ -352,5 +351,30 @@ class PlaceService
 
         $total = SiteService::CommandQueryOne($query);
         return $total['count'];
+    }
+
+    public static function GetTopPlace() {
+        $query = (new Query())
+                                ->select([
+                                    'p.name',
+                                    'p.slug',
+                                    'p.path',
+                                    'p.name_destination',
+                                    'p.short_description',
+                                    'p.id_type_of_place as place_type',
+                                    'AVG(r.rating) as rating_avg',
+                                    'COUNT(r.rating) as rating_count'
+                                ])
+                                ->from('place_image as p')
+                                ->innerJoin('rating as r', 'r.object_id = p.id')
+                                ->where(['and',  ['r.object_type' => 'app\modules\app\models\Place']])
+                                ->groupBy(['p.name', 'p.slug', 'p.path','p.name_destination','p.short_description', 'place_type'])
+                                ->orderBy(['rating_count' => SORT_DESC])
+                                ->all();
+        foreach($query as &$q) {
+            $q['path'] = ImageService::GetThumbnailPath($q['path']);
+        }         
+
+        return $query;
     }
 }

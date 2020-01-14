@@ -20,11 +20,15 @@
      }
 
      .create-plan-detail .trip-panel-detail .trip-list {
-          display: flex;
+          width: auto;
+          white-space: nowrap;
+          overflow-x: scroll;
      }
 
      .create-plan-detail .trip-panel-detail .trip-list__item {
-          width: 50%;
+          width: 500px;
+          display: inline-block;
+          vertical-align: top;
           border: 1px solid #eee;
           margin: 15px;
           padding: 10px;
