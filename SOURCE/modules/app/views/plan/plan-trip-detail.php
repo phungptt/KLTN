@@ -1,4 +1,10 @@
 <?php
+
+use app\modules\app\services\PlanService;
+use app\modules\app\widgets\CMSMapPlanWidget;
+use app\modules\contrib\gxassets\GxLeafletAsset;
+GxLeafletAsset::register($this);
+
 include('plan-trip-detail_css.php')
 ?>
 
@@ -59,7 +65,7 @@ include('plan-trip-detail_css.php')
                          </div>
                     </div>
                     <div class="col-5 plan-view__map">
-                         <div id="map" style="height: 550px"></div>
+                         <?= CMSMapPlanWidget::widget() ?> 
                     </div>
                </div>
           </div>
@@ -75,9 +81,6 @@ include('plan-trip-detail_css.php')
                data: {
                     plan: plan,
                     trip: plan_detail,
-                    polyline: [
-
-                    ],
                     transferType: [
                          {
                               type: 'car',
@@ -92,17 +95,21 @@ include('plan-trip-detail_css.php')
                               label: 'Xe đạp',
                               icon: 'fa fa-biking'
                          },
-                         // {
-                         //      type: 'publicTransport',
-                         //      label: 'Phương tiện công cộng',
-                         //      icon: 'fa fa-bus'
-                         // },
                     ]
                },
-               
-               created: function() {
 
+               mounted: function() {
+                    var _this = this
+                    _this.$nextTick(function() {
+                         console.log(DATA)
+                         _this.initTripLayer()
+                    })
+               }, 
+
+               created: function() {
+                    
                },
+
                methods: {
                     rangeTimeFormat: function(minute) {
                          return convertMinuteToTime(minute, 'range');
@@ -111,6 +118,66 @@ include('plan-trip-detail_css.php')
                     startTimeFormat: function(minute) {
                          return convertMinuteToTime(minute, 'oclock');
                     },
+                    
+                    initTripLayer: function() {
+                         var _this = this;
+                         _this.trip.forEach((tripItem, didx) => {
+                              // let arrLayerGroup = [];
+                              DATA.layers.tripLayers[didx] = L.layerGroup()
+                              tripItem.details.forEach((place, index) => {
+                                   //init icon place
+                                   let placeIcon = '<img src="' + place.path + '" id="image-object-on-map-' + place.slug + '">';
+                                   let divIcon = L.divIcon({
+                                        html: placeIcon,
+                                        className: 'image-object-on-map position-relative',
+                                        iconSize: [48, 48],
+                                        iconAnchor: [24, 53],
+                                        popupAnchor: [0, -44]
+                                   });
+                                   let placeMarker = L.marker([place.lat, place.lng], {icon: divIcon}).bindPopup(_this.contentImagePopup(place))
+                                   DATA.layers.tripLayers[didx].addLayer(placeMarker)
+
+                                   //getLineString
+                                   if(index < tripItem.details.length - 1) {
+                                        var prePlace = tripItem.details[index]
+                                        var nextPlace = tripItem.details[index + 1]
+                                        _this.getRoutesAndDistancesBetweenLocations(prePlace, nextPlace, DATA.transferType[prePlace.id_type_of_transport].type, function(shape) {
+                                             let routeLine = L.polyline(shape, {color: 'blue'})
+                                             DATA.layers.tripLayers[didx].addLayer(routeLine)
+                                        })
+                                   }
+                              });
+                         })
+
+                         console.log(DATA.layers.tripLayers);
+                    },
+
+                    getRoutesAndDistancesBetweenLocations: function(waypoint0, waypoint1, transporttype, callback) {
+                         var urlApiGetDistances = 'https://route.ls.hereapi.com/routing/7.2/calculateroute.json?apiKey=<?= PlanService::$HERE_KEY ?>' + '&waypoint0=geo!' + waypoint0.lat + ',' + waypoint0.lng + '&waypoint1=geo!' + waypoint1.lat + ',' + waypoint1.lng + '&routeattributes=sh&mode=fastest;' + transporttype;
+                         return $.ajax({
+                              url: urlApiGetDistances,
+                              success: function(data) {
+                                   if (data.response.route) {
+                                        callback(data.response.route[0].shape);
+                                   } else {
+                                        callback(false);
+                                   }
+                              },
+                              error: function(msg) {
+                                   callback(false);
+                              }
+                         });
+                    },
+
+                    contentImagePopup: function(data) {
+                         var urldetail = '<?= Yii::$app->homeUrl ?>app/place/' + (data.id_type_of_place == 0 ? 'hotel-detail' : (data.id_type_of_place == 1 ? 'food-detail' : 'visit-location-detail')) + '?slug=' + data.slug;
+                         var html = '<div class="d-flex flex-column align-items-center">'
+                         html += '<a href="' + urldetail + '"><h5 class="mb-0 font-weight-bold">' + data.name + '</h5></a>';
+                         html += '<p class="text-muted mt-1 mb-2">' + data.address + '</p>';
+                         html += '<a href="' + urldetail + '"><img src="' + data.path + '" style="width: 270px; height: 170px; object-fit:cover"></a>';
+                         html += '</div>'
+                         return html;
+                    }
                }
           })
      })
