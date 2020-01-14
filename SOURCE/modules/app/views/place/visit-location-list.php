@@ -79,8 +79,8 @@ include('visit-location-list_css.php')
                     </div><!-- /.flat-filter -->
                </div><!-- /.col-md-6 -->
                <div class="col-lg-6 px-0">
-                    <section class="pdmap">
-                         <div class="pdmap style2" style="height: 1200px;">
+                    <section class="pdmap" id="flat-map">
+                         <div class="pdmap style2 h-100">
                             <?= CMSMapListWidget::widget() ?>
                          </div>
                     </section><!-- /#flat-map-2 -->
